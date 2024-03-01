@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".registerScreen">
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Faça seu Cadastro"
+        android:textAlignment="center"
+        android:textSize="40dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="60dp"
+        android:textColor="@color/black"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="30dp"
+        android:height="50dp"
+        android:width="200dp"
+        android:hint="Nome"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etCpf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="30dp"
+        android:height="50dp"
+        android:width="200dp"
+        android:hint="CPF"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etNascimento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="30dp"
+        android:height="50dp"
+        android:width="200dp"
+        android:hint="data nascimento"/>
+
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="30dp"
+        android:height="50dp"
+        android:width="200dp"
+        android:hint="E-mail"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="30dp"
+        android:height="50dp"
+        android:width="200dp"
+        android:hint="Senha"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnEnviar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enviar"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvCadastroEnviado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="cadastro realizado"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="60dp"
+        android:textColor="@color/green"
+        android:visibility="gone"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvCadastroNegado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="cadastro negado"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="60dp"
+        android:textColor="@color/red"
+        android:visibility="gone"/>
+
+
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>
