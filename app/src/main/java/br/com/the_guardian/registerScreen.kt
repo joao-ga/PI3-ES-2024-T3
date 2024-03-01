@@ -24,6 +24,7 @@ class registerScreen : AppCompatActivity() {
     private lateinit var etCpf: AppCompatEditText
     private lateinit var etNascimento: AppCompatEditText
     private lateinit var btnEnviar: AppCompatButton
+    private lateinit var btnVoltar: AppCompatButton
     private lateinit var tvCadastroEnviado: AppCompatTextView
     private lateinit var tvCadastroNegado: AppCompatTextView
 
@@ -43,7 +44,10 @@ class registerScreen : AppCompatActivity() {
         btnEnviar.setOnClickListener {
             userRegistration(etEmail.text.toString(), etPassword.text.toString())
         }
-
+        btnVoltar = findViewById(R.id.btnVoltar)
+        btnVoltar.setOnClickListener {
+            nextScreen()
+        }
     }
 
     private fun userRegistration(email: String, password: String) {
@@ -69,12 +73,11 @@ class registerScreen : AppCompatActivity() {
             }
     }
 
-    /*
-    private fun nextScreem() {
 
-        val loginScreem = Intent(this, LoginActivity::class.java)
-        startActivity(loginScreem)
+    private fun nextScreen() {
+
+        val nxScreen = Intent(this, loginScreen::class.java)
+        startActivity(nxScreen)
 
     }
-    */
 }
