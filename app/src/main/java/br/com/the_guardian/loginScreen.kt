@@ -11,6 +11,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -55,6 +56,7 @@ class loginScreen : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(ContentValues.TAG, "signInWithEmail:success")
                     val user = auth.currentUser
+                    updateUI()
 
                     tvLoginEnviado.visibility = View.VISIBLE
 
@@ -66,11 +68,26 @@ class loginScreen : AppCompatActivity() {
                         "Authentication failed.",
                         Toast.LENGTH_SHORT,
                     ).show()
-
+                    updateUI()
                     tvLoginNegado.visibility = View.VISIBLE
                 }
             }
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        updateUI()
+    }
+
+    private fun updateUI() {
+        val user: FirebaseUser? = auth.currentUser
+        try{
+            tvLoginEnviado.text = user?.email
+            tvLoginEnviado.visibility = View.VISIBLE
+        } catch (e: Exception) {
+            tvLoginNegado.visibility = View.GONE
+        }
     }
 
     private fun nextScreen() {
