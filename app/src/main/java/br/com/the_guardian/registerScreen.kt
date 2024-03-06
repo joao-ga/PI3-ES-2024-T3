@@ -2,6 +2,7 @@ package br.com.the_guardian
 
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -59,10 +61,23 @@ class registerScreen : AppCompatActivity() {
         tvCadastroEnviado = findViewById(R.id.tvCadastroEnviado)
         tvCadastroNegado = findViewById(R.id.tvCadastroNegado)
         btnEnviar = findViewById(R.id.btnEnviar)
-        btnEnviar.setOnClickListener {
-            userRegistration(etEmail.text.toString(), etPassword.text.toString())
-            registerUser(etPassword.text.toString(), etName.text.toString(), etEmail.text.toString(), etCpf.text.toString(), etNascimento.text.toString())
+        btnEnviar.setOnClickListener {view->
+            val email = etEmail.text.toString()
+            val password = etPassword.text.toString()
+            val cpf = etCpf.text.toString()
+            val birth = etNascimento.text.toString()
+            val name = etName.text.toString()
+
+            if(email.isEmpty() || password.isEmpty() || cpf.isEmpty() || birth.isEmpty() || name.isEmpty()) {
+                val snackbar = Snackbar.make(view, "Preencha todos os campos!", Snackbar.LENGTH_SHORT)
+                snackbar.setBackgroundTint(Color.RED)
+                snackbar.show()
+            } else {
+                userRegistration(email, password)
+                registerUser(password, name, email, cpf, birth)
+            }
         }
+
         btnVoltar = findViewById(R.id.btnVoltar)
         btnVoltar.setOnClickListener {
             nextScreen()
@@ -77,6 +92,7 @@ class registerScreen : AppCompatActivity() {
                     Log.d(TAG, "createUserWithEmail:success")
                     val user = auth.currentUser
                     tvCadastroEnviado.visibility = View.VISIBLE
+                    nextScreen()
 
                 } else {
                     // If sign in fails, display a message to the user.

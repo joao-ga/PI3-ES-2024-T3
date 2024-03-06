@@ -1,7 +1,9 @@
 package br.com.the_guardian
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -26,6 +29,7 @@ class loginScreen : AppCompatActivity() {
     private lateinit var tvCadastrar: AppCompatTextView
     private lateinit var tvLoginNegado: AppCompatTextView
     private lateinit var tvLoginEnviado: AppCompatTextView
+    @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_screen)
@@ -41,13 +45,21 @@ class loginScreen : AppCompatActivity() {
         tvLoginNegado = findViewById(R.id.tvLoginNegado)
         tvLoginEnviado = findViewById(R.id.tvLoginEnviado)
         btnEnviarLogin = findViewById(R.id.btnEnviarLogin)
-        btnEnviarLogin.setOnClickListener {
-            authenticator(etEmailLogin.text.toString(), etSenhaLogin.text.toString())
+        btnEnviarLogin.setOnClickListener {view->
+
+            val email = etEmailLogin.text.toString()
+            val senha = etSenhaLogin.text.toString()
+
+            if(email.isEmpty() || senha.isEmpty()) {
+                val snackbar =
+                    Snackbar.make(view, "Preencha todos os campos!", Snackbar.LENGTH_SHORT)
+                snackbar.setBackgroundTint(Color.RED)
+                snackbar.show()
+            } else {
+                authenticator(email, senha)
+            }
         }
-
-
     }
-
 
     fun authenticator (etEmail: String, etSenha: String) {
         auth.signInWithEmailAndPassword(etEmail, etSenha)
@@ -72,7 +84,6 @@ class loginScreen : AppCompatActivity() {
                     tvLoginNegado.visibility = View.VISIBLE
                 }
             }
-
     }
 
     override fun onStart() {
@@ -83,8 +94,7 @@ class loginScreen : AppCompatActivity() {
     private fun updateUI() {
         val user: FirebaseUser? = auth.currentUser
         try{
-            tvLoginEnviado.text = user?.email
-            tvLoginEnviado.visibility = View.VISIBLE
+                tvLoginEnviado.visibility = View.GONE
         } catch (e: Exception) {
             tvLoginNegado.visibility = View.GONE
         }
