@@ -57,7 +57,7 @@ class registerScreen : AppCompatActivity() {
         auth = Firebase.auth
         database = Firebase.database.reference
         db = FirebaseFirestore.getInstance()
-        functions = FirebaseFunctions.getInstance()
+        functions = Firebase.functions("southamerica-east1")
 
         etName = findViewById(R.id.etName)
         etEmail = findViewById(R.id.etEmail)
@@ -137,6 +137,7 @@ class registerScreen : AppCompatActivity() {
             }
     }
 
+
     private fun addUser(u: User) {
         val user = hashMapOf(
             "name" to u.name,
@@ -151,8 +152,7 @@ class registerScreen : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 // Sucesso ao cadastrar o usuário
                 val response = result.data as HashMap<*, *>
-                val userId = response["data"] as String
-                Log.d(TAG, "Usuário cadastrado com sucesso. ID: $userId")
+                Log.d(TAG, "Usuário cadastrado com sucesso")
             }
             .addOnFailureListener { e ->
                 // Erro ao cadastrar o usuário
