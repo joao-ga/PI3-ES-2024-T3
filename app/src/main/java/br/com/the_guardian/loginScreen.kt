@@ -68,9 +68,16 @@ class loginScreen : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(ContentValues.TAG, "signInWithEmail:success")
                     val user = auth.currentUser
+                    if(user?.isEmailVerified == true) {
+                        //abrir home
+                    } else {
+                        Toast.makeText(
+                            baseContext,
+                            "Email não verificado",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    }
                     updateUI()
-
-                    tvLoginEnviado.visibility = View.VISIBLE
 
                 } else {
                     // If sign in fails, display a message to the user.
@@ -81,7 +88,7 @@ class loginScreen : AppCompatActivity() {
                         Toast.LENGTH_SHORT,
                     ).show()
                     updateUI()
-                    tvLoginNegado.visibility = View.VISIBLE
+
                 }
             }
     }
@@ -94,14 +101,13 @@ class loginScreen : AppCompatActivity() {
     private fun updateUI() {
         val user: FirebaseUser? = auth.currentUser
         try{
-                tvLoginEnviado.visibility = View.GONE
+            tvLoginEnviado.visibility = View.GONE
         } catch (e: Exception) {
             tvLoginNegado.visibility = View.GONE
         }
     }
 
     private fun nextScreen() {
-
         val loginScreem = Intent(this, registerScreen::class.java)
         startActivity(loginScreem)
 
