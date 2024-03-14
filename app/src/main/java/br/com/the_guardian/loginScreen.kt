@@ -39,7 +39,7 @@ class loginScreen : AppCompatActivity() {
         etSenhaLogin = findViewById(R.id.etSenhaLogin)
         tvCadastrar = findViewById(R.id.tvCadastrar)
         tvCadastrar.setOnClickListener {
-            nextScreen()
+            nextScreen(registerScreen::class.java)
         }
         tvLoginNegado = findViewById(R.id.tvLoginNegado)
         tvLoginEnviado = findViewById(R.id.tvLoginEnviado)
@@ -68,7 +68,7 @@ class loginScreen : AppCompatActivity() {
                     Log.d(ContentValues.TAG, "signInWithEmail:success")
                     val user = auth.currentUser
                     if(user?.isEmailVerified == true) {
-                        //fazer a home
+                        nextScreen(homeScreen::class.java)
                     } else {
                         Toast.makeText(
                             baseContext,
@@ -105,9 +105,9 @@ class loginScreen : AppCompatActivity() {
         }
     }
 
-    private fun nextScreen() {
-        val loginScreem = Intent(this, registerScreen::class.java)
-        startActivity(loginScreem)
+    private fun nextScreen(screen: Class<*>) {
+        val newScreem = Intent(this, screen)
+        startActivity(newScreem)
 
     }
 }

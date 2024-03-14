@@ -1,6 +1,7 @@
 package br.com.the_guardian
 
 import android.content.ContentValues
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -27,6 +28,7 @@ class RegisterCreditCard : AppCompatActivity() {
     private lateinit var etExpDate: AppCompatEditText
     private lateinit var etSecCode: AppCompatEditText
     private lateinit var btnEnviar: AppCompatButton
+    private lateinit var btnVoltar: AppCompatButton
 
     data class creditCards(val cardNumber: String? = null,
                           val cardName: String? = null,
@@ -58,6 +60,11 @@ class RegisterCreditCard : AppCompatActivity() {
             addCreditCard(card)
         }
 
+        btnVoltar = findViewById(R.id.btnVoltar)
+        btnVoltar.setOnClickListener {
+            nextScreen(homeScreen::class.java)
+        }
+
     }
 
     private fun addCreditCard(card: RegisterCreditCard.creditCards) {
@@ -79,5 +86,11 @@ class RegisterCreditCard : AppCompatActivity() {
                 // Erro ao cadastrar o usuário
                 Log.w(ContentValues.TAG, "Erro ao cadastrar Cartão de crédito", e)
             }
+    }
+
+    private fun nextScreen(screen: Class<*>) {
+        val loginScreem = Intent(this, screen)
+        startActivity(loginScreem)
+
     }
 }
