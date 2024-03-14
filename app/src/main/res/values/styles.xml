@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="logo">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">180dp</item>
+        <item name="android:background">@drawable/fundologo</item>
+    </style>
+
+    <style name="email_barra">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/email_login</item>
+        <item name="android:padding">13dp</item>
+        <item name="android:layout_marginLeft">80dp</item>
+        <item name="android:layout_marginRight">80dp</item>
+
+        <item name="android:textSize">20sp</item>sssss
+    </style>
+
+    <style name="login_button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/button_login</item>
+        <item name="android:padding">1dp</item>
+        <item name="android:layout_marginLeft">4dp</item>
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:textColor">"@color/white"</item>
+
+
+    </style>
+</resources>

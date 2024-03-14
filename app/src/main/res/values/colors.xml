@@ -6,8 +6,13 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="red">#C31C1C</color>
-    <color name="green">#32A037</color>
-    <color name="blue">#03A9F4</color>
+    <color name="grey">#E5E5E5</color>
+    <color name="purple">#5218FA</color>
+    <color name="green">#A0E418</color>
+    <color name="dark_blue">#1C2733</color>
+    <color name="red">#D90000</color>
+    <color name="light_grey">#CACACA</color>
+    <color name="blue_icons">#163760</color>
+    <color name="light_black">#6F161D25</color>
+    <color name="white">#F6F6F6</color>
 </resources>
