@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".RegisterCreditCard">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cadastro de cartão de crédito"
+        android:textAlignment="center"
+        android:textSize="35dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="30dp"
+        android:textColor="@color/black"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etNumCartao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:inputType="number"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="30dp"
+        android:height="50dp"
+        android:width="200dp"
+        android:hint="Número do cartão"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:inputType="text"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="30dp"
+        android:height="50dp"
+        android:width="200dp"
+        android:hint="Nome no cartão"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etExpDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:inputType="text"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="30dp"
+        android:height="50dp"
+        android:width="200dp"
+        android:hint="Data de expiração"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etSecCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:inputType="numberPassword"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="30dp"
+        android:height="50dp"
+        android:width="200dp"
+        android:hint="Código de Segurança"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnEnviar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enviar"
+        android:layout_gravity="center"
+        android:layout_marginTop="0dp"/>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

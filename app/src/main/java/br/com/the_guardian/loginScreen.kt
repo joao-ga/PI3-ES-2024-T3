@@ -29,7 +29,6 @@ class loginScreen : AppCompatActivity() {
     private lateinit var tvCadastrar: AppCompatTextView
     private lateinit var tvLoginNegado: AppCompatTextView
     private lateinit var tvLoginEnviado: AppCompatTextView
-    @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_screen)
@@ -69,7 +68,7 @@ class loginScreen : AppCompatActivity() {
                     Log.d(ContentValues.TAG, "signInWithEmail:success")
                     val user = auth.currentUser
                     if(user?.isEmailVerified == true) {
-                        //abrir home
+                        //fazer a home
                     } else {
                         Toast.makeText(
                             baseContext,
@@ -78,7 +77,6 @@ class loginScreen : AppCompatActivity() {
                         ).show()
                     }
                     updateUI()
-
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(ContentValues.TAG, "signInWithEmail:failure", task.exception)

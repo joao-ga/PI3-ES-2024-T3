@@ -94,7 +94,6 @@ class registerScreen : AppCompatActivity() {
         }
     }
 
-
     fun sendEmailVerification(){
         val user = auth.currentUser
         Log.d(TAG, "Entrei")
@@ -136,8 +135,6 @@ class registerScreen : AppCompatActivity() {
                 }
             }
     }
-
-
     private fun addUser(u: User) {
         val user = hashMapOf(
             "name" to u.name,
