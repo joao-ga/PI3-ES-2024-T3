@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".registerScreen">
+    tools:context="br.com.the_guardian.registerScreen">
 
 
     <androidx.appcompat.widget.AppCompatTextView

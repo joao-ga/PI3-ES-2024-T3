@@ -1,87 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
+<androidx.constraintlayout.widget.ConstraintLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayoutCompat2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey"
     android:orientation="vertical"
-    tools:context=".loginScreen">
+    tools:context="br.com.the_guardian.loginScreen">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="match_parent"
+    <View
+        android:id="@+id/rectangle"
+        style="@style/logo"
+        app:layout_constraintBottom_toBottomOf="@id/imageView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="136dp"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:textSize="40dp"
+        android:layout_marginTop="115dp"
+        android:src="@drawable/llogopng"
+        android:adjustViewBounds="true"
+        android:maxHeight="87dp"
+        app:layout_constraintBottom_toTopOf="@+id/rectangle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.352" />
+
+    <TextView
+        android:id="@+id/appCompatTextView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="196dp"
+        android:contentDescription="@string/welcome_back_description"
+        android:text="@string/welcome_back"
+        android:fontFamily="@font/kronaone_regular"
         android:textAlignment="center"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="60dp"
-        android:textColor="@color/black"/>
+        android:textColor="@color/dark_blue"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etEmailLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="30dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="30dp"
-        android:hint="E-mail                "/>
+    <TextView
+        android:id="@+id/AppCompatTextView3"
+        android:layout_width="310dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="224dp"
+        android:text="@string/get_started"
+        android:textAlignment="textStart"
+        android:textColor="@color/dark_blue"
+        android:fontFamily="@font/juraregular"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.396"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etSenhaLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:inputType="textPassword"
-        android:layout_marginStart="30dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="30dp"
-        android:hint="Senha                "/>
-
-
-    <androidx.appcompat.widget.AppCompatTextView
+    <TextView
         android:id="@+id/tvCadastrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Não tem cadastro? Cadastrar"
-        android:layout_gravity="center"
-        android:textColor="@color/blue"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/sem_cadastro"
+        android:fontFamily="@font/jurabold"
+        android:textColor="@color/purple"
+        app:layout_constraintHorizontal_bias="0.361"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnEnviarLogin" />
 
+    <EditText
+        android:id="@+id/etEmailLogin"
+        style="@style/email_barra"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="296dp"
+        android:layout_marginEnd="40dp"
+        android:drawableEnd="@drawable/email_svg"
+        android:hint="@string/email_login"
+        android:inputType="textEmailAddress"
+        android:fontFamily="@font/juraregular"
+        android:textColorHint="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/AppCompatTextView3"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <EditText
+        android:id="@+id/etSenhaLogin"
+        style="@style/email_barra"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="284dp"
+        android:layout_marginEnd="40dp"
+        android:drawableEnd="@drawable/eye_svgrepo_com"
+        android:hint="@string/senha_login"
+        android:fontFamily="@font/juraregular"
+        android:inputType="textPassword"
+        android:textColorHint="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/AppCompatTextView3"
+        app:layout_constraintTop_toBottomOf="@id/imageView3" />
+
+    <Button
         android:id="@+id/btnEnviarLogin"
+        style="@style/login_button"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="70dp"
+        android:text="@string/login"
+        android:fontFamily="@font/kronaone_regular"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@id/tvCadastrar"
+        app:layout_constraintStart_toStartOf="@id/tvCadastrar"
+        app:layout_constraintTop_toBottomOf="@+id/etSenhaLogin" />
+
+    <TextView
+        android:id="@+id/tvLoginEnviado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enviar"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"/>
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvLoginEnviado"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="login realizado"
+        android:text="@string/login_realizado"
         android:textAlignment="center"
-        android:textSize="20sp"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="60dp"
         android:textColor="@color/green"
-        android:visibility="gone"/>
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvLoginNegado"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="login negado"
-        android:textAlignment="center"
         android:textSize="20sp"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="60dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvLoginNegado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Login_negado"
+        android:textAlignment="center"
         android:textColor="@color/red"
-        android:visibility="gone"/>
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCadastrar" />
 
-
-</androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.constraintlayout.widget.ConstraintLayout>

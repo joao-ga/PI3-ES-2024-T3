@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">the-guardian</string>
+    <string name="welcome_back">Bem-vindo de volta,</string>
+    <string name="get_started">Para começarmos, entre usando seu email e senha.</string>
+    <string name="email_login">Email</string>
+    <string name="senha_login">Senha</string>
+    <string name="sem_cadastro">Não tem conta? cadastre-se</string>
+    <string name="login">LOGIN</string>
+    <string name="login_realizado">Login Realizado</string>
+    <string name="Login_negado">Login Negado</string>
+    <string name="welcome_back_description">logo</string>
 </resources>
