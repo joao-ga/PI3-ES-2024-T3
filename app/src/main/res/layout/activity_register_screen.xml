@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="30dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="15dp"
         android:layout_marginEnd="30dp"
         android:height="50dp"
         android:width="200dp"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="30dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="15dp"
         android:layout_marginEnd="30dp"
         android:height="50dp"
         android:width="200dp"
@@ -48,13 +48,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:inputType="text"
         android:layout_marginStart="30dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="15dp"
         android:layout_marginEnd="30dp"
         android:height="50dp"
         android:width="200dp"
-        android:hint="data nascimento"/>
+        android:hint="Data nascimento"/>
 
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:inputType="text"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="30dp"
+        android:height="50dp"
+        android:width="200dp"
+        android:hint="Telefone"/>
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etEmail"
@@ -62,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="30dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="15dp"
         android:layout_marginEnd="30dp"
         android:height="50dp"
         android:width="200dp"
@@ -73,8 +86,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:inputType="textPassword"
         android:layout_marginStart="30dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="15dp"
         android:layout_marginEnd="30dp"
         android:height="50dp"
         android:width="200dp"
@@ -86,7 +100,7 @@
         android:layout_height="wrap_content"
         android:text="Enviar"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="0dp"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnVoltar"

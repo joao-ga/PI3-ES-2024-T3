@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayoutCompat2"
@@ -8,7 +9,6 @@
     android:background="@color/grey"
     android:orientation="vertical"
     tools:context="br.com.the_guardian.loginScreen">
-
 
     <View
         android:id="@+id/rectangle"
@@ -32,7 +32,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.352" />
-
 
     <TextView
         android:id="@+id/appCompatTextView2"
@@ -63,7 +62,6 @@
         app:layout_constraintHorizontal_bias="0.396"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <TextView
         android:id="@+id/tvCadastrar"
@@ -122,9 +120,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@id/tvCadastrar"
         app:layout_constraintStart_toStartOf="@id/tvCadastrar"
-        app:layout_constraintTop_toBottomOf="@+id/etSenhaLogin"
-        />
-
+        app:layout_constraintTop_toBottomOf="@+id/etSenhaLogin" />
 
     <TextView
         android:id="@+id/tvLoginEnviado"
@@ -150,6 +146,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvCadastrar" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
