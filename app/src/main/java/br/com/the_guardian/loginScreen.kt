@@ -16,6 +16,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.functions.FirebaseFunctions
+import com.google.firebase.functions.FirebaseFunctionsException
 import com.google.firebase.ktx.Firebase
 
 class loginScreen : AppCompatActivity() {
@@ -29,6 +31,9 @@ class loginScreen : AppCompatActivity() {
     private lateinit var tvCadastrar: AppCompatTextView
     private lateinit var tvLoginNegado: AppCompatTextView
     private lateinit var tvLoginEnviado: AppCompatTextView
+    private lateinit var tvEsqueceuSenha: AppCompatTextView
+    private lateinit var tvStatusEsqueceuSenha: AppCompatTextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_screen)
@@ -44,6 +49,10 @@ class loginScreen : AppCompatActivity() {
         tvLoginNegado = findViewById(R.id.tvLoginNegado)
         tvLoginEnviado = findViewById(R.id.tvLoginEnviado)
         btnEnviarLogin = findViewById(R.id.btnEnviarLogin)
+
+        tvEsqueceuSenha = findViewById(R.id.tvEsqueceuSenha)
+        tvStatusEsqueceuSenha = findViewById(R.id.tvStatusEsqueceuSenha)
+
         btnEnviarLogin.setOnClickListener {view->
 
             val email = etEmailLogin.text.toString()
@@ -56,6 +65,45 @@ class loginScreen : AppCompatActivity() {
                 snackbar.show()
             } else {
                 authenticator(email, senha)
+            }
+        }
+
+        tvEsqueceuSenha.setOnClickListener {
+
+            val email = etEmailLogin.text.toString()
+
+            if(email.isEmpty()){
+                tvStatusEsqueceuSenha.text = "Informe um email"
+                tvStatusEsqueceuSenha.visibility = View.VISIBLE
+            } else {
+                val data = hashMapOf(
+                    "email" to email
+                )
+
+                FirebaseFunctions.getInstance()
+                    .getHttpsCallable("RecoverPassword")
+                    .call(data)
+                    .continueWith { task ->
+                        if (!task.isSuccessful) {
+                            val e = task.exception
+                            if (e is FirebaseFunctionsException) {
+                                val code = e.code
+                                val details = e.details
+                                Log.e("RecoverPassword", "Erro: $code, Detalhes: $details") // Adicionado log aqui
+                            } else {
+
+                            }
+                        } else {
+                            // Trate a resposta aqui
+                            Log.i("RecoverPassword", "Resposta recebida: ${task.result}") // Adicionado log aqui
+                        }
+                    }
+            }
+
+            etEmailLogin.setOnFocusChangeListener{email, focus ->
+                if(focus){
+                    tvStatusEsqueceuSenha.visibility = View.GONE
+                }
             }
         }
     }
