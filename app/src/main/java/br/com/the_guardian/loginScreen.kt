@@ -71,38 +71,35 @@ class loginScreen : AppCompatActivity() {
         tvEsqueceuSenha.setOnClickListener {
 
             val email = etEmailLogin.text.toString()
-
-            if(email.isEmpty()){
-                tvStatusEsqueceuSenha.text = "Informe um email"
-                tvStatusEsqueceuSenha.visibility = View.VISIBLE
-            } else {
-                val data = hashMapOf(
-                    "email" to email
-                )
-
-                FirebaseFunctions.getInstance()
-                    .getHttpsCallable("RecoverPassword")
-                    .call(data)
-                    .continueWith { task ->
-                        if (!task.isSuccessful) {
-                            val e = task.exception
-                            if (e is FirebaseFunctionsException) {
-                                val code = e.code
-                                val details = e.details
-                                Log.e("RecoverPassword", "Erro: $code, Detalhes: $details") // Adicionado log aqui
-                            } else {
-
-                            }
-                        } else {
-                            // Trate a resposta aqui
-                            Log.i("RecoverPassword", "Resposta recebida: ${task.result}") // Adicionado log aqui
-                        }
-                    }
-            }
+            recoverPassword(email)
 
             etEmailLogin.setOnFocusChangeListener{email, focus ->
                 if(focus){
                     tvStatusEsqueceuSenha.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    fun recoverPassword(email: String) {
+
+        if(email.isEmpty()){
+           tvStatusEsqueceuSenha.text = "Informe um email"
+            tvStatusEsqueceuSenha.visibility = View.VISIBLE
+        } else {
+            auth.sendPasswordResetEmail(email).addOnCompleteListener {task->
+                if (!task.isSuccessful) {
+                    val e = task.exception
+                    if (e is FirebaseFunctionsException) {
+                        val code = e.code
+                        val details = e.details
+                        Log.e("RecoverPassword", "Erro: $code, Detalhes: $details") // Adicionado log aqui
+                    } else {
+
+                    }
+                } else {
+                    // Trate a resposta aqui
+                    Log.i("RecoverPassword", "Resposta recebida: ${task.result}") // Adicionado log aqui
                 }
             }
         }
