@@ -8,6 +8,14 @@
     android:orientation="vertical"
     tools:context=".homeScreen">
 
+    <androidx.fragment.app.FragmentContainerView
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/map"
+        tools:context=".MapsActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnVoltar"
         android:layout_width="wrap_content"
