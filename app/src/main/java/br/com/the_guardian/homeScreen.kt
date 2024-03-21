@@ -2,6 +2,8 @@ package br.com.the_guardian
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -43,7 +45,11 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
 
         btnCadastrarCartao = findViewById(R.id.btnCadastrarCartao)
         btnCadastrarCartao.setOnClickListener {
-            nextScreen(RegisterCreditCard::class.java)
+            if(usuarioEstaLogado()){
+                nextScreen(RegisterCreditCard::class.java)
+            } else {
+                Toast.makeText(this, "Para acessar essa funcionalidade, você precisa fazer login.", Toast.LENGTH_SHORT).show()
+            }
         }
         btnSair = findViewById(R.id.btnSair)
         btnSair.setOnClickListener {
@@ -84,4 +90,12 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         startActivity(newScreem)
 
     }
+
+    private fun usuarioEstaLogado(): Boolean {
+        Log.i("Entrei","Entrei na funcao")
+        val auth = FirebaseAuth.getInstance()
+        val usuarioAtual = auth.currentUser
+        return usuarioAtual != null
+    }
+
 }
