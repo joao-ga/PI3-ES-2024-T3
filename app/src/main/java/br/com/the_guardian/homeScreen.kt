@@ -53,7 +53,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun addMarkers(googleMap: GoogleMap) {
+    fun addMarkers(googleMap: GoogleMap) {
         places.forEach { place ->
             val marker = googleMap.addMarker(
                 MarkerOptions()
@@ -65,13 +65,18 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions()
-            .position(sydney)
-            .title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        addMarkers(mMap)
+        if (places.isNotEmpty()) {
+            places.forEach { place ->
+                val marker = googleMap.addMarker(
+                    MarkerOptions()
+                        .title(place.name)
+                        .position(place.latLng)
+                )
+            }
+            val firstPlace = places[0]
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstPlace.latLng, 12f))
+        }
     }
 
     private fun nextScreen(screen: Class<*>) {
