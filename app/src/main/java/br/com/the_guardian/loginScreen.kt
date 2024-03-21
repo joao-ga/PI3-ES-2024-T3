@@ -1,14 +1,13 @@
 package br.com.the_guardian
 
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
@@ -16,7 +15,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.FirebaseFunctionsException
 import com.google.firebase.ktx.Firebase
 
@@ -33,6 +31,7 @@ class loginScreen : AppCompatActivity() {
     private lateinit var tvLoginEnviado: AppCompatTextView
     private lateinit var tvEsqueceuSenha: AppCompatTextView
     private lateinit var tvStatusEsqueceuSenha: AppCompatTextView
+    private lateinit var tvEntrarAnonimamente: AppCompatTextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +48,7 @@ class loginScreen : AppCompatActivity() {
         tvLoginNegado = findViewById(R.id.tvLoginNegado)
         tvLoginEnviado = findViewById(R.id.tvLoginEnviado)
         btnEnviarLogin = findViewById(R.id.btnEnviarLogin)
+        tvEntrarAnonimamente = findViewById(R.id.tvEntrarAnonimamente)
 
         tvEsqueceuSenha = findViewById(R.id.tvEsqueceuSenha)
         tvStatusEsqueceuSenha = findViewById(R.id.tvStatusEsqueceuSenha)
@@ -78,6 +78,10 @@ class loginScreen : AppCompatActivity() {
                     tvStatusEsqueceuSenha.visibility = View.GONE
                 }
             }
+        }
+
+        tvEntrarAnonimamente.setOnClickListener {
+            nextScreen(homeScreen::class.java)
         }
     }
 

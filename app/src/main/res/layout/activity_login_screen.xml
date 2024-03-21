@@ -91,6 +91,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnEnviarLogin" />
 
+    <TextView
+        android:id="@+id/tvEntrarAnonimamente"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="77dp"
+        android:text="Entrar anonimamente"
+        android:textColor="@color/purple"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnEnviarLogin" />
+
     <EditText
         android:id="@+id/etEmailLogin"
         style="@style/email_barra"
