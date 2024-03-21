@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="196dp"
+        android:layout_marginTop="176dp"
         android:contentDescription="@string/welcome_back_description"
         android:text="@string/welcome_back"
         android:fontFamily="@font/kronaone_regular"
@@ -52,7 +52,7 @@
         android:id="@+id/AppCompatTextView3"
         android:layout_width="310dp"
         android:layout_height="52dp"
-        android:layout_marginTop="224dp"
+        android:layout_marginTop="204dp"
         android:text="@string/get_started"
         android:textAlignment="textStart"
         android:textColor="@color/dark_blue"
@@ -77,11 +77,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnEnviarLogin" />
 
+    <TextView
+        android:id="@+id/tvEsqueceuSenha"
+        android:layout_width="139dp"
+        android:layout_height="34dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="44dp"
+        android:text="Esqueceu a senha?"
+        android:textColor="@color/purple"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnEnviarLogin" />
+
     <EditText
         android:id="@+id/etEmailLogin"
         style="@style/email_barra"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="296dp"
+        android:layout_marginTop="266dp"
         android:layout_marginEnd="40dp"
         android:drawableEnd="@drawable/email_svg"
         android:hint="@string/email_login"
@@ -91,13 +105,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/AppCompatTextView3"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/etSenhaLogin"
         style="@style/email_barra"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="284dp"
+        android:layout_marginTop="244dp"
         android:layout_marginEnd="40dp"
         android:drawableEnd="@drawable/eye_svgrepo_com"
         android:hint="@string/senha_login"
@@ -113,7 +128,7 @@
         android:id="@+id/btnEnviarLogin"
         style="@style/login_button"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="70dp"
         android:text="@string/login"
         android:fontFamily="@font/kronaone_regular"
@@ -146,5 +161,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvCadastrar" />
+
+    <TextView
+        android:id="@+id/tvStatusEsqueceuSenha"
+        android:layout_width="146dp"
+        android:layout_height="123dp"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvEsqueceuSenha" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
