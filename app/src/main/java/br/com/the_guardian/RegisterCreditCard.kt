@@ -30,7 +30,7 @@ class RegisterCreditCard : AppCompatActivity() {
     private lateinit var btnEnviar: AppCompatButton
     private lateinit var btnVoltar: AppCompatButton
 
-    data class creditCards(val cardNumber: String? = null,
+    data class CreditCards(val cardNumber: String? = null,
                           val cardName: String? = null,
                           val expDate: String? = null,
                           val secCode: String? = null)
@@ -49,13 +49,13 @@ class RegisterCreditCard : AppCompatActivity() {
         etExpDate = findViewById(R.id.etExpDate)
         etSecCode = findViewById(R.id.etSecCode)
         btnEnviar = findViewById(R.id.btnEnviar)
-        btnEnviar.setOnClickListener { view->
+        btnEnviar.setOnClickListener {
             val cardNumber = etNumCartao.text.toString()
             val cardName = etName.text.toString()
             val expDate = etExpDate.text.toString()
             val secCode = etSecCode.text.toString()
 
-            val card = creditCards(cardNumber, cardName, expDate, secCode)
+            val card = CreditCards(cardNumber, cardName, expDate, secCode)
 
             addCreditCard(card)
         }
@@ -67,7 +67,7 @@ class RegisterCreditCard : AppCompatActivity() {
 
     }
 
-    private fun addCreditCard(card: RegisterCreditCard.creditCards) {
+    private fun addCreditCard(card: RegisterCreditCard.CreditCards) {
         val cc = hashMapOf(
             "cardName" to card.cardName,
             "cardNumber" to card.cardNumber,
@@ -89,8 +89,8 @@ class RegisterCreditCard : AppCompatActivity() {
     }
 
     private fun nextScreen(screen: Class<*>) {
-        val loginScreem = Intent(this, screen)
-        startActivity(loginScreem)
+        val loginScreen = Intent(this, screen)
+        startActivity(loginScreen)
 
     }
 }

@@ -81,7 +81,7 @@ class loginScreen : AppCompatActivity() {
         }
     }
 
-    fun recoverPassword(email: String) {
+    private fun recoverPassword(email: String) {
 
         if(email.isEmpty()){
            tvStatusEsqueceuSenha.text = "Informe um email"
@@ -94,8 +94,6 @@ class loginScreen : AppCompatActivity() {
                         val code = e.code
                         val details = e.details
                         Log.e("RecoverPassword", "Erro: $code, Detalhes: $details") // Adicionado log aqui
-                    } else {
-
                     }
                 } else {
                     // Trate a resposta aqui
@@ -105,7 +103,7 @@ class loginScreen : AppCompatActivity() {
         }
     }
 
-    fun authenticator (etEmail: String, etSenha: String) {
+    private fun authenticator (etEmail: String, etSenha: String) {
         auth.signInWithEmailAndPassword(etEmail, etSenha)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -151,8 +149,8 @@ class loginScreen : AppCompatActivity() {
     }
 
     private fun nextScreen(screen: Class<*>) {
-        val newScreem = Intent(this, screen)
-        startActivity(newScreem)
+        val newScreen = Intent(this, screen)
+        startActivity(newScreen)
 
     }
 }
