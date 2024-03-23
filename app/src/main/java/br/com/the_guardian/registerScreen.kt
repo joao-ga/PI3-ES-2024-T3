@@ -94,7 +94,7 @@ class registerScreen : AppCompatActivity() {
         }
     }
 
-    fun sendEmailVerification(){
+    private fun sendEmailVerification(){
         val user = auth.currentUser
         Log.d(TAG, "Entrei")
         user?.sendEmailVerification()

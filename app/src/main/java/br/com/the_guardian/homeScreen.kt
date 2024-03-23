@@ -11,6 +11,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -19,29 +20,48 @@ import com.google.firebase.auth.auth
 class homeScreen : AppCompatActivity(), OnMapReadyCallback {
 
     private val places = arrayListOf(
-        Place("Google", LatLng(-23.5868031,-46.6847268), "Av. Brig. Faria Lima, 3477 - 18º Andar - Itaim Bibi, São Paulo - SP, 04538-133", 4.8f),
-        Place("Parque", LatLng(-23.5902467, -46.6639756), "Av. República do Líbano, 1157 - Ibirapuera, São Paulo - SP, 04502-001", 4.9f)
+        Place("Armário 1", LatLng(-22.833953, -47.052900), "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", false),
+        Place("Armário 2", LatLng(-22.833877, -47.052470), "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", false),
+        Place("Armário 3", LatLng(-22.834040, -47.051999), "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13", false),
+        Place("Armário 4", LatLng(-22.834028, -47.051889), "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13", false),
+        Place("Armário 5", LatLng(-22.833963, -47.051539), "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900", "Em frente ao prédio h11", false),
+        Place("Armário 6", LatLng(-22.833928, -47.051418), "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900", "Em frente ao prédio h11", false)
         )
 
     data class Place(
         val name: String,
         val latLng: LatLng,
         val address: String,
-        val rating: Float
+        val reference: String,
+        val disponibility: Boolean
     )
 
     private lateinit var mMap: GoogleMap
+    private lateinit var auth: FirebaseAuth
 
     private lateinit var btnCadastrarCartao: AppCompatButton
     private lateinit var btnSair: AppCompatButton
-    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
 
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync { googleMap ->
+            googleMap.setInfoWindowAdapter(markerInfoAdapter(this))
+            addMarkers(googleMap)
+
+            googleMap.setOnMapLoadedCallback {
+                val bounds = LatLngBounds.builder()
+
+                places.forEach {
+                    bounds.include(it.latLng)
+                }
+
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 150))
+            }
+
+        }
 
         btnCadastrarCartao = findViewById(R.id.btnCadastrarCartao)
         btnCadastrarCartao.setOnClickListener {
@@ -59,13 +79,20 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    fun addMarkers(googleMap: GoogleMap) {
+    private fun addMarkers(googleMap: GoogleMap) {
         places.forEach { place ->
             val marker = googleMap.addMarker(
                 MarkerOptions()
                     .title(place.name)
+                    .snippet(place.reference)
+                    .contentDescription(place.address)
+                    .draggable(place.disponibility)
                     .position(place.latLng)
             )
+
+            if (marker != null) {
+                marker.tag = place
+            }
         }
     }
 
@@ -77,17 +104,21 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
                 val marker = googleMap.addMarker(
                     MarkerOptions()
                         .title(place.name)
+                        .snippet(place.reference)
+                        .contentDescription(place.address)
+                        .draggable(place.disponibility)
                         .position(place.latLng)
                 )
             }
-            val firstPlace = places[0]
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstPlace.latLng, 12f))
+            mMap.setOnMarkerClickListener { false }
+
         }
     }
 
+
     private fun nextScreen(screen: Class<*>) {
-        val newScreem = Intent(this, screen)
-        startActivity(newScreem)
+        val newScreen = Intent(this, screen)
+        startActivity(newScreen)
 
     }
 
