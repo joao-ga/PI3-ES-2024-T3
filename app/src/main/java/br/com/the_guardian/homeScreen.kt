@@ -7,6 +7,7 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -152,6 +153,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
     // funcoes de pegar a localizacao do usuario
 
     private fun getCurrentLocation() {
+        Log.e("debug", "entrei na getCurrentLocation")
         if(checkPermission()) {
             if(isLocationEnabled()) {
                 fusedLocationProviderClient.lastLocation.addOnCompleteListener(this) {task->
@@ -162,11 +164,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
                     } else {
                         Toast.makeText(this, "Get Success", Toast.LENGTH_SHORT).show()
                         userLoc = LatLng(location.latitude, location.longitude)
-                        // move a camera para a localizaçao do usuario
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, 12f))
-                        // Adiciona marcador do usuário
-                        mMap.addMarker(MarkerOptions().position(userLoc).title("Sua Localização"))
-
+                        Log.e("debug", "AUTORIZADO")
                     }
 
                 }
@@ -180,7 +178,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
             }
 
         } else {
-            //request permission
 
             requestPermissions()
         }
@@ -192,6 +189,9 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun isLocationEnabled():Boolean {
+        Log.e("debug", "entrei na isLocationEnabled")
+
+
         val locationManager:LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER
@@ -199,6 +199,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
 
     }
     private fun requestPermissions() {
+        Log.e("debug", "entrei na requestPermissions")
 
         ActivityCompat.requestPermissions(
             this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -210,15 +211,11 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun checkPermission(): Boolean {
-        if(ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-            return true
-        }
-
-        return false
+        Log.e("debug", "entrei na checkPermission")
+        return (ActivityCompat.checkSelfPermission(this,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+            android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
     }
 
     override fun onRequestPermissionsResult(
@@ -226,6 +223,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        Log.e("debug", "entrei na onRequestPermissionsResult")
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if(requestCode== PERMISSION_REQUEST_ACCESS_LOCATION) {
