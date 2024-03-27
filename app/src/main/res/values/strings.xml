@@ -22,4 +22,17 @@
     <string name="login_voltar">Login</string>
     <string name="cadastro_realizado">Cadastro realizado</string>
     <string name="cadastro_negado">Cadastro negado</string>
+
+
+    <!--- Strings da tela de cadastro de cartão-->
+    <string name="cadastracartao">CADASTRAR CARTÃO</string>
+    <string name="cartaonumber">Número do cartão</string>
+    <string name="cartaoname">Nome no cartão</string>
+    <string name="dataexpira">Data de expiração</string>
+    <string name="cvv">CVV</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="numberamostra">0000  0000  0000  0000</string>
+    <string name="nameamostra">nome</string>
+    <string name="dataamostra">00/00</string>
+
 </resources>
