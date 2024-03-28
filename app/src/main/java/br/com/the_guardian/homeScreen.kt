@@ -1,5 +1,6 @@
 package br.com.the_guardian
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -26,7 +27,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
 class homeScreen : AppCompatActivity(), OnMapReadyCallback {
-    private val places = arrayListOf(
+    private var places: MutableList<Place> = mutableListOf(
         Place("Armário 1", LatLng(-22.833953, -47.052900), "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", false),
         Place("Armário 2", LatLng(-22.833877, -47.052470), "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", false),
         Place("Armário 3", LatLng(-22.834040, -47.051999), "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13", false),
@@ -62,21 +63,22 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
 
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync { googleMap ->
-            googleMap.setInfoWindowAdapter(markerInfoAdapter(this))
-            addMarkers(googleMap)
-
-            googleMap.setOnMapLoadedCallback {
-                val bounds = LatLngBounds.builder()
-
-                places.forEach {
-                    bounds.include(it.latLng)
-                }
-
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 150))
-            }
-
-        }
+        mapFragment.getMapAsync(this)
+//        { googleMap ->
+//            googleMap.setInfoWindowAdapter(markerInfoAdapter(this))
+//            addMarkers(googleMap)
+//
+//            googleMap.setOnMapLoadedCallback {
+//                val bounds = LatLngBounds.builder()
+//
+//                places.forEach {
+//                    bounds.include(it.latLng)
+//                }
+//
+//                googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 150))
+//            }
+//
+//        }
 
 
         btnCadastrarCartao = findViewById(R.id.btnCadastrarCartao)
@@ -110,20 +112,16 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
                 marker.tag = place
             }
         }
-
-        // Adiciona marcador para a localização do usuário
-        if (::userLoc.isInitialized) {
-            googleMap.addMarker(
-                MarkerOptions()
-                    .title("Sua Localização")
-                    .position(userLoc)
-            )
-        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         addMarkers(mMap)
+        if (checkPermission()) {
+            mMap.isMyLocationEnabled = true
+        } else {
+            requestPermissions()
+        }
         if (places.isNotEmpty()) {
             places.forEach { place ->
                 val marker = googleMap.addMarker(
@@ -164,6 +162,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
                     } else {
                         Toast.makeText(this, "Get Success", Toast.LENGTH_SHORT).show()
                         userLoc = LatLng(location.latitude, location.longitude)
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, 18f))
                         Log.e("debug", "AUTORIZADO")
                     }
 
