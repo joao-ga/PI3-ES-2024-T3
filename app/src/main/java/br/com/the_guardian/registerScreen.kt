@@ -53,7 +53,7 @@ class registerScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_screen)
-        // Initialize Firebase Auth
+
         auth = Firebase.auth
         database = Firebase.database.reference
         db = FirebaseFirestore.getInstance()

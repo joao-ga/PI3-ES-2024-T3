@@ -56,30 +56,13 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
-        
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         getCurrentLocation()
 
-
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-//        { googleMap ->
-//            googleMap.setInfoWindowAdapter(markerInfoAdapter(this))
-//            addMarkers(googleMap)
-//
-//            googleMap.setOnMapLoadedCallback {
-//                val bounds = LatLngBounds.builder()
-//
-//                places.forEach {
-//                    bounds.include(it.latLng)
-//                }
-//
-//                googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 150))
-//            }
-//
-//        }
-
 
         btnCadastrarCartao = findViewById(R.id.btnCadastrarCartao)
         btnCadastrarCartao.setOnClickListener {
@@ -115,6 +98,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        googleMap.setInfoWindowAdapter(markerInfoAdapter(this))
         mMap = googleMap
         addMarkers(mMap)
         if (checkPermission()) {
@@ -122,26 +106,13 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         } else {
             requestPermissions()
         }
-        if (places.isNotEmpty()) {
-            places.forEach { place ->
-                val marker = googleMap.addMarker(
-                    MarkerOptions()
-                        .title(place.name)
-                        .snippet(place.reference)
-                        .contentDescription(place.address)
-                        .draggable(place.disponibility)
-                        .position(place.latLng)
-                )
-            }
-        }
     }
-
 
     private fun nextScreen(screen: Class<*>) {
         val newScreen = Intent(this, screen)
         startActivity(newScreen)
-
     }
+
     private fun usuarioEstaLogado(): Boolean {
         val auth = FirebaseAuth.getInstance()
         val usuarioAtual = auth.currentUser
