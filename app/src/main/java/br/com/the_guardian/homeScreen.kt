@@ -1,6 +1,6 @@
 package br.com.the_guardian
 
-import android.Manifest
+
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -25,6 +25,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import android.content.SharedPreferences
+import com.google.firebase.auth.FirebaseUser
 
 class homeScreen : AppCompatActivity(), OnMapReadyCallback {
     private var places: MutableList<Place> = mutableListOf(
@@ -48,6 +50,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var auth: FirebaseAuth
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var userLoc: LatLng
+    private lateinit var sharedPreferences: SharedPreferences
 
 
     private lateinit var btnCadastrarCartao: AppCompatButton
@@ -58,6 +61,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_home_screen)
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
 
         getCurrentLocation()
 
@@ -76,7 +80,17 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         btnSair.setOnClickListener {
             auth = Firebase.auth
             auth.signOut()
-            nextScreen(loginScreen::class.java)
+
+            // Limpar o estado de login no SharedPreferences
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(getString(R.string.logged_in_key), false)
+            editor.apply()
+
+            // Redirecionar para a tela de login
+            val intent = Intent(this, loginScreen::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finishAffinity() // Limpar o histórico de atividades
         }
     }
 
@@ -118,6 +132,21 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         val usuarioAtual = auth.currentUser
         return usuarioAtual != null
     }
+
+    private fun updateUI() {
+        val user: FirebaseUser? = auth.currentUser
+        if (user != null) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(getString(R.string.logged_in_key), false)
+            editor.apply()
+            // Redirecionar para a tela de login
+            val intent = Intent(this, loginScreen::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finishAffinity() // Limpar o histórico de atividades
+        }
+    }
+
 
     // funcoes de pegar a localizacao do usuario
 

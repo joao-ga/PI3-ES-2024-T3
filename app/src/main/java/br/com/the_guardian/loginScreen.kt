@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -17,11 +18,17 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.functions.FirebaseFunctionsException
 import com.google.firebase.ktx.Firebase
+import android.content.Context
+import android.content.SharedPreferences
+
 
 class loginScreen : AppCompatActivity() {
 
 
     private lateinit var auth: FirebaseAuth
+    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var sharedPreferences: SharedPreferences
+
 
     private lateinit var etEmailLogin: AppCompatEditText
     private lateinit var etSenhaLogin: AppCompatEditText
@@ -32,10 +39,14 @@ class loginScreen : AppCompatActivity() {
     private lateinit var tvEsqueceuSenha: AppCompatTextView
     private lateinit var tvStatusEsqueceuSenha: AppCompatTextView
     private lateinit var tvEntrarAnonimamente: AppCompatTextView
+    private lateinit var checkbox: CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_screen)
+
+        sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
 
         auth = Firebase.auth
 
@@ -73,7 +84,7 @@ class loginScreen : AppCompatActivity() {
             val email = etEmailLogin.text.toString()
             recoverPassword(email)
 
-            etEmailLogin.setOnFocusChangeListener{email, focus ->
+            etEmailLogin.setOnFocusChangeListener{ email, focus ->
                 if(focus){
                     tvStatusEsqueceuSenha.visibility = View.GONE
                 }
@@ -84,7 +95,6 @@ class loginScreen : AppCompatActivity() {
             nextScreen(homeScreen::class.java)
         }
     }
-
     private fun recoverPassword(email: String) {
 
         if(email.isEmpty()){
@@ -135,21 +145,32 @@ class loginScreen : AppCompatActivity() {
                     updateUI()
 
                 }
-            }
+        }
     }
 
     override fun onStart() {
         super.onStart()
-        updateUI()
+        val isLoggedIn = sharedPreferences.getBoolean(getString(R.string.logged_in_key), false)
+        if (isLoggedIn) {
+            goToHomeScreen()
+        }
     }
 
     private fun updateUI() {
         val user: FirebaseUser? = auth.currentUser
-        try{
-            tvLoginEnviado.visibility = View.GONE
-        } catch (e: Exception) {
-            tvLoginNegado.visibility = View.GONE
+        if (user != null) {
+            // Usuário está logado, salve o estado de login no SharedPreferences
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(getString(R.string.logged_in_key), true)
+            editor.apply()
+            // Redirecione para a tela principal
+            goToHomeScreen()
         }
+    }
+
+    private fun goToHomeScreen() {
+        startActivity(Intent(this, homeScreen::class.java))
+        finish()
     }
 
     private fun nextScreen(screen: Class<*>) {

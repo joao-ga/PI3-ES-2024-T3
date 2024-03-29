@@ -9,4 +9,6 @@
     <string name="login_realizado">Login Realizado</string>
     <string name="Login_negado">Login Negado</string>
     <string name="welcome_back_description">logo</string>
+    <string name="logged_in_key">logged_in</string>
+    <string name="preference_file_key">loginScreen</string>
 </resources>
