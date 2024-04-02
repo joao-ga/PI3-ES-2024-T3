@@ -1,5 +1,6 @@
 package br.com.the_guardian
 
+
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -24,9 +25,11 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import android.content.SharedPreferences
+import com.google.firebase.auth.FirebaseUser
 
 class homeScreen : AppCompatActivity(), OnMapReadyCallback {
-    private val places = arrayListOf(
+    private var places: MutableList<Place> = mutableListOf(
         Place("Armário 1", LatLng(-22.833953, -47.052900), "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", false),
         Place("Armário 2", LatLng(-22.833877, -47.052470), "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", false),
         Place("Armário 3", LatLng(-22.834040, -47.051999), "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13", false),
@@ -47,6 +50,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var auth: FirebaseAuth
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var userLoc: LatLng
+    private lateinit var sharedPreferences: SharedPreferences
 
 
     private lateinit var btnCadastrarCartao: AppCompatButton
@@ -55,29 +59,14 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
-        
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
 
         getCurrentLocation()
 
-
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync { googleMap ->
-            googleMap.setInfoWindowAdapter(markerInfoAdapter(this))
-            addMarkers(googleMap)
-
-            googleMap.setOnMapLoadedCallback {
-                val bounds = LatLngBounds.builder()
-
-                places.forEach {
-                    bounds.include(it.latLng)
-                }
-
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 150))
-            }
-
-        }
-
+        mapFragment.getMapAsync(this)
 
         btnCadastrarCartao = findViewById(R.id.btnCadastrarCartao)
         btnCadastrarCartao.setOnClickListener {
@@ -91,7 +80,17 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         btnSair.setOnClickListener {
             auth = Firebase.auth
             auth.signOut()
-            nextScreen(loginScreen::class.java)
+
+            // Limpar o estado de login no SharedPreferences
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(getString(R.string.logged_in_key), false)
+            editor.apply()
+
+            // Redirecionar para a tela de login
+            val intent = Intent(this, loginScreen::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finishAffinity() // Limpar o histórico de atividades
         }
     }
 
@@ -110,45 +109,44 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
                 marker.tag = place
             }
         }
-
-        // Adiciona marcador para a localização do usuário
-        if (::userLoc.isInitialized) {
-            googleMap.addMarker(
-                MarkerOptions()
-                    .title("Sua Localização")
-                    .position(userLoc)
-            )
-        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        googleMap.setInfoWindowAdapter(markerInfoAdapter(this))
         mMap = googleMap
         addMarkers(mMap)
-        if (places.isNotEmpty()) {
-            places.forEach { place ->
-                val marker = googleMap.addMarker(
-                    MarkerOptions()
-                        .title(place.name)
-                        .snippet(place.reference)
-                        .contentDescription(place.address)
-                        .draggable(place.disponibility)
-                        .position(place.latLng)
-                )
-            }
+        if (checkPermission()) {
+            mMap.isMyLocationEnabled = true
+        } else {
+            requestPermissions()
         }
     }
-
 
     private fun nextScreen(screen: Class<*>) {
         val newScreen = Intent(this, screen)
         startActivity(newScreen)
-
     }
+
     private fun usuarioEstaLogado(): Boolean {
         val auth = FirebaseAuth.getInstance()
         val usuarioAtual = auth.currentUser
         return usuarioAtual != null
     }
+
+    private fun updateUI() {
+        val user: FirebaseUser? = auth.currentUser
+        if (user != null) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(getString(R.string.logged_in_key), false)
+            editor.apply()
+            // Redirecionar para a tela de login
+            val intent = Intent(this, loginScreen::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finishAffinity() // Limpar o histórico de atividades
+        }
+    }
+
 
     // funcoes de pegar a localizacao do usuario
 
@@ -164,6 +162,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
                     } else {
                         Toast.makeText(this, "Get Success", Toast.LENGTH_SHORT).show()
                         userLoc = LatLng(location.latitude, location.longitude)
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, 18f))
                         Log.e("debug", "AUTORIZADO")
                     }
 

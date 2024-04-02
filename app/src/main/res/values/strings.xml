@@ -9,30 +9,6 @@
     <string name="login_realizado">Login Realizado</string>
     <string name="Login_negado">Login Negado</string>
     <string name="welcome_back_description">logo</string>
-    <string name="bem_vindo">Seja Bem Vindo!</string>
-    <string name="para_come_ar_entre_com_suas_credenciais">Para começar entre com suas credênciais</string>
-    <string name="nome_cadastro">nome</string>
-    <string name="cpf_cadastro">cpf</string>
-    <string name="data_nascimento">data de nascimento</string>
-    <string name="telefone_cadastro">telefone</string>
-    <string name="e_mail_cadastro">e-mail</string>
-    <string name="senha_cadastro">senha</string>
-    <string name="cadastrar_se">cadastrar-se</string>
-    <string name="j_possu_uma_conta">Já possui uma conta?</string>
-    <string name="login_voltar">Login</string>
-    <string name="cadastro_realizado">Cadastro realizado</string>
-    <string name="cadastro_negado">Cadastro negado</string>
-
-
-    <!--- Strings da tela de cadastro de cartão-->
-    <string name="cadastracartao">CADASTRAR CARTÃO</string>
-    <string name="cartaonumber">Número do cartão</string>
-    <string name="cartaoname">Nome no cartão</string>
-    <string name="dataexpira">Data de expiração</string>
-    <string name="cvv">CVV</string>
-    <string name="confirmar">Confirmar</string>
-    <string name="numberamostra">0000  0000  0000  0000</string>
-    <string name="nameamostra">nome</string>
-    <string name="dataamostra">00/00</string>
-
+    <string name="logged_in_key">logged_in</string>
+    <string name="preference_file_key">loginScreen</string>
 </resources>
