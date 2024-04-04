@@ -68,10 +68,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:text="@string/sem_cadastro"
         android:fontFamily="@font/jurabold"
-        android:textColor="@color/purple"
+        android:textColor="@color/dark_blue"
         app:layout_constraintHorizontal_bias="0.361"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,23 +82,25 @@
         android:layout_width="139dp"
         android:layout_height="34dp"
         android:layout_gravity="center"
-        android:layout_marginTop="44dp"
-        android:text="Esqueceu a senha?"
+        android:layout_marginTop="9dp"
+        android:text="@string/esqueci_senha"
         android:textColor="@color/purple"
-        android:textSize="15sp"
+        android:textSize="14sp"
+        android:fontFamily="@font/jurasemibold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintHorizontal_bias="0.893"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnEnviarLogin" />
+        app:layout_constraintTop_toBottomOf="@id/etSenhaLogin" />
 
     <TextView
         android:id="@+id/tvEntrarAnonimamente"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_gravity="center"
-        android:layout_marginTop="77dp"
-        android:text="Entrar anonimamente"
+        android:layout_marginTop="50dp"
+        android:text="@string/ver_mapa"
         android:textColor="@color/purple"
+        android:fontFamily="@font/jurasemibold"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -141,7 +143,7 @@
         android:id="@+id/btnEnviarLogin"
         style="@style/login_button"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="70dp"
         android:text="@string/login"
         android:fontFamily="@font/kronaone_regular"
@@ -149,6 +151,19 @@
         app:layout_constraintEnd_toEndOf="@id/tvCadastrar"
         app:layout_constraintStart_toStartOf="@id/tvCadastrar"
         app:layout_constraintTop_toBottomOf="@+id/etSenhaLogin" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ou"
+        android:fontFamily="@font/jurabold"
+        android:layout_gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCadastrar"
+        android:textColor="@color/dark_blue"
+        />
 
     <TextView
         android:id="@+id/tvLoginEnviado"
