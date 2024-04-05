@@ -24,4 +24,11 @@
         android:layout_marginBottom="10dp">
     </ImageView>
 
+    <TextView
+        android:id="@+id/codigo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+    </TextView>
+
 </androidx.appcompat.widget.LinearLayoutCompat>
