@@ -16,15 +16,6 @@
         android:id="@+id/map"
         tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnCadastrarCartao"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:text="Cadastrar Cartão" />
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSair"
         android:layout_width="wrap_content"
@@ -32,5 +23,19 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:text="Logout" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnCadastrarCartao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Cadastrar Cartão" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Rotas" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
