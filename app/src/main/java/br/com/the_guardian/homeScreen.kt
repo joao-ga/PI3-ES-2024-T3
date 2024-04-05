@@ -31,11 +31,11 @@ import com.google.firebase.auth.FirebaseUser
 class homeScreen : AppCompatActivity(), OnMapReadyCallback {
     private var places: MutableList<Place> = mutableListOf(
         Place("Armário 1", LatLng(-22.833953, -47.052900), "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", false),
-        Place("Armário 2", LatLng(-22.833877, -47.052470), "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", false),
+        Place("Armário 2", LatLng(-22.833877, -47.052470), "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", true),
         Place("Armário 3", LatLng(-22.834040, -47.051999), "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13", false),
-        Place("Armário 4", LatLng(-22.834028, -47.051889), "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13", false),
+        Place("Armário 4", LatLng(-22.834028, -47.051889), "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13", true),
         Place("Armário 5", LatLng(-22.833963, -47.051539), "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900", "Em frente ao prédio h11", false),
-        Place("Armário 6", LatLng(-22.833928, -47.051418), "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900", "Em frente ao prédio h11", false)
+        Place("Armário 6", LatLng(-22.833928, -47.051418), "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900", "Em frente ao prédio h11", true)
         )
 
     data class Place(
@@ -51,8 +51,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var userLoc: LatLng
     private lateinit var sharedPreferences: SharedPreferences
-
-
     private lateinit var btnCadastrarCartao: AppCompatButton
     private lateinit var btnSair: AppCompatButton
 
@@ -117,10 +115,20 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         addMarkers(mMap)
         if (checkPermission()) {
             mMap.isMyLocationEnabled = true
-        } else {
-            requestPermissions()
+        }
+
+        mMap.setOnInfoWindowClickListener { marker ->
+            val place = marker.tag as? homeScreen.Place ?: return@setOnInfoWindowClickListener
+            val intent = Intent(this, DataScreen::class.java).apply {
+                putExtra("name", place.name)
+                putExtra("reference", place.reference)
+                putExtra("address", place.address)
+                putExtra("disponibility", place.disponibility)
+            }
+            startActivity(intent)
         }
     }
+
 
     private fun nextScreen(screen: Class<*>) {
         val newScreen = Intent(this, screen)
