@@ -45,9 +45,8 @@ class DataScreen : AppCompatActivity() {
             finish()
         }
 
-        btnConsultar.isEnabled = disponibility
-
         btnConsultar = findViewById(R.id.btn_consultar)
+        btnConsultar.isEnabled = disponibility
         btnConsultar.setOnClickListener {
             var isAnyRadioButtonChecked = false
             var checkedRadioButtonId = -1
