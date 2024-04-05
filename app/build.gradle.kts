@@ -16,9 +16,14 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+        buildConfig = false
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
