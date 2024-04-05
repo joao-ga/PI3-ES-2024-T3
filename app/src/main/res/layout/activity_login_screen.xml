@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout 
+<androidx.appcompat.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayoutCompat2"
     android:layout_width="match_parent"
@@ -10,162 +9,163 @@
     android:orientation="vertical"
     tools:context="br.com.the_guardian.loginScreen">
 
-    <View
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         style="@style/logo"
-        app:layout_constraintBottom_toBottomOf="@id/imageView3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:paddingTop="100dp" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageView3"
-        android:layout_width="136dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="115dp"
+        android:layout_width="176dp"
+        android:layout_height="89dp"
+        android:layout_marginTop="-90dp"
         android:src="@drawable/llogopng"
-        android:adjustViewBounds="true"
-        android:maxHeight="87dp"
-        app:layout_constraintBottom_toTopOf="@+id/rectangle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.352" />
+        android:layout_marginStart="119dp"
+        android:layout_marginBottom="4dp"
+        />
 
-    <TextView
-        android:id="@+id/appCompatTextView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="176dp"
-        android:contentDescription="@string/welcome_back_description"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textbemvindo"
+        android:layout_width="279dp"
+        android:layout_height="25dp"
         android:text="@string/welcome_back"
         android:fontFamily="@font/kronaone_regular"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:textColor="@color/dark_blue"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="20sp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="7dp"
+        />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/AppCompatTextView3"
-        android:layout_width="310dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="204dp"
+        android:layout_width="260dp"
+        android:layout_height="44dp"
         android:text="@string/get_started"
         android:textAlignment="textStart"
         android:textColor="@color/dark_blue"
         android:fontFamily="@font/juraregular"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.396"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="16sp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="7dp"
+        />
 
-    <TextView
-        android:id="@+id/tvCadastrar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/sem_cadastro"
-        android:fontFamily="@font/jurabold"
-        android:textColor="@color/dark_blue"
-        app:layout_constraintHorizontal_bias="0.361"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnEnviarLogin" />
-
-    <TextView
-        android:id="@+id/tvEsqueceuSenha"
-        android:layout_width="139dp"
-        android:layout_height="34dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="9dp"
-        android:text="@string/esqueci_senha"
-        android:textColor="@color/purple"
-        android:textSize="14sp"
-        android:fontFamily="@font/jurasemibold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.893"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etSenhaLogin" />
-
-    <TextView
-        android:id="@+id/tvEntrarAnonimamente"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:text="@string/ver_mapa"
-        android:textColor="@color/purple"
-        android:fontFamily="@font/jurasemibold"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnEnviarLogin" />
-
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
+        android:layout_width="310dp"
+        android:layout_height="55dp"
         android:id="@+id/etEmailLogin"
         style="@style/email_barra"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="266dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="60dp"
         android:drawableEnd="@drawable/email_svg"
         android:hint="@string/email_login"
         android:inputType="textEmailAddress"
         android:fontFamily="@font/juraregular"
         android:textColorHint="@color/grey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/AppCompatTextView3"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="" />
+        />
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etSenhaLogin"
+        android:layout_width="310dp"
+        android:layout_height="55dp"
         style="@style/email_barra"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="244dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="40dp"
         android:drawableEnd="@drawable/eye_svgrepo_com"
         android:hint="@string/senha_login"
         android:fontFamily="@font/juraregular"
         android:inputType="textPassword"
         android:textColorHint="@color/grey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/AppCompatTextView3"
-        app:layout_constraintTop_toBottomOf="@id/imageView3" />
+        />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/EmailText"
+        android:layout_width="51dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="-177dp"
+        android:hint="@string/email_login"
+        android:fontFamily="@font/juraregular"
+        android:textColor="@color/dark_blue"
+        android:textSize="20sp"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/SenhaText"
+        android:layout_width="70dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="69dp"
+        android:hint="@string/senha_login"
+        android:fontFamily="@font/juraregular"
+        android:textColor="@color/dark_blue"
+        android:textSize="20sp"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvEsqueceuSenha"
+        android:layout_width="147dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="60dp"
+        android:text="@string/esqueci_senha"
+        android:fontFamily="@font/jurabold"
+        android:textColor="@color/purple"
+        android:textSize="12sp"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="299dp"
+        android:layout_height="50dp"
         android:id="@+id/btnEnviarLogin"
         style="@style/login_button"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="70dp"
+        android:layout_marginStart="65dp"
+        android:layout_marginTop="10dp"
         android:text="@string/login"
         android:fontFamily="@font/kronaone_regular"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@id/tvCadastrar"
-        app:layout_constraintStart_toStartOf="@id/tvCadastrar"
-        app:layout_constraintTop_toBottomOf="@+id/etSenhaLogin" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ou"
-        android:fontFamily="@font/jurabold"
-        android:layout_gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvCadastrar"
-        android:textColor="@color/dark_blue"
+        android:textColor="@color/grey"
         />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvCadastrar"
+        android:layout_width="240dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="90dp"
+        android:layout_marginTop="13dp"
+        android:text="@string/sem_cadastro"
+        android:fontFamily="@font/jurasemibold"
+        android:textColor="@color/purple"
+        android:textSize="16sp"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ou"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:text="@string/ou"
+        android:fontFamily="@font/jurabold"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="-10dp"
+        android:textColor="@color/dark_blue"
+        android:textSize="16sp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvEntrarAnonimamente"
+        android:layout_width="75dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="-9dp"
+        android:layout_marginStart="174dp"
+        android:fontFamily="@font/jurasemibold"
+        android:text="@string/ver_mapa"
+        android:textColor="@color/purple"
+        android:textSize="16sp"
+        />
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvLoginEnviado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -174,10 +174,9 @@
         android:textColor="@color/green"
         android:textSize="20sp"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvLoginNegado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -186,23 +185,20 @@
         android:textColor="@color/red"
         android:textSize="20sp"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvCadastrar" />
+        android:layout_marginStart="90dp"
+        android:layout_marginTop="30dp"
+        />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvStatusEsqueceuSenha"
         android:layout_width="146dp"
         android:layout_height="123dp"
         android:layout_marginTop="10dp"
-        android:text=""
+        android:text="@string/informemail"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/red"
         android:textSize="16sp"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvEsqueceuSenha" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_marginStart="135dp"
+        />
+</androidx.appcompat.widget.LinearLayoutCompat>
