@@ -11,6 +11,7 @@ import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import kotlin.random.Random
 
+
 class QrCodeScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +21,9 @@ class QrCodeScreen : AppCompatActivity() {
         if (checkedRadioButtonText != null) {
 
             val qrCode = findViewById<ImageView>(R.id.qrCode)
+
             val codigo = Random.nextInt(9999)
+
             val text = codigo
             try {
                 val bitmap = textToImageEncode(text)
