@@ -31,4 +31,9 @@
     <string name="nameamostra">nome</string>
     <string name="dataamostra">00/00</string>
 
+    <!---Strings da tela menu-->
+    <string name="home">HOME</string>
+    <string name="habilita_cartão">Cadastrar cartão</string>
+    <string name="rota">Trace rota \naté armários</string>
+
 </resources>
