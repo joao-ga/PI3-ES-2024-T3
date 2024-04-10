@@ -29,6 +29,13 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import android.content.SharedPreferences
+import android.graphics.Color
+import com.google.android.gms.maps.model.PolylineOptions
+import com.google.firebase.auth.FirebaseUser
+import com.google.maps.DirectionsApi
+import com.google.maps.GeoApiContext
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import java.io.Serializable
@@ -57,6 +64,9 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var userLoc: LatLng
     private lateinit var sharedPreferences: SharedPreferences
+    private var selectedMarkerLatLng: LatLng? = null
+
+    private lateinit var btnRoute: AppCompatButton
     private lateinit var btnCadastrarCartao: AppCompatButton
     private lateinit var btnSair: AppCompatButton
 
@@ -96,6 +106,20 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
             finishAffinity()
         }
+
+        btnRoute = findViewById(R.id.btnRoute)
+        btnRoute.setOnClickListener{
+            btnRoute = findViewById(R.id.btnRoute)
+            btnRoute.setOnClickListener{
+                // Verificar se as coordenadas do marcador foram selecionadas
+                if (selectedMarkerLatLng != null) {
+                    // Chamar a função de traçar rota passando as coordenadas do marcador selecionado
+                    directions(selectedMarkerLatLng!!)
+                } else {
+                    Toast.makeText(this, "Por favor, selecione um marcador primeiro.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun addMarkers(googleMap: GoogleMap) {
@@ -117,9 +141,12 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         addMarkers(mMap)
         if (checkPermission()) {
             mMap.isMyLocationEnabled = true
+        } else {
+            requestPermissions()
         }
 
         mMap.setOnMarkerClickListener { marker ->
+
             val place = marker.tag as? Place ?: return@setOnMarkerClickListener false
 
             // Criar uma instância do StartGameDialogFragment
@@ -134,9 +161,16 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
             dialog.show(supportFragmentManager, "MarkerInfoDialog")
 
             false
+          
+            //adaptar o codigo para que a funcao directions() poça receber 
+          
+            //selectedMarkerLatLng = marker.position
+            //false // Permite que o evento padrão do marcador seja executado
+
         }
 
     }
+
 
     class pinInformation : BottomSheetDialogFragment() {
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -198,6 +232,31 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    //funcao para traçar a rota
+    private fun directions(destination: LatLng) {
+        val origin = userLoc
+
+        val geoApiContext = GeoApiContext.Builder()
+            .apiKey("AIzaSyAkBu8YNk9bX1jUsK4D2hEvs8xx5wBii8w")
+            .build()
+
+        val directionsApi = DirectionsApi.newRequest(geoApiContext)
+        val directionsResult = directionsApi.origin(com.google.maps.model.LatLng(origin.latitude, origin.longitude))
+            .destination(com.google.maps.model.LatLng(destination.latitude, destination.longitude))
+            .await()
+
+        val route = directionsResult.routes[0]
+        val polylineOptions = PolylineOptions()
+            .addAll(route.overviewPolyline.decodePath().map { convertToAndroidLatLng(it) })
+            .color(Color.BLUE)
+            .width(5f)
+
+        mMap.addPolyline(polylineOptions)
+    }
+
+    private fun convertToAndroidLatLng(latLng: com.google.maps.model.LatLng): LatLng {
+        return LatLng(latLng.lat, latLng.lng)
+    }
 
     // funcoes de pegar a localizacao do usuario
 

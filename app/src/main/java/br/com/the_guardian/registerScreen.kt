@@ -143,7 +143,6 @@ class registerScreen : AppCompatActivity() {
             "birth" to u.birth,
             "phone" to u.phone
         )
-        Log.d(TAG, "Entrei na funcao")
         // Chame a função do Firebase para cadastrar o usuário
         functions.getHttpsCallable("addUser").call(user)
             .addOnSuccessListener { result ->
