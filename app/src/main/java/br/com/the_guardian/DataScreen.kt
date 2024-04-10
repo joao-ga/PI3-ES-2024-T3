@@ -10,9 +10,11 @@ import android.widget.TextView
 import android.graphics.Color
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
+import com.google.firebase.firestore.FirebaseFirestore
 
 class DataScreen : AppCompatActivity() {
 
+    private val firestore = FirebaseFirestore.getInstance()
     private lateinit var btnConsultar: AppCompatButton
     private lateinit var btnVoltar: AppCompatButton
 
@@ -25,6 +27,7 @@ class DataScreen : AppCompatActivity() {
         val name = intent.getStringExtra("name")
         val reference = intent.getStringExtra("reference")
         val disponibility = intent.getBooleanExtra("disponibility", false)
+        val prices = intent.getIntArrayExtra("prices")
 
         findViewById<TextView>(R.id.marker_title).text = "Alugar $name"
         findViewById<TextView>(R.id.marker_reference).text = reference
@@ -38,6 +41,12 @@ class DataScreen : AppCompatActivity() {
         val radiobutton5 = findViewById<RadioButton>(R.id.radiobutton5)
 
         val radioButtons = listOf(radiobutton1, radiobutton2, radiobutton3, radiobutton4, radiobutton5)
+
+        prices?.forEachIndexed { index, price ->
+            if (index < radioButtons.size) {
+                radioButtons[index].text = "R$ $price"
+            }
+        }
 
         radioButtons.forEach { radioButton ->
             radioButton.isEnabled = disponibility

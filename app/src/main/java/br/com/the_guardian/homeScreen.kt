@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.auth.FirebaseUser
 import com.google.maps.DirectionsApi
 import com.google.maps.GeoApiContext
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import java.io.Serializable
@@ -56,8 +57,10 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         val longitude: Double,
         val address: String,
         val reference: String,
-        val disponibility: Boolean
-    ) : Serializable
+        val disponibility: Boolean,
+        var prices: List<Int> = listOf() 
+     ) : Serializable
+
 
     private lateinit var mMap: GoogleMap
     private lateinit var auth: FirebaseAuth
@@ -109,7 +112,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
 
         btnRoute = findViewById(R.id.btnRoute)
         btnRoute.setOnClickListener{
-            btnRoute = findViewById(R.id.btnRoute)
             btnRoute.setOnClickListener{
                 // Verificar se as coordenadas do marcador foram selecionadas
                 if (selectedMarkerLatLng != null) {
@@ -146,6 +148,12 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         }
 
         mMap.setOnMarkerClickListener { marker ->
+          
+            selectedMarkerLatLng = marker.position
+            // Chamar getData() quando o marcador for clicado
+            val clickedPlace = marker.tag as Place
+            getData(clickedPlace)
+            false
 
             val place = marker.tag as? Place ?: return@setOnMarkerClickListener false
 
@@ -218,19 +226,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         return usuarioAtual != null
     }
 
-    private fun updateUI() {
-        val user: FirebaseUser? = auth.currentUser
-        if (user != null) {
-            val editor = sharedPreferences.edit()
-            editor.putBoolean(getString(R.string.logged_in_key), false)
-            editor.apply()
-            // Redirecionar para a tela de login
-            val intent = Intent(this, loginScreen::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finishAffinity() // Limpar o histórico de atividades
-        }
-    }
 
     //funcao para traçar a rota
     private fun directions(destination: LatLng) {
@@ -256,6 +251,44 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
 
     private fun convertToAndroidLatLng(latLng: com.google.maps.model.LatLng): LatLng {
         return LatLng(latLng.lat, latLng.lng)
+    }
+
+    //funcao para buscar os precos do banco de dados
+    private fun getData(clickedPlace: Place) {
+        val firestore = FirebaseFirestore.getInstance()
+        val name = clickedPlace.name
+
+        firestore.collection("Lockers")
+            .whereEqualTo("id", name)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents[0]
+                    val prices = document["prices"] as? List<Long>
+                    if (prices != null) {
+                        clickedPlace.prices = prices.map { it.toInt() } // Convertendo de Long para Int
+                        openDetailsScreen(clickedPlace)
+                        Log.i("SUCESSO", "DADOS COLETADOS $prices")
+                    } else {
+                        Toast.makeText(this, "Este armário não possui preços disponíveis.", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this, "Dados não encontrados para este armário.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("DataScreen", "Erro ao recuperar dados do Firestore: $exception")
+                Toast.makeText(this, "Erro ao recuperar dados do Firestore.", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun openDetailsScreen(clickedPlace: Place) {
+        val intent = Intent(this, DataScreen::class.java).apply {
+            putExtra("name", clickedPlace.name)
+            putExtra("reference", clickedPlace.reference)
+            putExtra("disponibility", clickedPlace.disponibility)
+            putExtra("prices", clickedPlace.prices.toIntArray()) // Passando os preços como um array de inteiros
+        }
     }
 
     // funcoes de pegar a localizacao do usuario
