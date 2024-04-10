@@ -31,4 +31,22 @@
     <string name="nameamostra">nome</string>
     <string name="dataamostra">00/00</string>
 
+    <!---Strings da tela menu-->
+    <string name="home">HOME</string>
+    <string name="habilita_cartão">Cadastrar cartão</string>
+    <string name="rota">Trace rota \naté armários</string>
+    <string name="bem_vindo">Bem vindo!</string>
+    <string name="para_come_ar_entre_com_suas_credenciais">Para começar entre com suas credenciais.</string>
+    <string name="nome_cadastro">Nome</string>
+    <string name="cpf_cadastro">CPF</string>
+    <string name="data_nascimento">Data de nascimento\n</string>
+    <string name="telefone_cadastro">Telefone</string>
+    <string name="e_mail_cadastro">E-mail</string>
+    <string name="senha_cadastro">Senha</string>
+    <string name="cadastrar_se">Cadastre-se</string>
+    <string name="j_possu_uma_conta">Já possuí uma conta?\n</string>
+    <string name="voltar_login">Login</string>
+    <string name="cadastro_realizado">Cadastro realizado</string>
+    <string name="cadastro_negado">Cadastro negado</string>
+
 </resources>

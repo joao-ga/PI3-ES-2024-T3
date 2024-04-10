@@ -6,36 +6,105 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/grey"
     tools:context=".homeScreen">
 
+<!--    Tool bar da tela de menu, com os botões de sair e o
+Textview que indica a tela menu ou "home"-->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/logo"
+        android:paddingTop="100dp" />
+<!--Botão de sair-->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSair"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="end"
+        android:layout_marginTop="-69dp"
+        android:layout_marginEnd="20dp"
+        android:drawableRight="@drawable/baseline_logout_24"
+        android:background="@color/dark_blue"
+        />
+<!--TextView indicando a tela HOME-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:text="@string/home"
+        android:layout_marginTop="-39dp"
+        android:layout_marginStart="150dp"
+        android:textColor="@color/grey"
+        android:fontFamily="@font/kronaone_regular"
+        android:textSize="24sp"/>
+<!--MAPA-->
     <fragment
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_width="386dp"
+        android:layout_height="440dp"
         android:id="@+id/map"
         tools:context=".MapsActivity"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="40dp"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnSair"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:text="Logout" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnCadastrarCartao"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Cadastrar Cartão" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="10dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSair"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout" />
+
+    </LinearLayout>
+
+
+<!--Botão que clica ao selecionar o pin no mapa, ee ele traçara
+ uma rota até o local indicado pelo pin-->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnRoute"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Rotas" />
+        android:layout_width="386dp"
+        android:layout_height="85dp"
+        android:layout_marginStart="12dp"
+        android:background="@drawable/rotabutton"
+        android:drawableRight="@drawable/baseline_push_pin_24"
+        android:text="@string/rota"
+        android:fontFamily="@font/jurabold"
+        android:textColor="@color/dark_blue"
+        android:textAlignment="textStart"
+        android:paddingStart="29dp"
+        android:layout_marginTop="-3dp"
+        android:paddingEnd="30dp"
+        android:textSize="25sp"
+        android:textAllCaps="false"
+        />
+
+<!--Botão que cadastra o cartão-->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnCadastrarCartao"
+        android:layout_width="386dp"
+        android:layout_height="84dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/habilita_cartão"
+        android:background="@drawable/button_border_round"
+        android:textColor="@color/grey"
+        android:fontFamily="@font/jurabold"
+        android:textSize="16sp"
+        android:layout_marginStart="13dp"
+        android:layout_marginBottom="10dp"
+        android:textAlignment="textStart"
+        android:paddingStart="30dp"
+        android:textAllCaps="false"
+        android:drawableEnd="@drawable/cardenfeite"
+        android:paddingEnd="-6dp"
+        />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
