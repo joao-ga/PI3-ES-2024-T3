@@ -13,6 +13,7 @@ import kotlin.random.Random
 
 
 class QrCodeScreen : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qr_code_screen)
@@ -22,7 +23,11 @@ class QrCodeScreen : AppCompatActivity() {
 
             val qrCode = findViewById<ImageView>(R.id.qrCode)
 
-            val codigo = Random.nextInt(9999)
+            var codigo = 0
+
+            while(codigo < 1000){
+                codigo = Random.nextInt(9999)
+            }
 
             val text = codigo
             try {
