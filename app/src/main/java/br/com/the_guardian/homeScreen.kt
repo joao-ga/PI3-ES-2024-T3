@@ -1,14 +1,19 @@
 package br.com.the_guardian
 
-
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -21,6 +26,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -30,24 +36,28 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.auth.FirebaseUser
 import com.google.maps.DirectionsApi
 import com.google.maps.GeoApiContext
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.auth
+import java.io.Serializable
 
 class homeScreen : AppCompatActivity(), OnMapReadyCallback {
     private var places: MutableList<Place> = mutableListOf(
-        Place("Armário 1", LatLng(-22.833953, -47.052900), "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", false),
-        Place("Armário 2", LatLng(-22.833877, -47.052470), "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", false),
-        Place("Armário 3", LatLng(-22.834040, -47.051999), "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13", false),
-        Place("Armário 4", LatLng(-22.834028, -47.051889), "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13", false),
-        Place("Armário 5", LatLng(-22.833963, -47.051539), "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900", "Em frente ao prédio h11", false),
-        Place("Armário 6", LatLng(-22.833928, -47.051418), "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900", "Em frente ao prédio h11", false)
-        )
+        Place("Armário 1", -22.833953, -47.052900, "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", false),
+        Place("Armário 2", -22.833877, -47.052470, "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", true),
+        Place("Armário 3", -22.834040, -47.051999, "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13", false),
+        Place("Armário 4", -22.834028, -47.051889, "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13", true),
+        Place("Armário 5", -22.833963, -47.051539, "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900", "Em frente ao prédio h11", false),
+        Place("Armário 6", -22.833928, -47.051418, "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900", "Em frente ao prédio h11", true)
+    )
 
     data class Place(
         val name: String,
-        val latLng: LatLng,
+        val latitude: Double,
+        val longitude: Double,
         val address: String,
         val reference: String,
         val disponibility: Boolean
-    )
+    ) : Serializable
 
     private lateinit var mMap: GoogleMap
     private lateinit var auth: FirebaseAuth
@@ -94,7 +104,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
             val intent = Intent(this, loginScreen::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-            finishAffinity() // Limpar o histórico de atividades
+            finishAffinity()
         }
 
         btnRoute = findViewById(R.id.btnRoute)
@@ -117,10 +127,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
             val marker = googleMap.addMarker(
                 MarkerOptions()
                     .title(place.name)
-                    .snippet(place.reference)
-                    .contentDescription(place.address)
-                    .draggable(place.disponibility)
-                    .position(place.latLng)
+                    .position(LatLng(place.latitude, place.longitude))
             )
 
             if (marker != null) {
@@ -130,7 +137,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        googleMap.setInfoWindowAdapter(markerInfoAdapter(this))
         mMap = googleMap
         addMarkers(mMap)
         if (checkPermission()) {
@@ -140,8 +146,64 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         }
 
         mMap.setOnMarkerClickListener { marker ->
-            selectedMarkerLatLng = marker.position
-            false // Permite que o evento padrão do marcador seja executado
+
+            val place = marker.tag as? Place ?: return@setOnMarkerClickListener false
+
+            // Criar uma instância do StartGameDialogFragment
+            val dialog = pinInformation()
+
+            // Passar as informações do marcador como argumentos
+            val args = Bundle()
+            args.putSerializable("place", place)
+            dialog.arguments = args
+
+            // Exibir o diálogo
+            dialog.show(supportFragmentManager, "MarkerInfoDialog")
+
+            false
+          
+            //adaptar o codigo para que a funcao directions() poça receber 
+          
+            //selectedMarkerLatLng = marker.position
+            //false // Permite que o evento padrão do marcador seja executado
+
+        }
+
+    }
+
+
+    class pinInformation : BottomSheetDialogFragment() {
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            val view = inflater.inflate(R.layout.dialog_marker_info, container, false)
+
+            val place = arguments?.getSerializable("place") as? Place
+
+            if (place != null) {
+                view.findViewById<TextView>(R.id.marker_title_home).text = place.name
+                view.findViewById<TextView>(R.id.marker_reference_home).text = place.reference
+                view.findViewById<TextView>(R.id.marker_address_home).text = place.address
+                view.findViewById<TextView>(R.id.marker_disponibility_home).text = if (place.disponibility) "Está disponível: Sim" else "Está disponível: Não"
+
+                val btnConsultar = view.findViewById<Button>(R.id.btnConsultar)
+                btnConsultar.setOnClickListener{
+                    val intent = Intent(activity, DataScreen::class.java).apply {
+                        putExtra("name", place.name)
+                        putExtra("reference", place.reference)
+                        putExtra("address", place.address)
+                        putExtra("disponibility", place.disponibility)
+                        putExtra("latitude", place.latitude)
+                        putExtra("longitude", place.longitude)
+                    }
+                    startActivity(intent)
+                }
+
+                val btnRota = view.findViewById<Button>(R.id.btnRota)
+                btnRota.setOnClickListener{
+                    // Adicione a ação para o botão Rota aqui
+                }
+            }
+
+            return view
         }
     }
 

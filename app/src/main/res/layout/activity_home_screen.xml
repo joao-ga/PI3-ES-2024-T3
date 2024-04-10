@@ -50,6 +50,23 @@ Textview que indica a tela menu ou "home"-->
         android:layout_marginTop="40dp"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="10dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSair"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout" />
+
+    </LinearLayout>
+
+
 <!--Botão que clica ao selecionar o pin no mapa, ee ele traçara
  uma rota até o local indicado pelo pin-->
     <androidx.appcompat.widget.AppCompatButton
@@ -70,7 +87,6 @@ Textview que indica a tela menu ou "home"-->
         android:textAllCaps="false"
         />
 
-
 <!--Botão que cadastra o cartão-->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnCadastrarCartao"
@@ -90,7 +106,5 @@ Textview que indica a tela menu ou "home"-->
         android:drawableEnd="@drawable/cardenfeite"
         android:paddingEnd="-6dp"
         />
-
-
 
 </androidx.appcompat.widget.LinearLayoutCompat>
