@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import java.util.Calendar
 
 class DataScreen : AppCompatActivity() {
 
@@ -32,10 +33,10 @@ class DataScreen : AppCompatActivity() {
 
         val radioButtons = listOf(
             findViewById<RadioButton>(R.id.radiobutton1),
-            findViewById<RadioButton>(R.id.radiobutton2),
-            findViewById<RadioButton>(R.id.radiobutton3),
-            findViewById<RadioButton>(R.id.radiobutton4),
-            findViewById<RadioButton>(R.id.radiobutton5)
+            findViewById(R.id.radiobutton2),
+            findViewById(R.id.radiobutton3),
+            findViewById(R.id.radiobutton4),
+            findViewById(R.id.radiobutton5)
         )
 
         prices?.forEachIndexed { index, price ->
@@ -47,6 +48,17 @@ class DataScreen : AppCompatActivity() {
         radioButtons.forEach { radioButton ->
             radioButton.isEnabled = disponibility
             radioButton.setTextColor(if (disponibility) Color.BLACK else Color.GRAY)
+        }
+
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+
+        if(hour in 6..8){
+            radioButtons.last().isEnabled = true
+        }
+        else{
+            radioButtons.last().isEnabled = false
+            radioButtons.last().setTextColor(Color.GRAY)
         }
 
         // Configurar o botão Voltar para fechar a tela
@@ -81,4 +93,5 @@ class DataScreen : AppCompatActivity() {
 
         }
     }
+
 }
