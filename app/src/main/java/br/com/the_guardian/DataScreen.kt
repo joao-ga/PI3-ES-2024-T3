@@ -1,46 +1,42 @@
 package br.com.the_guardian
 
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.RadioButton
 import android.widget.TextView
-import android.graphics.Color
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import com.google.firebase.firestore.FirebaseFirestore
 
 class DataScreen : AppCompatActivity() {
 
-    private val firestore = FirebaseFirestore.getInstance()
     private lateinit var btnConsultar: AppCompatButton
     private lateinit var btnVoltar: AppCompatButton
-
-    @SuppressLint("SetTextI18n")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_data_screen)
 
+        // Recuperar os dados do lugar clicado e os preços do intent
         val name = intent.getStringExtra("name")
         val reference = intent.getStringExtra("reference")
         val disponibility = intent.getBooleanExtra("disponibility", false)
         val prices = intent.getIntArrayExtra("prices")
 
+        // Atualizar a interface do usuário com os dados recuperados
         findViewById<TextView>(R.id.marker_title).text = "Alugar $name"
         findViewById<TextView>(R.id.marker_reference).text = reference
-        findViewById<TextView>(R.id.marker_disponibility).text = if (disponibility) "Está disponível: Sim"
-        else "Está disponível: Não"
+        findViewById<TextView>(R.id.marker_disponibility).text = if (disponibility) "Está disponível: Sim" else "Está disponível: Não"
 
-        val radiobutton1 = findViewById<RadioButton>(R.id.radiobutton1)
-        val radiobutton2 = findViewById<RadioButton>(R.id.radiobutton2)
-        val radiobutton3 = findViewById<RadioButton>(R.id.radiobutton3)
-        val radiobutton4 = findViewById<RadioButton>(R.id.radiobutton4)
-        val radiobutton5 = findViewById<RadioButton>(R.id.radiobutton5)
-
-        val radioButtons = listOf(radiobutton1, radiobutton2, radiobutton3, radiobutton4, radiobutton5)
+        val radioButtons = listOf(
+            findViewById<RadioButton>(R.id.radiobutton1),
+            findViewById<RadioButton>(R.id.radiobutton2),
+            findViewById<RadioButton>(R.id.radiobutton3),
+            findViewById<RadioButton>(R.id.radiobutton4),
+            findViewById<RadioButton>(R.id.radiobutton5)
+        )
 
         prices?.forEachIndexed { index, price ->
             if (index < radioButtons.size) {
@@ -53,14 +49,15 @@ class DataScreen : AppCompatActivity() {
             radioButton.setTextColor(if (disponibility) Color.BLACK else Color.GRAY)
         }
 
+        // Configurar o botão Voltar para fechar a tela
         btnVoltar = findViewById(R.id.btn_voltar)
         btnVoltar.setOnClickListener{
             finish()
         }
 
+        // Configurar o botão Consultar para iniciar a tela de QrCode
         btnConsultar = findViewById(R.id.btn_consultar)
         btnConsultar.isEnabled = disponibility
-
         btnConsultar.setOnClickListener {
             var isAnyRadioButtonChecked = false
             var checkedRadioButtonId = -1
@@ -83,6 +80,5 @@ class DataScreen : AppCompatActivity() {
             }
 
         }
-
     }
 }

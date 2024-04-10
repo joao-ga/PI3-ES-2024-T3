@@ -49,32 +49,27 @@
             <RadioButton
                 android:id="@+id/radiobutton1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="30 minutos - R$30,00" />
+                android:layout_height="wrap_content"/>
 
             <RadioButton
                 android:id="@+id/radiobutton2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="1 hora - R$60,00" />
+                android:layout_height="wrap_content"/>
 
             <RadioButton
                 android:id="@+id/radiobutton3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="2 horas - R$100,00" />
+                android:layout_height="wrap_content"/>
 
             <RadioButton
                 android:id="@+id/radiobutton4"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="4 horas - R$150,00" />
+                android:layout_height="wrap_content"/>
 
             <RadioButton
                 android:id="@+id/radiobutton5"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Até as 18 horas - R$300,00" />
+                android:layout_height="wrap_content"/>
 
         </RadioGroup>
 

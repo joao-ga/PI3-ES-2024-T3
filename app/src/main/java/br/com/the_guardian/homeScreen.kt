@@ -30,18 +30,15 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
-import android.content.SharedPreferences
 import android.graphics.Color
 import com.google.android.gms.maps.model.PolylineOptions
-import com.google.firebase.auth.FirebaseUser
 import com.google.maps.DirectionsApi
 import com.google.maps.GeoApiContext
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.auth
 import java.io.Serializable
 
-class homeScreen : AppCompatActivity(), OnMapReadyCallback {
+class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
+
     private var places: MutableList<Place> = mutableListOf(
         Place("Armário 1", -22.833953, -47.052900, "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", false),
         Place("Armário 2", -22.833877, -47.052470, "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", true),
@@ -112,16 +109,37 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
 
         btnRoute = findViewById(R.id.btnRoute)
         btnRoute.setOnClickListener{
-            btnRoute.setOnClickListener{
-                // Verificar se as coordenadas do marcador foram selecionadas
-                if (selectedMarkerLatLng != null) {
-                    // Chamar a função de traçar rota passando as coordenadas do marcador selecionado
-                    directions(selectedMarkerLatLng!!)
-                } else {
-                    Toast.makeText(this, "Por favor, selecione um marcador primeiro.", Toast.LENGTH_SHORT).show()
+            // Verificar se as coordenadas do marcador foram selecionadas
+            if (selectedMarkerLatLng != null) {
+                // Chamar a função de traçar rota passando as coordenadas do marcador selecionado
+                selectedMarkerLatLng?.let { latLng ->
+                    directions(latLng.latitude, latLng.longitude)
                 }
+            } else {
+                Toast.makeText(this, "Por favor, selecione um marcador primeiro.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    fun directions(destinationLatitude: Double, destinationLongitude: Double) {
+        val origin = userLoc
+
+        val geoApiContext = GeoApiContext.Builder()
+            .apiKey("AIzaSyAkBu8YNk9bX1jUsK4D2hEvs8xx5wBii8w")
+            .build()
+
+        val directionsApi = DirectionsApi.newRequest(geoApiContext)
+        val directionsResult = directionsApi.origin(com.google.maps.model.LatLng(origin.latitude, origin.longitude))
+            .destination(com.google.maps.model.LatLng(destinationLatitude, destinationLongitude))
+            .await()
+
+        val route = directionsResult.routes[0]
+        val polylineOptions = PolylineOptions()
+            .addAll(route.overviewPolyline.decodePath().map { convertToAndroidLatLng(it) })
+            .color(Color.BLUE)
+            .width(5f)
+
+        mMap.addPolyline(polylineOptions)
     }
 
     private fun addMarkers(googleMap: GoogleMap) {
@@ -148,16 +166,9 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
         }
 
         mMap.setOnMarkerClickListener { marker ->
-          
-            selectedMarkerLatLng = marker.position
-            // Chamar getData() quando o marcador for clicado
-            val clickedPlace = marker.tag as Place
-            getData(clickedPlace)
-            false
-
             val place = marker.tag as? Place ?: return@setOnMarkerClickListener false
 
-            // Criar uma instância do StartGameDialogFragment
+            // Criar uma instância do DialogFragment
             val dialog = pinInformation()
 
             // Passar as informações do marcador como argumentos
@@ -168,17 +179,9 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
             // Exibir o diálogo
             dialog.show(supportFragmentManager, "MarkerInfoDialog")
 
-            false
-          
-            //adaptar o codigo para que a funcao directions() poça receber 
-          
-            //selectedMarkerLatLng = marker.position
-            //false // Permite que o evento padrão do marcador seja executado
-
+            true // Retornar true para indicar que o clique no marcador foi consumido
         }
-
     }
-
 
     class pinInformation : BottomSheetDialogFragment() {
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -194,63 +197,19 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
 
                 val btnConsultar = view.findViewById<Button>(R.id.btnConsultar)
                 btnConsultar.setOnClickListener{
-                    val intent = Intent(activity, DataScreen::class.java).apply {
-                        putExtra("name", place.name)
-                        putExtra("reference", place.reference)
-                        putExtra("address", place.address)
-                        putExtra("disponibility", place.disponibility)
-                        putExtra("latitude", place.latitude)
-                        putExtra("longitude", place.longitude)
-                    }
-                    startActivity(intent)
-                }
+                    // Obter uma referência para o contexto atual
+                    val context = requireContext()
 
-                val btnRota = view.findViewById<Button>(R.id.btnRota)
-                btnRota.setOnClickListener{
-                    // Adicione a ação para o botão Rota aqui
+                    // Chamar a função getData para buscar os preços no Firebase
+                    (context as? homeScreen)?.getData(place)
+
+                    // Fechar o diálogo
+                    dismiss()
                 }
             }
 
             return view
         }
-    }
-
-    private fun nextScreen(screen: Class<*>) {
-        val newScreen = Intent(this, screen)
-        startActivity(newScreen)
-    }
-
-    private fun usuarioEstaLogado(): Boolean {
-        val auth = FirebaseAuth.getInstance()
-        val usuarioAtual = auth.currentUser
-        return usuarioAtual != null
-    }
-
-
-    //funcao para traçar a rota
-    private fun directions(destination: LatLng) {
-        val origin = userLoc
-
-        val geoApiContext = GeoApiContext.Builder()
-            .apiKey("AIzaSyAkBu8YNk9bX1jUsK4D2hEvs8xx5wBii8w")
-            .build()
-
-        val directionsApi = DirectionsApi.newRequest(geoApiContext)
-        val directionsResult = directionsApi.origin(com.google.maps.model.LatLng(origin.latitude, origin.longitude))
-            .destination(com.google.maps.model.LatLng(destination.latitude, destination.longitude))
-            .await()
-
-        val route = directionsResult.routes[0]
-        val polylineOptions = PolylineOptions()
-            .addAll(route.overviewPolyline.decodePath().map { convertToAndroidLatLng(it) })
-            .color(Color.BLUE)
-            .width(5f)
-
-        mMap.addPolyline(polylineOptions)
-    }
-
-    private fun convertToAndroidLatLng(latLng: com.google.maps.model.LatLng): LatLng {
-        return LatLng(latLng.lat, latLng.lng)
     }
 
     //funcao para buscar os precos do banco de dados
@@ -282,6 +241,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
             }
     }
 
+    // Função para abrir a tela de detalhes com os dados do lugar clicado e os preços recuperados
     private fun openDetailsScreen(clickedPlace: Place) {
         val intent = Intent(this, DataScreen::class.java).apply {
             putExtra("name", clickedPlace.name)
@@ -289,9 +249,23 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
             putExtra("disponibility", clickedPlace.disponibility)
             putExtra("prices", clickedPlace.prices.toIntArray()) // Passando os preços como um array de inteiros
         }
+        startActivity(intent)
     }
 
-    // funcoes de pegar a localizacao do usuario
+    private fun nextScreen(screen: Class<*>) {
+        val newScreen = Intent(this, screen)
+        startActivity(newScreen)
+    }
+
+    private fun usuarioEstaLogado(): Boolean {
+        val auth = FirebaseAuth.getInstance()
+        val usuarioAtual = auth.currentUser
+        return usuarioAtual != null
+    }
+
+    private fun convertToAndroidLatLng(latLng: com.google.maps.model.LatLng): LatLng {
+        return LatLng(latLng.lat, latLng.lng)
+    }
 
     private fun getCurrentLocation() {
         Log.e("debug", "entrei na getCurrentLocation")
@@ -380,4 +354,12 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    override fun onDirectionsRequested(destination: LatLng) {
+        directions(destination.latitude, destination.longitude)
+    }
+
+}
+
+interface DirectionsCallback {
+    fun onDirectionsRequested(destination: LatLng)
 }
