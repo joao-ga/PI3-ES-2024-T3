@@ -31,6 +31,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import android.graphics.Color
+import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.DirectionsApi
 import com.google.maps.GeoApiContext
@@ -65,10 +66,10 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
     private lateinit var userLoc: LatLng
     private lateinit var sharedPreferences: SharedPreferences
     private var selectedMarkerLatLng: LatLng? = null
-
-    private lateinit var btnRoute: AppCompatButton
     private lateinit var btnCadastrarCartao: AppCompatButton
     private lateinit var btnSair: AppCompatButton
+    private var currentPolyline: Polyline? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,18 +108,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
             finishAffinity()
         }
 
-        btnRoute = findViewById(R.id.btnRoute)
-        btnRoute.setOnClickListener{
-            // Verificar se as coordenadas do marcador foram selecionadas
-            if (selectedMarkerLatLng != null) {
-                // Chamar a função de traçar rota passando as coordenadas do marcador selecionado
-                selectedMarkerLatLng?.let { latLng ->
-                    directions(latLng.latitude, latLng.longitude)
-                }
-            } else {
-                Toast.makeText(this, "Por favor, selecione um marcador primeiro.", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     fun directions(destinationLatitude: Double, destinationLongitude: Double) {
@@ -139,8 +128,13 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
             .color(Color.BLUE)
             .width(5f)
 
-        mMap.addPolyline(polylineOptions)
+        // Remover a Polyline atual do mapa
+        currentPolyline?.remove()
+
+        // Adicionar a nova Polyline ao mapa e guardar a referência
+        currentPolyline = mMap.addPolyline(polylineOptions)
     }
+
 
     private fun addMarkers(googleMap: GoogleMap) {
         places.forEach { place ->
@@ -206,6 +200,14 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
                     // Fechar o diálogo
                     dismiss()
                 }
+
+                val bntRota = view.findViewById<Button>(R.id.btnRota)
+                bntRota.setOnClickListener{
+                    val homeScreenActivity = activity as homeScreen
+                    homeScreenActivity.selectedMarkerLatLng = LatLng(place.latitude, place.longitude)
+                    homeScreenActivity.directions(place.latitude, place.longitude)
+                }
+
             }
 
             return view
