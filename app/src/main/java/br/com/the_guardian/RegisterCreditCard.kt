@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import com.google.firebase.Firebase
@@ -30,10 +31,12 @@ class RegisterCreditCard : AppCompatActivity() {
     private lateinit var btnEnviar: AppCompatButton
     private lateinit var btnVoltar: AppCompatButton
 
-    data class CreditCards(val cardNumber: String? = null,
-                          val cardName: String? = null,
-                          val expDate: String? = null,
-                          val secCode: String? = null)
+    data class CreditCards(
+        val idUser: String? = null,
+        val cardNumber: String? = null,
+        val cardName: String? = null,
+        val expDate: String? = null,
+        val secCode: String? = null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +46,7 @@ class RegisterCreditCard : AppCompatActivity() {
         database = Firebase.database.reference
         db = FirebaseFirestore.getInstance()
         functions = Firebase.functions("southamerica-east1")
+        val currentUser = auth.currentUser
 
         etNumCartao = findViewById(R.id.etNumCartao)
         etName = findViewById(R.id.etName)
@@ -54,8 +58,9 @@ class RegisterCreditCard : AppCompatActivity() {
             val cardName = etName.text.toString()
             val expDate = etExpDate.text.toString()
             val secCode = etSecCode.text.toString()
+            val idUser = currentUser?.uid
 
-            val card = CreditCards(cardNumber, cardName, expDate, secCode)
+            val card = CreditCards(idUser, cardNumber, cardName, expDate, secCode)
 
             addCreditCard(card)
         }
@@ -69,6 +74,7 @@ class RegisterCreditCard : AppCompatActivity() {
 
     private fun addCreditCard(card: RegisterCreditCard.CreditCards) {
         val cc = hashMapOf(
+            "idUser" to card.idUser,
             "cardName" to card.cardName,
             "cardNumber" to card.cardNumber,
             "secCode" to card.secCode,
@@ -81,10 +87,12 @@ class RegisterCreditCard : AppCompatActivity() {
                 // Sucesso ao cadastrar o usuário
                 val response = result.data as HashMap<*, *>
                 Log.d(ContentValues.TAG, "Cartão de crédito cadastrado com sucesso")
+                Toast.makeText(this, "Cartão de Crédito cadastrado com sucesso.", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { e ->
                 // Erro ao cadastrar o usuário
                 Log.w(ContentValues.TAG, "Erro ao cadastrar Cartão de crédito", e)
+                Toast.makeText(this, "Cartão não cadastrado.", Toast.LENGTH_SHORT).show()
             }
     }
 
