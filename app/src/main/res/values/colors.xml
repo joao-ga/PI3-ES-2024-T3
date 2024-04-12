@@ -17,4 +17,5 @@
     <color name="white">#F6F6F6</color>
     <color name="grey_button">#D9D9D9</color>
     <color name="grey_texto_card">#9B9B9B</color>
+    <color name="dark_grey">#C6C6C6</color>
 </resources>

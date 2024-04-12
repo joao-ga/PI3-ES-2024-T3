@@ -39,20 +39,20 @@ Textview que indica a tela menu ou "home"-->
         android:fontFamily="@font/kronaone_regular"
         android:textSize="24sp"/>
 <!--MAPA-->
-    <fragment
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.cardview.widget.CardView
         android:layout_width="386dp"
-        android:layout_height="440dp"
-        android:id="@+id/map"
-        tools:context=".MapsActivity"
+        android:layout_height="470dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="40dp"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
+        app:cardCornerRadius="6dp">
 
-
-<!--Botão que clica ao selecionar o pin no mapa, ee ele traçara
- uma rota até o local indicado pelo pin-->
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="386dp"
+            android:layout_height="470dp"
+            tools:context=".MapsActivity" />
+    </androidx.cardview.widget.CardView>
 
 <!--Botão que cadastra o cartão-->
     <androidx.appcompat.widget.AppCompatButton
