@@ -12,15 +12,41 @@ import androidx.appcompat.widget.AppCompatButton
 import com.google.firebase.auth.FirebaseAuth
 import java.util.Calendar
 
+data class Locacao(
+    val userId: String,
+    val userLoc: String?,
+    val priceSelected: Double
+)
+
 class DataScreen : AppCompatActivity() {
 
     // variáveis para os botões
     private lateinit var btnConsultar: AppCompatButton
     private lateinit var btnVoltar: AppCompatButton
 
+    private lateinit var auth: FirebaseAuth
+    private var locacaoAtual: Locacao? = null
+    private lateinit var userId: String // Movendo a declaração para o escopo adequado
+
+    private fun confirmacao(locacao: Locacao) {
+        Toast.makeText(this, "Locação confirmada: $locacao", Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        var locacoesConfirmadas = mutableListOf<Locacao>()
+        // Variável global para indicar se uma locação foi confirmada, usa-la para mandar o usuario direto para tela do qrcode
+        var locacaoConfirmada: Boolean = false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_data_screen)
+
+        // Inicialização da FirebaseAuth
+        auth = FirebaseAuth.getInstance()
+
+        // Obtendo o usuário atual
+        userId = auth.currentUser?.uid ?: ""
 
         // recuperar os dados do lugar referênciado e os preços do intent
         val name = intent.getStringExtra("name")
@@ -58,17 +84,16 @@ class DataScreen : AppCompatActivity() {
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
 
-        if(hour in 6..8){
+        if (hour in 6..8) {
             radioButtons.last().isEnabled = true
-        }
-        else{
+        } else {
             radioButtons.last().isEnabled = false
             radioButtons.last().setTextColor(Color.GRAY)
         }
 
         // Configurar o botão Voltar para fechar a tela
         btnVoltar = findViewById(R.id.btn_voltar)
-        btnVoltar.setOnClickListener{
+        btnVoltar.setOnClickListener {
             finish()
         }
 
@@ -91,12 +116,33 @@ class DataScreen : AppCompatActivity() {
             // se algum botão foi selecionado, inicia a tela de QrCode com o preço selecionado
             if (isAnyRadioButtonChecked) {
                 if(usuarioEstaLogado()) {
-                    val intent = Intent(this, QrCodeScreen::class.java).apply {
-                        putExtra("checkedRadioButtonText", findViewById<RadioButton>(checkedRadioButtonId).text.toString())
+                    if(locacaoConfirmada) {
+                        if (locacaoAtual == null) {
+                            val precoSelecionadoText = findViewById<RadioButton>(checkedRadioButtonId).text.toString()
+                            val precoNumerico = precoSelecionadoText.substringAfter("R$ ").toDoubleOrNull()
+                            if (precoNumerico != null) {
+                                val userLoc = name
+                                val precoSelecionado = precoNumerico
+                                locacaoAtual = Locacao(userId, userLoc, precoSelecionado)
+                                locacoesConfirmadas.add(locacaoAtual!!)
+                                locacaoConfirmada = true // Atualizando a variável global para indicar que a locação foi confirmada
+                                confirmacao(locacaoAtual!!)
+                                val intent = Intent(this, QrCodeScreen::class.java).apply {
+                                    putExtra("checkedRadioButtonText", precoSelecionadoText)
+                                }
+                                startActivity(intent)
+                            } else {
+                                Toast.makeText(this, "Preço selecionado inválido", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(this, "Você já possui uma locação confirmada.", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(this, "Você já possui uma locação confirmada.", Toast.LENGTH_SHORT).show()
+
                     }
-                    startActivity(intent)
-                } else{
-                    Toast.makeText(baseContext, "Para acessar essa funcionalidade, faça o login", Toast.LENGTH_SHORT,).show()
+                } else {
+                    Toast.makeText(baseContext, "Para acessar essa funcionalidade, faça o login", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 Toast.makeText(this, "Escolha uma opção", Toast.LENGTH_SHORT).show()
