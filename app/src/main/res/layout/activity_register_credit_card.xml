@@ -245,6 +245,18 @@
         android:textSize="14sp"
         />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="293dp"
+        android:layout_height="47dp"
+        android:text="@string/aviso"
+        android:textSize="12sp"
+        android:fontFamily="@font/jurabold"
+        android:layout_marginStart="60dp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/dark_blue"
+        />
+
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnEnviar"
         android:layout_width="250dp"
@@ -265,7 +277,7 @@
         android:id="@+id/btnVoltar"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        style="style/button_voltar"
+        style="@style/button_voltar"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
         android:drawableStart="@drawable/baseline_arrow_back_ios_new_24"

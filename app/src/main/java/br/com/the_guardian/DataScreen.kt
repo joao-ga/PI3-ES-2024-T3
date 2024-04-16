@@ -136,7 +136,7 @@ class DataScreen : AppCompatActivity() {
         // configuração da disponibilidade e cor dos botões de preço com base na disponibilidade
         radioButtons.forEach { radioButton ->
             radioButton.isEnabled = disponibility
-            radioButton.setTextColor(if (disponibility) Color.BLACK else Color.GRAY)
+            radioButton.setTextColor(if (disponibility) Color.rgb(160,228,24) else Color.rgb(217,217,217))
         }
 
         // verifica a hora atual para habilitar ou desabilitar o botão do dia inteiro

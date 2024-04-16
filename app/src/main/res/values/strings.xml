@@ -1,6 +1,6 @@
 <resources>
 
-    <!--Strings da tela de cadastro-->
+    <!--Strings da tela de login-->
     <string name="app_name">the-guardian</string>
     <string name="welcome_back">Bem-vindo de volta,</string>
     <string name="get_started">Para começarmos, entre usando seu email e senha.</string>
@@ -18,7 +18,20 @@
     <string name="ou">ou</string>
     <string name="informemail" >Informe um email</string>
 
-
+    <!--Strings da telka de cadastro de usuário-->
+    <string name="bem_vindo">Bem vindo!</string>
+    <string name="para_come_ar_entre_com_suas_credenciais">Para começar entre com suas credenciais.</string>
+    <string name="nome_cadastro">Nome</string>
+    <string name="cpf_cadastro">CPF</string>
+    <string name="data_nascimento">Data de nascimento\n</string>
+    <string name="telefone_cadastro">Telefone</string>
+    <string name="e_mail_cadastro">E-mail</string>
+    <string name="senha_cadastro">Senha</string>
+    <string name="cadastrar_se">Cadastre-se</string>
+    <string name="j_possu_uma_conta">Já possuí uma conta?\n</string>
+    <string name="voltar_login"><b>LOGIN</b></string>
+    <string name="cadastro_realizado">Cadastro realizado</string>
+    <string name="cadastro_negado">Cadastro negado</string>
 
     <!--- Strings da tela de cadastro de cartão-->
     <string name="cadastracartao">CADASTRAR CARTÃO</string>
@@ -30,23 +43,25 @@
     <string name="numberamostra">0000  0000  0000  0000</string>
     <string name="nameamostra">nome</string>
     <string name="dataamostra">00/00</string>
+    <string name="aviso">Ao realizar uma locação, será <font color= "#5218FA">cobrado a caução de uma diária </font>, e
+        estornado de acordo com o período utilizado do armário.</string>
 
     <!---Strings da tela menu-->
     <string name="home">HOME</string>
     <string name="habilita_cartão">Cadastrar cartão</string>
-    <string name="rota">Trace rota \naté armários</string>
-    <string name="bem_vindo">Bem vindo!</string>
-    <string name="para_come_ar_entre_com_suas_credenciais">Para começar entre com suas credenciais.</string>
-    <string name="nome_cadastro">Nome</string>
-    <string name="cpf_cadastro">CPF</string>
-    <string name="data_nascimento">Data de nascimento\n</string>
-    <string name="telefone_cadastro">Telefone</string>
-    <string name="e_mail_cadastro">E-mail</string>
-    <string name="senha_cadastro">Senha</string>
-    <string name="cadastrar_se">Cadastre-se</string>
-    <string name="j_possu_uma_conta">Já possuí uma conta?\n</string>
-    <string name="voltar_login">Login</string>
-    <string name="cadastro_realizado">Cadastro realizado</string>
-    <string name="cadastro_negado">Cadastro negado</string>
+    <string name="descrição">Sair do aplicativo</string>
+
+    <!--Strings da tela de opção de aliguel-->
+    <string name="aluga_armar">ALUGAR ARMÁRIOS</string>
+    <string name="confirmaloc">CONFIRMAR</string>
+    <string name="avisoarmario">O tempo de aluguel de todos os armários são <font color= "#5218FA">estáticos</font> (meia hora para 1h).</string>
+    <string name="prox">Escolha uma opção</string>
+    <style name="markertitle">ALUGAR</style>
+    <style name="voltardescr">voltar</style>
+
+<!--Strings da dialog de traçar rota-->
+    <string name="rota">TRAÇAR ROTA</string>
+    <string name="consulta">CONSULTAR</string>
+
 
 </resources>
