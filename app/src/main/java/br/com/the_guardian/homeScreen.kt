@@ -177,6 +177,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         // chama a funcao para adicionar os marcadores
+
         addMarkers(mMap)
         // verifica se o usuario permitiu acessar a localizacao
         if (checkPermission()) {
