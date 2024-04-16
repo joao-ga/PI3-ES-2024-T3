@@ -289,6 +289,8 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
             putExtra("reference", clickedPlace.reference)
             putExtra("disponibility", clickedPlace.disponibility)
             putExtra("prices", clickedPlace.prices.toIntArray())
+            putExtra("userLocLatitude", userLoc.latitude)
+            putExtra("userLocLongitude", userLoc.longitude)
         }
         // inicia nova activity
         startActivity(intent)

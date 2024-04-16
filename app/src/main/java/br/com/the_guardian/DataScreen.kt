@@ -3,6 +3,7 @@ package br.com.the_guardian
 // importações
 import android.content.Intent
 import android.graphics.Color
+import android.location.Location
 import android.os.Bundle
 import android.widget.RadioButton
 import android.widget.TextView
@@ -10,19 +11,73 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.google.firebase.auth.FirebaseAuth
+import com.google.android.gms.maps.model.LatLng
 import java.util.Calendar
 
 data class Locacao(
     val userId: String,
-    val userLoc: String?,
+    val userLoc: LatLng?,
+    val actualLocker: homeScreen.Place?,
     val priceSelected: Double
 )
 
 class DataScreen : AppCompatActivity() {
 
+    private var places: MutableList<homeScreen.Place> = mutableListOf(
+        homeScreen.Place(
+            "Armário 1",
+            -22.833953,
+            -47.052900,
+            "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900",
+            "Em frente ao prédio h15",
+            false
+        ),
+        homeScreen.Place(
+            "Armário 2",
+            -22.833877,
+            -47.052470,
+            "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900",
+            "Em frente ao prédio h15",
+            true
+        ),
+        homeScreen.Place(
+            "Armário 3",
+            -22.834040,
+            -47.051999,
+            "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP",
+            "Em frente ao prédio h13",
+            false
+        ),
+        homeScreen.Place(
+            "Armário 4",
+            -22.834028,
+            -47.051889,
+            "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP",
+            "Em frente ao prédio h13",
+            true
+        ),
+        homeScreen.Place(
+            "Armário 5",
+            -22.833963,
+            -47.051539,
+            "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900",
+            "Em frente ao prédio h11",
+            false
+        ),
+        homeScreen.Place(
+            "Armário 6",
+            -22.833928,
+            -47.051418,
+            "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900",
+            "Em frente ao prédio h11",
+            true
+        )
+    )
+
     // variáveis para os botões
     private lateinit var btnConsultar: AppCompatButton
     private lateinit var btnVoltar: AppCompatButton
+    private lateinit var actualLocker: homeScreen.Place
 
     private lateinit var auth: FirebaseAuth
     private var locacaoAtual: Locacao? = null
@@ -53,11 +108,15 @@ class DataScreen : AppCompatActivity() {
         val reference = intent.getStringExtra("reference")
         val disponibility = intent.getBooleanExtra("disponibility", false)
         val prices = intent.getIntArrayExtra("prices")
+        val userLocLatitude = intent.getDoubleExtra("userLocLatitude", 0.0)
+        val userLocLongitude = intent.getDoubleExtra("userLocLongitude", 0.0)
+        val userLoc = LatLng(userLocLatitude, userLocLongitude)
 
         // atualizar a interface do usuário com os dados recuperados
         findViewById<TextView>(R.id.marker_title).text = "Alugar $name"
         findViewById<TextView>(R.id.marker_reference).text = reference
         findViewById<TextView>(R.id.marker_disponibility).text = if (disponibility) "Está disponível: Sim" else "Está disponível: Não"
+
 
         // configuração dos botões de preço
         val radioButtons = listOf(
@@ -113,32 +172,60 @@ class DataScreen : AppCompatActivity() {
                 }
             }
 
+            fun calcularDistancia(segunda: LatLng):Double {
+                var localizacaoAtual = Location("")
+                localizacaoAtual.latitude = userLocLatitude
+                localizacaoAtual.longitude = userLocLongitude
+
+                var localizacaoSegunda = Location("")
+                localizacaoSegunda.latitude = segunda.latitude
+                localizacaoSegunda.longitude = segunda.longitude
+
+                var distancia = localizacaoAtual.distanceTo(localizacaoSegunda) / 100.0
+
+                return distancia
+            }
+            fun checkLocation(): Boolean {
+                for (place in places) {
+                    var locPlace = LatLng(place.latitude, place.longitude)
+                    var distancia = calcularDistancia(locPlace)
+                    if (distancia <= 1.0) {
+                        actualLocker = place
+                        return true
+                    }
+                }
+                return false
+            }
             // se algum botão foi selecionado, inicia a tela de QrCode com o preço selecionado
             if (isAnyRadioButtonChecked) {
                 if(usuarioEstaLogado()) {
-                    if(locacaoConfirmada) {
-                        if (locacaoAtual == null) {
-                            val precoSelecionadoText = findViewById<RadioButton>(checkedRadioButtonId).text.toString()
-                            val precoNumerico = precoSelecionadoText.substringAfter("R$ ").toDoubleOrNull()
-                            if (precoNumerico != null) {
-                                val userLoc = name
-                                val precoSelecionado = precoNumerico
-                                locacaoAtual = Locacao(userId, userLoc, precoSelecionado)
-                                locacoesConfirmadas.add(locacaoAtual!!)
-                                locacaoConfirmada = true // Atualizando a variável global para indicar que a locação foi confirmada
-                                confirmacao(locacaoAtual!!)
-                                val intent = Intent(this, QrCodeScreen::class.java).apply {
-                                    putExtra("checkedRadioButtonText", precoSelecionadoText)
+                    if(checkLocation()) {
+                        if(locacaoConfirmada) {
+                            if (locacaoAtual == null) {
+                                val precoSelecionadoText = findViewById<RadioButton>(checkedRadioButtonId).text.toString()
+                                val precoNumerico = precoSelecionadoText.substringAfter("R$ ").toDoubleOrNull()
+                                if (precoNumerico != null) {
+                                    val locker = actualLocker
+                                    val priceSelected = precoNumerico
+                                    locacaoAtual = Locacao(userId,userLoc, locker,  priceSelected)
+                                    locacoesConfirmadas.add(locacaoAtual!!)
+                                    locacaoConfirmada = true // Atualizando a variável global para indicar que a locação foi confirmada
+                                    confirmacao(locacaoAtual!!)
+                                    val intent = Intent(this, QrCodeScreen::class.java).apply {
+                                        putExtra("checkedRadioButtonText", precoSelecionadoText)
+                                    }
+                                    startActivity(intent)
+                                } else {
+                                    Toast.makeText(this, "Preço selecionado inválido", Toast.LENGTH_SHORT).show()
                                 }
-                                startActivity(intent)
                             } else {
-                                Toast.makeText(this, "Preço selecionado inválido", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this, "Você já possui uma locação confirmada.", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             Toast.makeText(this, "Você já possui uma locação confirmada.", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(this, "Você já possui uma locação confirmada.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(baseContext, "Para realizar a locação, você devera estar entre 1 km", Toast.LENGTH_LONG).show()
 
                     }
                 } else {
