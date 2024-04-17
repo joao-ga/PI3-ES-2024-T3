@@ -127,11 +127,27 @@ class DataScreen : AppCompatActivity() {
             findViewById(R.id.radiobutton5)
         )
 
+        // Supondo que "pricesFromDatabase" seja uma lista de preços obtida do banco de dados
+
+
+
+        // Recupere as strings dos recursos
+        val time30Min = resources.getString(R.string.time_30_min)
+        val time1h = resources.getString(R.string.time_1h)
+        val time2h = resources.getString(R.string.time_2h)
+        val time4h = resources.getString(R.string.time_4h)
+        val time18h = resources.getString(R.string.time_18h)
+
+        val horario = listOf(time30Min, time1h, time2h, time4h, time18h)
+
+        // Itera sobre os preços e os configura nos botões de rádio para cada horário
         prices?.forEachIndexed { index, price ->
             if (index < radioButtons.size) {
-                radioButtons[index].text = "R$ $price"
+                radioButtons[index].text = "${horario[index]} | R$ $price"
             }
         }
+
+
 
         // configuração da disponibilidade e cor dos botões de preço com base na disponibilidade
         radioButtons.forEach { radioButton ->
