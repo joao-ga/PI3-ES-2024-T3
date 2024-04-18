@@ -37,6 +37,7 @@
         android:layout_marginStart="-3dp"
         android:layout_marginTop="30dp"
         android:minHeight="300dp"
+        android:background="@color/light_grey"
 
         />
 
@@ -60,10 +61,11 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="40dp"
             android:layout_marginBottom="10dp"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textSize="16sp"
             android:fontFamily="@font/kronaone_regular"
-            android:buttonTint="@color/grey"/>
+            android:buttonTint="@color/grey"
+            android:paddingStart="20dp"/>
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/radiobutton2"
@@ -72,10 +74,11 @@
             style="@style/login_button"
             android:layout_marginStart="40dp"
             android:layout_marginBottom="10dp"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textSize="16sp"
             android:fontFamily="@font/kronaone_regular"
-            android:buttonTint="@color/grey"/>
+            android:buttonTint="@color/grey"
+            android:paddingStart="20dp"/>
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/radiobutton3"
@@ -85,10 +88,11 @@
             android:textColor="@color/green"
             android:layout_marginStart="40dp"
             android:layout_marginBottom="10dp"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textSize="16sp"
             android:fontFamily="@font/kronaone_regular"
-            android:buttonTint="@color/grey"/>
+            android:buttonTint="@color/grey"
+            android:paddingStart="20dp"/>
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/radiobutton4"
@@ -98,10 +102,11 @@
             android:textColor="@color/green"
             android:layout_marginStart="40dp"
             android:layout_marginBottom="10dp"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textSize="16sp"
             android:fontFamily="@font/kronaone_regular"
             android:buttonTint="@color/grey"
+            android:paddingStart="20dp"
             />
 
         <androidx.appcompat.widget.AppCompatRadioButton
@@ -112,16 +117,17 @@
             android:textColor="@color/green"
             android:layout_marginStart="40dp"
             android:layout_marginBottom="10dp"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textSize="16sp"
             android:fontFamily="@font/kronaone_regular"
-            android:buttonTint="@color/grey" />
+            android:buttonTint="@color/grey"
+            android:paddingStart="20dp"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="293dp"
         android:layout_height="47dp"
         android:text="@string/avisoarmario"
-        android:textSize="12sp"
+        android:textSize="15sp"
         android:fontFamily="@font/jurabold"
         android:layout_marginStart="60dp"
         android:textAlignment="center"
@@ -139,7 +145,7 @@
         android:textColor="@color/dark_blue"
         android:textSize="18sp"
         android:fontFamily="@font/kronaone_regular"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="35dp"/>
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -149,8 +155,8 @@
         android:textColor="@color/dark_blue"
         android:textAlignment="center"
         android:textSize="16sp"
-        android:fontFamily="@font/jurabold"
-        android:layout_marginTop="4dp"/>
+        android:fontFamily="@font/juramedium"
+        android:layout_marginTop="-17dp"/>
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -161,7 +167,7 @@
         android:textAlignment="center"
         android:textSize="16sp"
         android:fontFamily="@font/jurabold"
-        android:layout_marginTop="4dp"/>
+        android:layout_marginTop="-10dp"/>
 
 
     <androidx.appcompat.widget.AppCompatButton
@@ -173,7 +179,7 @@
         android:textSize="24sp"
         android:fontFamily="@font/kronaone_regular"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="1dp"
         android:layout_width="250dp"
         android:layout_height="49dp"
@@ -187,7 +193,7 @@
         android:paddingStart="3dp"
         android:paddingEnd="3dp"
         android:drawableStart="@drawable/baseline_arrow_back_ios_new_24"
-        android:layout_marginTop="-710dp"
+        android:layout_marginTop="-707dp"
         android:layout_marginStart="35dp"
         />
 

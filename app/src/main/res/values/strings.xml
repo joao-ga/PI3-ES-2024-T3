@@ -54,10 +54,15 @@
     <!--Strings da tela de opção de aliguel-->
     <string name="aluga_armar">ALUGAR ARMÁRIOS</string>
     <string name="confirmaloc">CONFIRMAR</string>
-    <string name="avisoarmario">O tempo de aluguel de todos os armários são <font color= "#5218FA">estáticos</font> (meia hora para 1h).</string>
+    <string name="avisoarmario">A opção das 18h é válida, somente a partir das: <font color= "#5218FA">7h e 8h da manhã </font>.</string>
     <string name="prox">Escolha uma opção</string>
     <style name="markertitle">ALUGAR</style>
     <style name="voltardescr">voltar</style>
+    <string name="time_30_min">30 min</string>
+    <string name="time_1h">1h</string>
+    <string name="time_2h">2h</string>
+    <string name="time_4h">3h</string>
+    <string name="time_18h">até às 18h</string>
 
 <!--Strings da dialog de traçar rota-->
     <string name="rota">TRAÇAR ROTA</string>
