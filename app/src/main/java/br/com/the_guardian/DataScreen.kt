@@ -1,10 +1,13 @@
 package br.com.the_guardian
 
 // importações
+import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
@@ -12,11 +15,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.Firebase
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.database
 import java.util.Calendar
+import com.google.firebase.firestore.FirebaseFirestore
 
 data class Locacao(
     val userId: String,
-    val userLoc: LatLng?,
+    val userLoc: LatLng,
     val actualLocker: homeScreen.Place?,
     val priceSelected: Double
 )
@@ -78,6 +85,8 @@ class DataScreen : AppCompatActivity() {
     private lateinit var btnConsultar: AppCompatButton
     private lateinit var btnVoltar: AppCompatButton
     private lateinit var actualLocker: homeScreen.Place
+    private lateinit var db: FirebaseFirestore
+    private lateinit var database: DatabaseReference
 
     private lateinit var auth: FirebaseAuth
     private var locacaoAtual: Locacao? = null
@@ -93,15 +102,24 @@ class DataScreen : AppCompatActivity() {
         var locacaoConfirmada: Boolean = false
     }
 
+    private var checkedRadioButtonId: Int = -1
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_data_screen)
 
         // Inicialização da FirebaseAuth
         auth = FirebaseAuth.getInstance()
+        database = Firebase.database.reference
+        db = FirebaseFirestore.getInstance()
 
         // Obtendo o usuário atual
         userId = auth.currentUser?.uid ?: ""
+
+        verificarLocacaoUsuario()
+        if(locacaoConfirmada) {
+            enviarParaTelaQRCode()
+        }
 
         // recuperar os dados do lugar referênciado e os preços do intent
         val name = intent.getStringExtra("name")
@@ -161,7 +179,7 @@ class DataScreen : AppCompatActivity() {
         btnConsultar.isEnabled = disponibility
         btnConsultar.setOnClickListener {
             var isAnyRadioButtonChecked = false
-            var checkedRadioButtonId = -1
+
 
             // verificação se algum botão de preço foi selecionado
             for (radioButton in radioButtons) {
@@ -173,22 +191,22 @@ class DataScreen : AppCompatActivity() {
             }
 
             fun calcularDistancia(segunda: LatLng):Double {
-                var localizacaoAtual = Location("")
+                val localizacaoAtual = Location("")
                 localizacaoAtual.latitude = userLocLatitude
                 localizacaoAtual.longitude = userLocLongitude
 
-                var localizacaoSegunda = Location("")
+                val localizacaoSegunda = Location("")
                 localizacaoSegunda.latitude = segunda.latitude
                 localizacaoSegunda.longitude = segunda.longitude
 
-                var distancia = localizacaoAtual.distanceTo(localizacaoSegunda) / 100.0
+                val distancia = localizacaoAtual.distanceTo(localizacaoSegunda) / 100.0
 
                 return distancia
             }
             fun checkLocation(): Boolean {
                 for (place in places) {
-                    var locPlace = LatLng(place.latitude, place.longitude)
-                    var distancia = calcularDistancia(locPlace)
+                    val locPlace = LatLng(place.latitude, place.longitude)
+                    val distancia = calcularDistancia(locPlace)
                     if (distancia <= 1.0) {
                         actualLocker = place
                         return true
@@ -200,16 +218,16 @@ class DataScreen : AppCompatActivity() {
             if (isAnyRadioButtonChecked) {
                 if(usuarioEstaLogado()) {
                     if(checkLocation()) {
-                        if(locacaoConfirmada) {
+                        if(!locacaoConfirmada) {
                             if (locacaoAtual == null) {
                                 val precoSelecionadoText = findViewById<RadioButton>(checkedRadioButtonId).text.toString()
                                 val precoNumerico = precoSelecionadoText.substringAfter("R$ ").toDoubleOrNull()
                                 if (precoNumerico != null) {
                                     val locker = actualLocker
                                     val priceSelected = precoNumerico
+                                    atualizarStatusLocacaoUsuario()
                                     locacaoAtual = Locacao(userId,userLoc, locker,  priceSelected)
                                     locacoesConfirmadas.add(locacaoAtual!!)
-                                    locacaoConfirmada = true // Atualizando a variável global para indicar que a locação foi confirmada
                                     confirmacao(locacaoAtual!!)
                                     val intent = Intent(this, QrCodeScreen::class.java).apply {
                                         putExtra("checkedRadioButtonText", precoSelecionadoText)
@@ -226,7 +244,6 @@ class DataScreen : AppCompatActivity() {
                         }
                     } else {
                         Toast.makeText(baseContext, "Para realizar a locação, você devera estar entre 1 km", Toast.LENGTH_LONG).show()
-
                     }
                 } else {
                     Toast.makeText(baseContext, "Para acessar essa funcionalidade, faça o login", Toast.LENGTH_SHORT).show()
@@ -237,8 +254,65 @@ class DataScreen : AppCompatActivity() {
         }
     }
 
+    private fun verificarLocacaoUsuario() {
+        val currentUser = auth.currentUser?.uid
+        Log.d("debugg", "entrou na funcao")
+        if (currentUser != null) {
+            db.collection("Users").whereEqualTo("id", currentUser)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        val document = querySnapshot.documents[0]
+                        Log.d("debugg", document.toString())
+                        val hasLocker = document["hasLocker"]
+                        Log.d("debugg", hasLocker.toString())
+                        if (hasLocker.toString() == "true") {
+                            // O usuário já possui um armário locado
+                            locacaoConfirmada = true
+
+                        }
+                    } else {
+                        Log.d(TAG, "Documento do usuário não encontrado")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(TAG, "Falha ao obter o documento do usuário:", exception)
+                }
+        }
+    }
+
+    private fun atualizarStatusLocacaoUsuario() {
+        val currentUser = auth.currentUser?.uid
+        if (currentUser != null) {
+            db.collection("Users")
+                .whereEqualTo("id", currentUser)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        db.collection("Users")
+                            .document(document.id)
+                            .update("hasLocker", true)
+                            .addOnSuccessListener {
+                                Log.d(TAG, "Status de locação atualizado com sucesso!")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(TAG, "Erro ao atualizar o status de locação", e)
+                            }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Erro ao obter documentos", e)
+                }
+        }
+    }
+
+    private fun enviarParaTelaQRCode() {
+        val intent = Intent(this, QrCodeScreen::class.java).apply {
+        }
+        startActivity(intent)
+    }
+
     private fun usuarioEstaLogado(): Boolean {
-        val auth = FirebaseAuth.getInstance()
         val usuarioAtual = auth.currentUser
         return usuarioAtual != null
     }

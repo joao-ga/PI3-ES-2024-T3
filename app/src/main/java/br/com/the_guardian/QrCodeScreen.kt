@@ -20,8 +20,8 @@ class QrCodeScreen : AppCompatActivity() {
         setContentView(R.layout.activity_qr_code_screen)
 
         // recupera o texto do código do intent
-        val checkedRadioButtonText = intent.getStringExtra("checkedRadioButtonText")
-        if (checkedRadioButtonText != null) {
+
+
 
             // referência para o ImageView onde o QR code será exibido
             val qrCode = findViewById<ImageView>(R.id.qrCode)
@@ -44,7 +44,7 @@ class QrCodeScreen : AppCompatActivity() {
             // exibe o código gerado em um TextView na tela
             var textCode = findViewById<TextView>(R.id.codigo)
             textCode.text = text.toString()
-        }
+
     }
 
     // função para converter um texto em um QR code na forma de Bitmap

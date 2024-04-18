@@ -47,11 +47,13 @@ class registerScreen : AppCompatActivity() {
 
 
     // classe usuário, representa os dados do usuário
-    data class User(val name: String? = null,
-                    val email: String? = null,
-                    val phone: String? = null,
-                    val cpf:String? = null,
-                    val birth:String? = null)
+    data class User(
+        val uid: String? = null,
+        val name: String? = null,
+        val email: String? = null,
+        val phone: String? = null,
+        val cpf:String? = null,
+        val birth:String? = null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +64,7 @@ class registerScreen : AppCompatActivity() {
         database = Firebase.database.reference
         db = FirebaseFirestore.getInstance()
         functions = Firebase.functions("southamerica-east1")
+        val currentUser = auth.currentUser
 
         etName = findViewById(R.id.etName)
         etEmail = findViewById(R.id.etEmail)
@@ -74,6 +77,7 @@ class registerScreen : AppCompatActivity() {
         btnEnviar = findViewById(R.id.btnEnviar)
         btnEnviar.setOnClickListener {view->
             // cria variaveis para receber os dados do usuário
+            val uid = currentUser?.uid
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
             val cpf = etCpf.text.toString()
@@ -82,7 +86,7 @@ class registerScreen : AppCompatActivity() {
             val phone = etPhone.text.toString()
 
             // instancia usuário
-            val user = User(name, email, phone,  cpf, birth)
+            val user = User(uid, name, email, phone,  cpf, birth)
 
             // valida se todos os campos estão preenchidos
             if(email.isEmpty() || password.isEmpty() || cpf.isEmpty() || birth.isEmpty() || name.isEmpty()|| phone.isEmpty()) {
@@ -161,6 +165,7 @@ class registerScreen : AppCompatActivity() {
     private fun addUser(u: User) {
         // faz um map nos dados do usuário
         val user = hashMapOf(
+            "uid" to u.uid,
             "name" to u.name,
             "email" to u.email,
             "cpf" to u.cpf,
