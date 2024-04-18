@@ -53,7 +53,8 @@ class registerScreen : AppCompatActivity() {
         val email: String? = null,
         val phone: String? = null,
         val cpf:String? = null,
-        val birth:String? = null)
+        val birth:String? = null,
+        val hasLocker:Boolean)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,9 +85,10 @@ class registerScreen : AppCompatActivity() {
             val birth = etNascimento.text.toString()
             val name = etName.text.toString()
             val phone = etPhone.text.toString()
+            val hasLocker = false
 
             // instancia usuário
-            val user = User(uid, name, email, phone,  cpf, birth)
+            val user = User(uid, name, email, phone,  cpf, birth, hasLocker)
 
             // valida se todos os campos estão preenchidos
             if(email.isEmpty() || password.isEmpty() || cpf.isEmpty() || birth.isEmpty() || name.isEmpty()|| phone.isEmpty()) {
@@ -170,7 +172,8 @@ class registerScreen : AppCompatActivity() {
             "email" to u.email,
             "cpf" to u.cpf,
             "birth" to u.birth,
-            "phone" to u.phone
+            "phone" to u.phone,
+            "hasLocker" to u.hasLocker
         )
         // chama a função do Firebase para cadastrar o usuário
         functions.getHttpsCallable("addUser").call(user)
