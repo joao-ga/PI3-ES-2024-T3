@@ -13,13 +13,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import com.google.firebase.auth.FirebaseAuth
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
-import java.util.Calendar
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Calendar
 
 data class Locacao(
     val userId: String,
@@ -145,11 +145,27 @@ class DataScreen : AppCompatActivity() {
             findViewById(R.id.radiobutton5)
         )
 
+        // Supondo que "pricesFromDatabase" seja uma lista de preços obtida do banco de dados
+
+
+
+        // Recupere as strings dos recursos
+        val time30Min = resources.getString(R.string.time_30_min)
+        val time1h = resources.getString(R.string.time_1h)
+        val time2h = resources.getString(R.string.time_2h)
+        val time4h = resources.getString(R.string.time_4h)
+        val time18h = resources.getString(R.string.time_18h)
+
+        val horario = listOf(time30Min, time1h, time2h, time4h, time18h)
+
+        // Itera sobre os preços e os configura nos botões de rádio para cada horário
         prices?.forEachIndexed { index, price ->
             if (index < radioButtons.size) {
-                radioButtons[index].text = "R$ $price"
+                radioButtons[index].text = "${horario[index]} | R$ $price"
             }
         }
+
+
 
         // configuração da disponibilidade e cor dos botões de preço com base na disponibilidade
         radioButtons.forEach { radioButton ->
@@ -243,10 +259,10 @@ class DataScreen : AppCompatActivity() {
                             Toast.makeText(this, "Você já possui uma locação confirmada.", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(baseContext, "Para realizar a locação, você devera estar entre 1 km", Toast.LENGTH_LONG).show()
+                        Toast.makeText(baseContext, "Para realizar a locação você devera estar a no máximo 1 km de distância", Toast.LENGTH_LONG).show()
                     }
                 } else {
-                    Toast.makeText(baseContext, "Para acessar essa funcionalidade, faça o login", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(baseContext, "Para acessar essa funcionalidade faça o login", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 Toast.makeText(this, "Escolha uma opção", Toast.LENGTH_SHORT).show()
