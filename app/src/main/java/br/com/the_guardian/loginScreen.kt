@@ -131,7 +131,7 @@ class loginScreen : AppCompatActivity() {
                     Log.w(ContentValues.TAG, "signInWithEmail:failure", task.exception)
                     Toast.makeText(
                         baseContext,
-                        "AAutenticação falhpou, tente de novo mais tarde",
+                        "Autenticação falhou, tente de novo mais tarde",
                         Toast.LENGTH_SHORT,
                     ).show()
                     updateUI()
@@ -167,7 +167,7 @@ class loginScreen : AppCompatActivity() {
         val currentUser = auth.currentUser?.uid
         Log.d("debugg", "entrou na funcao")
         if (currentUser != null) {
-            db.collection("Users").whereEqualTo("id", currentUser)
+            db.collection("Users").whereEqualTo("uid", currentUser)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     if (!querySnapshot.isEmpty) {

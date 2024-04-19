@@ -78,17 +78,12 @@ class registerScreen : AppCompatActivity() {
         btnEnviar = findViewById(R.id.btnEnviar)
         btnEnviar.setOnClickListener {view->
             // cria variaveis para receber os dados do usuário
-            val uid = currentUser?.uid
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
             val cpf = etCpf.text.toString()
             val birth = etNascimento.text.toString()
             val name = etName.text.toString()
             val phone = etPhone.text.toString()
-            val hasLocker = false
-
-            // instancia usuário
-            val user = User(uid, name, email, phone,  cpf, birth, hasLocker)
 
             // valida se todos os campos estão preenchidos
             if(email.isEmpty() || password.isEmpty() || cpf.isEmpty() || birth.isEmpty() || name.isEmpty()|| phone.isEmpty()) {
@@ -97,9 +92,8 @@ class registerScreen : AppCompatActivity() {
                 snackbar.setBackgroundTint(Color.RED)
                 snackbar.show()
             } else {
-                // se estiver tudo certo ele chama função para adicionar usario no banco de dados e registrar no firebase authenticator
+                // se estiver tudo certo ele chama função para registrar no firebase authenticator
                 userRegistration(email, password)
-                addUser(user)
             }
         }
 
@@ -135,8 +129,9 @@ class registerScreen : AppCompatActivity() {
     }
 
     // função que registra usuário no firebase authenticator
+    // função que registra usuário no firebase authenticator
     private fun userRegistration(email: String, password: String) {
-        // cria um usário no authenticator
+        // cria um usuário no authenticator
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 // se der certo
@@ -145,29 +140,35 @@ class registerScreen : AppCompatActivity() {
                     Log.d(TAG, "createUserWithEmail:success")
                     Toast.makeText(
                         baseContext,
-                        "Autênticado com sucesso!",
+                        "Autenticado com sucesso!",
                         Toast.LENGTH_SHORT,
                     ).show()
+                    // Obter o UID do usuário atualmente autenticado
+                    val uid = auth.currentUser?.uid
+                    if (uid != null) {
+                        // Chama a função addUser passando o UID do usuário
+                        addUser(uid, User(uid, etName.text.toString(), email, etPhone.text.toString(), etCpf.text.toString(), etNascimento.text.toString(), false))
+                    } else {
+                        Log.e(TAG, "UID do usuário é nulo após a autenticação.")
+                    }
                     sendEmailVerification()
                 } else {
-                    //
-                    // If sign in fails, display a message to the user.
+                    // Se falhar na autenticação
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     Toast.makeText(
                         baseContext,
-                        "Autênticação falhou, tente de novo mais tarde.",
+                        "Autenticação falhou, tente novamente mais tarde.",
                         Toast.LENGTH_SHORT,
                     ).show()
-
                 }
             }
     }
 
     // função que adiciona o usuário no banco de dados
-    private fun addUser(u: User) {
+    private fun addUser(uid: String, u: User) {
         // faz um map nos dados do usuário
         val user = hashMapOf(
-            "uid" to u.uid,
+            "uid" to uid,
             "name" to u.name,
             "email" to u.email,
             "cpf" to u.cpf,

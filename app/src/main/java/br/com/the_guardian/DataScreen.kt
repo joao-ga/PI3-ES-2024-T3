@@ -225,10 +225,10 @@ class DataScreen : AppCompatActivity() {
                                 if (precoNumerico != null) {
                                     val locker = actualLocker
                                     val priceSelected = precoNumerico
-                                    atualizarStatusLocacaoUsuario()
                                     locacaoAtual = Locacao(userId,userLoc, locker,  priceSelected)
                                     locacoesConfirmadas.add(locacaoAtual!!)
                                     confirmacao(locacaoAtual!!)
+                                    atualizarStatusLocacaoUsuario()
                                     val intent = Intent(this, QrCodeScreen::class.java).apply {
                                         putExtra("checkedRadioButtonText", precoSelecionadoText)
                                     }
@@ -237,7 +237,7 @@ class DataScreen : AppCompatActivity() {
                                     Toast.makeText(this, "Preço selecionado inválido", Toast.LENGTH_SHORT).show()
                                 }
                             } else {
-                                Toast.makeText(this, "Você já possui uma locação confirmada.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this, "Você já possui uma locação pendente.", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             Toast.makeText(this, "Você já possui uma locação confirmada.", Toast.LENGTH_SHORT).show()
@@ -256,9 +256,8 @@ class DataScreen : AppCompatActivity() {
 
     private fun verificarLocacaoUsuario() {
         val currentUser = auth.currentUser?.uid
-        Log.d("debugg", "entrou na funcao")
         if (currentUser != null) {
-            db.collection("Users").whereEqualTo("id", currentUser)
+            db.collection("Users").whereEqualTo("uid", currentUser)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     if (!querySnapshot.isEmpty) {
@@ -269,7 +268,6 @@ class DataScreen : AppCompatActivity() {
                         if (hasLocker.toString() == "true") {
                             // O usuário já possui um armário locado
                             locacaoConfirmada = true
-
                         }
                     } else {
                         Log.d(TAG, "Documento do usuário não encontrado")
@@ -282,10 +280,11 @@ class DataScreen : AppCompatActivity() {
     }
 
     private fun atualizarStatusLocacaoUsuario() {
+        Log.d("debugg", "entrou na funcao atualizarStatus")
         val currentUser = auth.currentUser?.uid
         if (currentUser != null) {
             db.collection("Users")
-                .whereEqualTo("id", currentUser)
+                .whereEqualTo("uid", currentUser)
                 .get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
@@ -316,5 +315,4 @@ class DataScreen : AppCompatActivity() {
         val usuarioAtual = auth.currentUser
         return usuarioAtual != null
     }
-
 }
