@@ -4,15 +4,13 @@ package br.com.the_guardian
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
-import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -20,9 +18,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
 import com.google.firebase.functions.FirebaseFunctions
-import com.google.firebase.functions.FirebaseFunctionsException
 import com.google.firebase.functions.functions
 
 class registerScreen : AppCompatActivity() {
@@ -54,7 +50,7 @@ class registerScreen : AppCompatActivity() {
         val phone: String? = null,
         val cpf:String? = null,
         val birth:String? = null,
-        val hasLocker:Boolean)
+        val hasLocker:Boolean = false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +74,7 @@ class registerScreen : AppCompatActivity() {
         btnEnviar = findViewById(R.id.btnEnviar)
         btnEnviar.setOnClickListener {view->
             // cria variaveis para receber os dados do usuário
-            val uid = currentUser?.uid
+            val uid = currentUser?.uid.toString()
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
             val cpf = etCpf.text.toString()

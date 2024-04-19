@@ -12,172 +12,18 @@
         android:layout_width="425dp"
         android:layout_height="96dp"
         style="@style/logo"
-        android:paddingTop="100dp"
-        />
+        android:layout_gravity="center_horizontal"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="267dp"
-        android:layout_height="30dp"
-        android:layout_marginBottom="6dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="95dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/aluga_armar"
         android:textAlignment="center"
         android:textColor="@color/grey"
         android:textSize="20sp"
-        android:layout_marginTop="-65dp"
         android:fontFamily="@font/kronaone_regular"
-        />
-
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-
-        android:layout_width="match_parent"
-        android:layout_height="450dp"
-        android:layout_marginStart="-3dp"
-        android:layout_marginTop="30dp"
-        android:minHeight="300dp"
-
-        />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="240dp"
-            android:layout_height="30dp"
-            android:text="@string/prox"
-            android:fontFamily="@font/kronaone_regular"
-            android:textSize="18sp"
-            android:textAlignment="center"
-            android:textColor="@color/dark_blue"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="-397dp"
-            />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/radiobutton1"
-            android:layout_width="340dp"
-            android:layout_height="49dp"
-            style="@style/login_button"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:fontFamily="@font/kronaone_regular"
-            android:buttonTint="@color/grey"/>
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/radiobutton2"
-            android:layout_width="340dp"
-            android:layout_height="49dp"
-            style="@style/login_button"
-            android:layout_marginStart="40dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:fontFamily="@font/kronaone_regular"
-            android:buttonTint="@color/grey"/>
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/radiobutton3"
-            android:layout_width="340dp"
-            android:layout_height="49dp"
-            style="@style/login_button"
-            android:textColor="@color/green"
-            android:layout_marginStart="40dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:fontFamily="@font/kronaone_regular"
-            android:buttonTint="@color/grey"/>
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/radiobutton4"
-            android:layout_width="340dp"
-            android:layout_height="49dp"
-            style="@style/login_button"
-            android:textColor="@color/green"
-            android:layout_marginStart="40dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:fontFamily="@font/kronaone_regular"
-            android:buttonTint="@color/grey"
-            />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/radiobutton5"
-            android:layout_width="340dp"
-            android:layout_height="49dp"
-            style="@style/login_button"
-            android:textColor="@color/green"
-            android:layout_marginStart="40dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:fontFamily="@font/kronaone_regular"
-            android:buttonTint="@color/grey" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="293dp"
-        android:layout_height="47dp"
-        android:text="@string/avisoarmario"
-        android:textSize="12sp"
-        android:fontFamily="@font/jurabold"
-        android:layout_marginStart="60dp"
-        android:textAlignment="center"
-        android:textColor="@color/dark_blue"
-        />
-
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/marker_title"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        android:textColor="@color/dark_blue"
-        android:textSize="18sp"
-        android:fontFamily="@font/kronaone_regular"
-        android:layout_marginTop="20dp"/>
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/marker_reference"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:textColor="@color/dark_blue"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        android:fontFamily="@font/jurabold"
-        android:layout_marginTop="4dp"/>
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/marker_disponibility"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:textColor="@color/dark_blue"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        android:fontFamily="@font/jurabold"
-        android:layout_marginTop="4dp"/>
-
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_consultar"
-        android:text="@string/confirmaloc"
-        android:layout_gravity="center"
-        style="@style/login_button"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:fontFamily="@font/kronaone_regular"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="1dp"
-        android:layout_width="250dp"
-        android:layout_height="49dp"
-        />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="-50dp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_voltar"
@@ -186,9 +32,154 @@
         style="@style/button_voltar"
         android:paddingStart="3dp"
         android:paddingEnd="3dp"
-        android:drawableStart="@drawable/baseline_arrow_back_ios_new_24"
-        android:layout_marginTop="-710dp"
-        android:layout_marginStart="35dp"
-        />
+        android:layout_marginTop="-38dp"
+        android:drawableStart="@drawable/baseline_arrow_back_ios_new_24"/>
+        <!--deixar ao lado do alugar armar-->
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/prox"
+            android:fontFamily="@font/kronaone_regular"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            android:textColor="@color/dark_blue"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radiobutton1"
+                android:layout_width="340dp"
+                android:layout_height="49dp"
+                style="@style/login_button"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginBottom="10dp"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:fontFamily="@font/kronaone_regular"
+                android:buttonTint="@color/grey"/>
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radiobutton2"
+                android:layout_width="340dp"
+                android:layout_height="49dp"
+                style="@style/login_button"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginBottom="10dp"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:fontFamily="@font/kronaone_regular"
+                android:buttonTint="@color/grey"/>
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radiobutton3"
+                android:layout_width="340dp"
+                android:layout_height="49dp"
+                style="@style/login_button"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginBottom="10dp"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:fontFamily="@font/kronaone_regular"
+                android:buttonTint="@color/grey"/>
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radiobutton4"
+                android:layout_width="340dp"
+                android:layout_height="49dp"
+                style="@style/login_button"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginBottom="10dp"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:fontFamily="@font/kronaone_regular"
+                android:buttonTint="@color/grey"/>
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radiobutton5"
+                android:layout_width="340dp"
+                android:layout_height="49dp"
+                style="@style/login_button"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginBottom="10dp"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:fontFamily="@font/kronaone_regular"
+                android:buttonTint="@color/grey"/>
+
+        </RadioGroup>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/avisoarmario"
+        android:textSize="12sp"
+        android:fontFamily="@font/jurabold"
+        android:textAlignment="center"
+        android:textColor="@color/dark_blue"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/marker_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="@color/dark_blue"
+        android:textSize="18sp"
+        android:fontFamily="@font/kronaone_regular"
+        android:layout_marginTop="20dp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/marker_reference"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/dark_blue"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:fontFamily="@font/jurabold"
+        android:layout_marginTop="4dp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/marker_disponibility"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/dark_blue"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:fontFamily="@font/jurabold"
+        android:layout_marginTop="4dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_consultar"
+        android:text="@string/confirmaloc"
+        style="@style/login_button"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:fontFamily="@font/kronaone_regular"
+        android:layout_width="250dp"
+        android:layout_height="49dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

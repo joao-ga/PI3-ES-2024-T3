@@ -13,13 +13,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import com.google.firebase.auth.FirebaseAuth
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
-import java.util.Calendar
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Calendar
 
 data class Locacao(
     val userId: String,
@@ -243,10 +243,10 @@ class DataScreen : AppCompatActivity() {
                             Toast.makeText(this, "Você já possui uma locação confirmada.", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(baseContext, "Para realizar a locação, você devera estar entre 1 km", Toast.LENGTH_LONG).show()
+                        Toast.makeText(baseContext, "Para realizar a locação você devera estar a no máximo 1 km de distância", Toast.LENGTH_LONG).show()
                     }
                 } else {
-                    Toast.makeText(baseContext, "Para acessar essa funcionalidade, faça o login", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(baseContext, "Para acessar essa funcionalidade faça o login", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 Toast.makeText(this, "Escolha uma opção", Toast.LENGTH_SHORT).show()
