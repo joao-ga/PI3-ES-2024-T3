@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,6 +23,7 @@ import kotlin.random.Random
 class QrCodeScreen : AppCompatActivity() {
 
     private lateinit var btnCancelarloc: AppCompatButton
+    private lateinit var btnVoltar: AppCompatButton
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
     private lateinit var userId: String
@@ -35,10 +37,14 @@ class QrCodeScreen : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
 
         btnCancelarloc = findViewById(R.id.btnCancelarloc)
+        btnVoltar = findViewById(R.id.btnVoltar)
 
         btnCancelarloc.setOnClickListener{
             atualizarStatusLocacaoUsuario()
+        }
 
+        btnVoltar.setOnClickListener {
+            nextScreen(homeScreen::class.java)
         }
 
 
@@ -107,9 +113,11 @@ class QrCodeScreen : AppCompatActivity() {
                             .update("hasLocker", false)
                             .addOnSuccessListener {
                                 nextScreen(homeScreen::class.java)
+                                Toast.makeText(this, "Pendência de locação cancelada!", Toast.LENGTH_SHORT).show()
                                 Log.d(ContentValues.TAG, "Status de locação atualizado com sucesso!")
                             }
                             .addOnFailureListener { e ->
+                                Toast.makeText(this, "Erro em cancelar pendência, tente de novo mais tarde!", Toast.LENGTH_SHORT).show()
                                 Log.w(ContentValues.TAG, "Erro ao atualizar o status de locação", e)
                             }
                     }

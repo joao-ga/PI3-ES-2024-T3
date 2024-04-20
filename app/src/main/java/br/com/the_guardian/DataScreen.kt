@@ -92,7 +92,7 @@ class DataScreen : AppCompatActivity() {
     private lateinit var userId: String
 
     private fun confirmacao(locacao: Locacao) {
-        Toast.makeText(this, "Locação confirmada: $locacao", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "pendencia de locação confirmada!", Toast.LENGTH_SHORT).show()
     }
 
     companion object {
