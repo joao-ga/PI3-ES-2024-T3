@@ -1,11 +1,17 @@
 package br.com.the_guardian
 
 // importações
+import android.content.ContentValues
+import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
@@ -15,11 +21,25 @@ import kotlin.random.Random
 
 class QrCodeScreen : AppCompatActivity() {
 
+    private lateinit var btnCancelarloc: AppCompatButton
+    private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
+    private lateinit var userId: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qr_code_screen)
 
-        // recupera o texto do código do intent
+        // Inicialização da FirebaseAuth
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+
+        btnCancelarloc = findViewById(R.id.btnCancelarloc)
+
+        btnCancelarloc.setOnClickListener{
+            atualizarStatusLocacaoUsuario()
+
+        }
 
 
 
@@ -71,6 +91,38 @@ class QrCodeScreen : AppCompatActivity() {
         bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight)
         return bitmap
 
+    }
+
+    private fun atualizarStatusLocacaoUsuario() {
+        Log.d("debugg", "entrou na funcao atualizarStatus")
+        val currentUser = auth.currentUser?.uid
+        if (currentUser != null) {
+            db.collection("Users")
+                .whereEqualTo("uid", currentUser)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        db.collection("Users")
+                            .document(document.id)
+                            .update("hasLocker", false)
+                            .addOnSuccessListener {
+                                nextScreen(homeScreen::class.java)
+                                Log.d(ContentValues.TAG, "Status de locação atualizado com sucesso!")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(ContentValues.TAG, "Erro ao atualizar o status de locação", e)
+                            }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.w(ContentValues.TAG, "Erro ao obter documentos", e)
+                }
+        }
+    }
+
+    private fun nextScreen(screen: Class<*>) {
+        val newScreen = Intent(this, screen)
+        startActivity(newScreen)
     }
 
 }
