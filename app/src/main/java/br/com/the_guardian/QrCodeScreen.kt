@@ -41,10 +41,6 @@ class QrCodeScreen : AppCompatActivity() {
                 e.printStackTrace()
             }
 
-            // exibe o código gerado em um TextView na tela
-            var textCode = findViewById<TextView>(R.id.codigo)
-            textCode.text = text.toString()
-
     }
 
     // função para converter um texto em um QR code na forma de Bitmap
