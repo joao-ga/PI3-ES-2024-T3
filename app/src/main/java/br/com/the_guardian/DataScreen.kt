@@ -86,11 +86,10 @@ class DataScreen : AppCompatActivity() {
     private lateinit var btnVoltar: AppCompatButton
     private lateinit var actualLocker: homeScreen.Place
     private lateinit var db: FirebaseFirestore
-    private lateinit var database: DatabaseReference
 
     private lateinit var auth: FirebaseAuth
     private var locacaoAtual: Locacao? = null
-    private lateinit var userId: String // Movendo a declaração para o escopo adequado
+    private lateinit var userId: String
 
     private fun confirmacao(locacao: Locacao) {
         Toast.makeText(this, "Locação confirmada: $locacao", Toast.LENGTH_SHORT).show()
@@ -110,7 +109,6 @@ class DataScreen : AppCompatActivity() {
 
         // Inicialização da FirebaseAuth
         auth = FirebaseAuth.getInstance()
-        database = Firebase.database.reference
         db = FirebaseFirestore.getInstance()
 
         // Obtendo o usuário atual
