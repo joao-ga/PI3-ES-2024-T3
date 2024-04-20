@@ -22,11 +22,11 @@ import kotlin.random.Random
 
 class QrCodeScreen : AppCompatActivity() {
 
+    // declarando variaveis uteis para o sistema
     private lateinit var btnCancelarloc: AppCompatButton
     private lateinit var btnVoltar: AppCompatButton
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
-    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,36 +36,36 @@ class QrCodeScreen : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
+        // iniciando os botoes
         btnCancelarloc = findViewById(R.id.btnCancelarloc)
         btnVoltar = findViewById(R.id.btnVoltar)
 
+        // botao que chama funcao que cancela a pendencia de locacao
         btnCancelarloc.setOnClickListener{
             atualizarStatusLocacaoUsuario()
         }
 
+        // botao que volta para a home
         btnVoltar.setOnClickListener {
             nextScreen(homeScreen::class.java)
         }
 
+        // referência para o ImageView onde o QR code será exibido
+        val qrCode = findViewById<ImageView>(R.id.qrCode)
 
-
-            // referência para o ImageView onde o QR code será exibido
-            val qrCode = findViewById<ImageView>(R.id.qrCode)
-
-            // Gera um código aleatório
-            var codigo = 0
-            while(codigo < 1000){
-                codigo = Random.nextInt(9999)
-            }
-
-            // converte o código em um QR code e o exibe no ImageView
-            val text = codigo
-            try {
-                val bitmap = textToImageEncode(text)
-                qrCode.setImageBitmap(bitmap)
-            } catch (e: WriterException) {
-                e.printStackTrace()
-            }
+        // Gera um código aleatório
+        var codigo = 0
+        while(codigo < 1000){
+            codigo = Random.nextInt(9999)
+        }
+        // converte o código em um QR code e o exibe no ImageView
+        val text = codigo
+        try {
+            val bitmap = textToImageEncode(text)
+            qrCode.setImageBitmap(bitmap)
+        } catch (e: WriterException) {
+            e.printStackTrace()
+        }
 
     }
 
@@ -99,24 +99,31 @@ class QrCodeScreen : AppCompatActivity() {
 
     }
 
+    // funcao que atualiza o status do campo hasLocker
     private fun atualizarStatusLocacaoUsuario() {
-        Log.d("debugg", "entrou na funcao atualizarStatus")
+        // aramazena o uid do usuario
         val currentUser = auth.currentUser?.uid
         if (currentUser != null) {
+            // se ele nao for vazio abre a colecao Users
             db.collection("Users")
+                //faz a busca do documento pelo uid do usuario
                 .whereEqualTo("uid", currentUser)
                 .get()
                 .addOnSuccessListener { documents ->
+                    // recebe os dados e faz um for para ir ate encontrar o campo hasLocker
                     for (document in documents) {
                         db.collection("Users")
                             .document(document.id)
+                            // atribue o valor false para o campo hasLocker
                             .update("hasLocker", false)
                             .addOnSuccessListener {
+                                //caso for sucesso mudar para a tela home e avisar o usuario
                                 nextScreen(homeScreen::class.java)
                                 Toast.makeText(this, "Pendência de locação cancelada!", Toast.LENGTH_SHORT).show()
                                 Log.d(ContentValues.TAG, "Status de locação atualizado com sucesso!")
                             }
                             .addOnFailureListener { e ->
+                                // se der erro avisa o usurio para tentar mais tarde
                                 Toast.makeText(this, "Erro em cancelar pendência, tente de novo mais tarde!", Toast.LENGTH_SHORT).show()
                                 Log.w(ContentValues.TAG, "Erro ao atualizar o status de locação", e)
                             }
@@ -128,6 +135,7 @@ class QrCodeScreen : AppCompatActivity() {
         }
     }
 
+    // funcao generica que muda de screen
     private fun nextScreen(screen: Class<*>) {
         val newScreen = Intent(this, screen)
         startActivity(newScreen)
