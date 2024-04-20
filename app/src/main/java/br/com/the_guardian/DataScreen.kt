@@ -87,7 +87,6 @@ class DataScreen : AppCompatActivity() {
     private lateinit var actualLocker: homeScreen.Place
     private lateinit var db: FirebaseFirestore
     private lateinit var database: DatabaseReference
-
     private lateinit var auth: FirebaseAuth
     private var locacaoAtual: Locacao? = null
     private lateinit var userId: String // Movendo a declaração para o escopo adequado
@@ -135,7 +134,6 @@ class DataScreen : AppCompatActivity() {
         findViewById<TextView>(R.id.marker_reference).text = reference
         findViewById<TextView>(R.id.marker_disponibility).text = if (disponibility) "Está disponível: Sim" else "Está disponível: Não"
 
-
         // configuração dos botões de preço
         val radioButtons = listOf(
             findViewById<RadioButton>(R.id.radiobutton1),
@@ -144,10 +142,6 @@ class DataScreen : AppCompatActivity() {
             findViewById(R.id.radiobutton4),
             findViewById(R.id.radiobutton5)
         )
-
-        // Supondo que "pricesFromDatabase" seja uma lista de preços obtida do banco de dados
-
-
 
         // Recupere as strings dos recursos
         val time30Min = resources.getString(R.string.time_30_min)
@@ -165,19 +159,18 @@ class DataScreen : AppCompatActivity() {
             }
         }
 
-
-
         // configuração da disponibilidade e cor dos botões de preço com base na disponibilidade
         radioButtons.forEach { radioButton ->
             radioButton.isEnabled = disponibility
-            radioButton.setTextColor(if (disponibility) Color.rgb(160,228,24) else Color.rgb(217,217,217))
+            radioButton.setTextColor(if (disponibility) Color.rgb(160,228,24) else Color.GRAY)
         }
 
         // verifica a hora atual para habilitar ou desabilitar o botão do dia inteiro
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
 
-        if (hour in 6..8) {
+        //7 hrs é o correto, excluir esse comentario no merge
+        if (hour in 7..8) {
             radioButtons.last().isEnabled = true
         } else {
             radioButtons.last().isEnabled = false
@@ -196,7 +189,6 @@ class DataScreen : AppCompatActivity() {
         btnConsultar.setOnClickListener {
             var isAnyRadioButtonChecked = false
 
-
             // verificação se algum botão de preço foi selecionado
             for (radioButton in radioButtons) {
                 if (radioButton.isChecked) {
@@ -206,6 +198,7 @@ class DataScreen : AppCompatActivity() {
                 }
             }
 
+            // realiza o calculo da distancia para verificar se pode ou não realizar a locação
             fun calcularDistancia(segunda: LatLng):Double {
                 val localizacaoAtual = Location("")
                 localizacaoAtual.latitude = userLocLatitude
@@ -219,6 +212,7 @@ class DataScreen : AppCompatActivity() {
 
                 return distancia
             }
+
             fun checkLocation(): Boolean {
                 for (place in places) {
                     val locPlace = LatLng(place.latitude, place.longitude)
@@ -230,6 +224,7 @@ class DataScreen : AppCompatActivity() {
                 }
                 return false
             }
+
             // se algum botão foi selecionado, inicia a tela de QrCode com o preço selecionado
             if (isAnyRadioButtonChecked) {
                 if(usuarioEstaLogado()) {
@@ -270,7 +265,7 @@ class DataScreen : AppCompatActivity() {
         }
     }
 
-    private fun verificarLocacaoUsuario() {
+    private fun verificarLocacaoUsuario() {// adaptar esssa função para checar se o usuario possui um cartao cadastrado
         val currentUser = auth.currentUser?.uid
         if (currentUser != null) {
             db.collection("Users").whereEqualTo("uid", currentUser)
@@ -296,7 +291,7 @@ class DataScreen : AppCompatActivity() {
     }
 
     private fun atualizarStatusLocacaoUsuario() {
-        Log.d("debugg", "entrou na funcao atualizarStatus")
+        Log.d("debugg", "entrou na função atualizarStatus")
         val currentUser = auth.currentUser?.uid
         if (currentUser != null) {
             db.collection("Users")
@@ -322,8 +317,7 @@ class DataScreen : AppCompatActivity() {
     }
 
     private fun enviarParaTelaQRCode() {
-        val intent = Intent(this, QrCodeScreen::class.java).apply {
-        }
+        val intent = Intent(this, QrCodeScreen::class.java).apply{}
         startActivity(intent)
     }
 

@@ -1,7 +1,9 @@
 package br.com.the_guardian
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -13,13 +15,11 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import android.content.Context
-import android.content.SharedPreferences
-import com.google.firebase.auth.FirebaseAuthException
 
 class loginScreen : AppCompatActivity() {
 
@@ -98,7 +98,7 @@ class loginScreen : AppCompatActivity() {
                 if (!task.isSuccessful) {
                     val e = task.exception
                     if (e is FirebaseAuthException) {
-                        val code = (e as FirebaseAuthException).errorCode
+                        val code = e.errorCode
                         val message = e.localizedMessage
                         Log.e("RecoverPassword", "Erro: $code, Mensagem: $message")
                     }
@@ -109,7 +109,6 @@ class loginScreen : AppCompatActivity() {
             }
         }
     }
-
 
     private fun authenticator (etEmail: String, etSenha: String) {
         auth.signInWithEmailAndPassword(etEmail, etSenha)
@@ -135,7 +134,6 @@ class loginScreen : AppCompatActivity() {
                         Toast.LENGTH_SHORT,
                     ).show()
                     updateUI()
-
                 }
             }
     }
@@ -191,8 +189,7 @@ class loginScreen : AppCompatActivity() {
     }
 
     private fun enviarParaTelaQRCode() {
-        val intent = Intent(this, QrCodeScreen::class.java).apply {
-        }
+        val intent = Intent(this, QrCodeScreen::class.java).apply{}
         startActivity(intent)
     }
 }

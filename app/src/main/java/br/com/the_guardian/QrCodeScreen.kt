@@ -2,25 +2,22 @@ package br.com.the_guardian
 
 // importações
 import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import kotlin.random.Random
 
-
 class QrCodeScreen : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qr_code_screen)
-
         // recupera o texto do código do intent
-
 
 
             // referência para o ImageView onde o QR code será exibido
@@ -74,7 +71,5 @@ class QrCodeScreen : AppCompatActivity() {
         val bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444)
         bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight)
         return bitmap
-
     }
-
 }
