@@ -56,7 +56,7 @@ class registerScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_screen)
 
-        // inicialização das variáveis, do firebase e da interface do usuário
+        // inicialização das variáveis do firebase e da interface do usuário
         auth = Firebase.auth
         database = Firebase.database.reference
         db = FirebaseFirestore.getInstance()
@@ -73,8 +73,8 @@ class registerScreen : AppCompatActivity() {
         tvCadastroNegado = findViewById(R.id.tvCadastroNegado)
         btnEnviar = findViewById(R.id.btnEnviar)
         btnEnviar.setOnClickListener {view->
-            // cria variaveis para receber os dados do usuário
 
+            // cria variaveis para receber os dados do usuário
             val uid = currentUser?.uid.toString()
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
@@ -98,7 +98,7 @@ class registerScreen : AppCompatActivity() {
         // botão para voltar pra tela de login
         btnVoltar = findViewById(R.id.btnVoltar)
         btnVoltar.setOnClickListener {
-            // funcao que muda de tela
+            // função que muda de tela
             nextScreen(loginScreen::class.java)
         }
     }
@@ -114,11 +114,11 @@ class registerScreen : AppCompatActivity() {
                 // se der certo exibe uma mensagem de sucesso
                 if (task.isSuccessful) {
                     Log.d(TAG, "Email de verificação enviado.")
-                    Toast.makeText(baseContext, "Um e-mail de verificação foi enviado para o seu endereço de e-mail.",
+                    Toast.makeText(baseContext, "Um email de verificação foi enviado para o seu endereço de email.",
                         Toast.LENGTH_SHORT).show()
                 } else {
-                    // se nao
-                    Toast.makeText(baseContext, "E-mail não enviado, tente de novo mais tarde",
+                    // se não
+                    Toast.makeText(baseContext, "Email não enviado, tente de novo mais tarde",
                         Toast.LENGTH_SHORT).show()
                     Log.e(TAG, "Falha ao enviar e-mail de verificação.", task.exception)
 
@@ -126,7 +126,6 @@ class registerScreen : AppCompatActivity() {
             }
     }
 
-    // função que registra usuário no firebase authenticator
     // função que registra usuário no firebase authenticator
     private fun userRegistration(email: String, password: String) {
         // cria um usuário no authenticator
@@ -136,11 +135,6 @@ class registerScreen : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // mostra uma resposta pro usuário e chama a função de mandar um email de verificação
                     Log.d(TAG, "createUserWithEmail:success")
-                    Toast.makeText(
-                        baseContext,
-                        "Autenticado com sucesso!",
-                        Toast.LENGTH_SHORT,
-                    ).show()
                     // Obter o UID do usuário atualmente autenticado
                     val uid = auth.currentUser?.uid
                     if (uid != null) {

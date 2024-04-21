@@ -30,7 +30,6 @@ data class Locacao(
 
 class DataScreen : AppCompatActivity() {
 
-    // Lista de lugares disponíveis para locação
     private var places: MutableList<homeScreen.Place> = mutableListOf(
         homeScreen.Place(
             "Armário 1",
@@ -87,13 +86,13 @@ class DataScreen : AppCompatActivity() {
     private lateinit var btnVoltar: AppCompatButton
     private lateinit var actualLocker: homeScreen.Place
     private lateinit var db: FirebaseFirestore
-
+    private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
     private var locacaoAtual: Locacao? = null
-    private lateinit var userId: String
+    private lateinit var userId: String // Movendo a declaração para o escopo adequado
 
     private fun confirmacao(locacao: Locacao) {
-        Toast.makeText(this, "pendencia de locação confirmada!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Locação confirmada: $locacao", Toast.LENGTH_SHORT).show()
     }
 
     companion object {
@@ -110,6 +109,7 @@ class DataScreen : AppCompatActivity() {
 
         // Inicialização da FirebaseAuth
         auth = FirebaseAuth.getInstance()
+        database = Firebase.database.reference
         db = FirebaseFirestore.getInstance()
 
         // Obtendo o usuário atual
@@ -134,7 +134,6 @@ class DataScreen : AppCompatActivity() {
         findViewById<TextView>(R.id.marker_reference).text = reference
         findViewById<TextView>(R.id.marker_disponibility).text = if (disponibility) "Está disponível: Sim" else "Está disponível: Não"
 
-
         // configuração dos botões de preço
         val radioButtons = listOf(
             findViewById<RadioButton>(R.id.radiobutton1),
@@ -143,7 +142,6 @@ class DataScreen : AppCompatActivity() {
             findViewById(R.id.radiobutton4),
             findViewById(R.id.radiobutton5)
         )
-
 
         // Recupere as strings dos recursos
         val time30Min = resources.getString(R.string.time_30_min)
@@ -161,19 +159,18 @@ class DataScreen : AppCompatActivity() {
             }
         }
 
-
-
         // configuração da disponibilidade e cor dos botões de preço com base na disponibilidade
         radioButtons.forEach { radioButton ->
             radioButton.isEnabled = disponibility
-            radioButton.setTextColor(if (disponibility) Color.rgb(160,228,24) else Color.rgb(217,217,217))
+            radioButton.setTextColor(if (disponibility) Color.rgb(160,228,24) else Color.GRAY)
         }
 
         // verifica a hora atual para habilitar ou desabilitar o botão do dia inteiro
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
 
-        if (hour in 6..8) {
+        //7 hrs é o correto, excluir esse comentario no merge
+        if (hour in 7..8) {
             radioButtons.last().isEnabled = true
         } else {
             radioButtons.last().isEnabled = false
@@ -192,7 +189,6 @@ class DataScreen : AppCompatActivity() {
         btnConsultar.setOnClickListener {
             var isAnyRadioButtonChecked = false
 
-
             // verificação se algum botão de preço foi selecionado
             for (radioButton in radioButtons) {
                 if (radioButton.isChecked) {
@@ -202,7 +198,7 @@ class DataScreen : AppCompatActivity() {
                 }
             }
 
-            // Função para calcular a distância entre dois pontos
+            // realiza o calculo da distancia para verificar se pode ou não realizar a locação
             fun calcularDistancia(segunda: LatLng):Double {
                 val localizacaoAtual = Location("")
                 localizacaoAtual.latitude = userLocLatitude
@@ -216,7 +212,7 @@ class DataScreen : AppCompatActivity() {
 
                 return distancia
             }
-            // Função para verificar se o usuário está próximo de um armário disponível
+
             fun checkLocation(): Boolean {
                 for (place in places) {
                     val locPlace = LatLng(place.latitude, place.longitude)
@@ -228,18 +224,16 @@ class DataScreen : AppCompatActivity() {
                 }
                 return false
             }
+
             // se algum botão foi selecionado, inicia a tela de QrCode com o preço selecionado
-            //faz verificacoes de distancia, se ja tem uma locacao, se o usuario esta logado
             if (isAnyRadioButtonChecked) {
                 if(usuarioEstaLogado()) {
                     if(checkLocation()) {
                         if(!locacaoConfirmada) {
                             if (locacaoAtual == null) {
-                                // cria a locacao
                                 val precoSelecionadoText = findViewById<RadioButton>(checkedRadioButtonId).text.toString()
                                 val precoNumerico = precoSelecionadoText.substringAfter("R$ ").toDoubleOrNull()
                                 if (precoNumerico != null) {
-                                    // chama funcao para atualizar no banco o campo hasLocker e muda de teka
                                     val locker = actualLocker
                                     val priceSelected = precoNumerico
                                     locacaoAtual = Locacao(userId,userLoc, locker,  priceSelected)
@@ -271,8 +265,7 @@ class DataScreen : AppCompatActivity() {
         }
     }
 
-    // Função para verificar se o usuário possui uma locação confirmada
-    private fun verificarLocacaoUsuario() {
+    private fun verificarLocacaoUsuario() {// adaptar esssa função para checar se o usuario possui um cartao cadastrado
         val currentUser = auth.currentUser?.uid
         if (currentUser != null) {
             db.collection("Users").whereEqualTo("uid", currentUser)
@@ -297,9 +290,8 @@ class DataScreen : AppCompatActivity() {
         }
     }
 
-    // Função para atualizar o status da locação do usuário
     private fun atualizarStatusLocacaoUsuario() {
-        Log.d("debugg", "entrou na funcao atualizarStatus")
+        Log.d("debugg", "entrou na função atualizarStatus")
         val currentUser = auth.currentUser?.uid
         if (currentUser != null) {
             db.collection("Users")
@@ -324,14 +316,11 @@ class DataScreen : AppCompatActivity() {
         }
     }
 
-    // Função para enviar para a tela do QrCode
     private fun enviarParaTelaQRCode() {
-        val intent = Intent(this, QrCodeScreen::class.java).apply {
-        }
+        val intent = Intent(this, QrCodeScreen::class.java).apply{}
         startActivity(intent)
     }
 
-    // Função para verificar se o usuário está logado
     private fun usuarioEstaLogado(): Boolean {
         val usuarioAtual = auth.currentUser
         return usuarioAtual != null

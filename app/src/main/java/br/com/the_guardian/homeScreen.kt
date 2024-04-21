@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -27,16 +28,15 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.Polyline
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
-import android.graphics.Color
-import com.google.android.gms.maps.model.Polyline
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.DirectionsApi
 import com.google.maps.GeoApiContext
-import com.google.firebase.firestore.FirebaseFirestore
 import java.io.Serializable
 
 class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
@@ -62,7 +62,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         var prices: List<Int> = listOf() 
      ) : Serializable
 
-
     // variáveis e propriedades da tela
     private lateinit var mMap: GoogleMap
     private lateinit var auth: FirebaseAuth
@@ -74,7 +73,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
     private lateinit var btnSair: AppCompatButton
     private var currentPolyline: Polyline? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
@@ -83,14 +81,14 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
 
-        // obter a localização atual do usuári
+        // obter a localização atual do usuário
         getCurrentLocation()
 
-        // obter referencia do fragmento do mapa e prepara-lo para a exibiçao
+        // obter referencia do fragmento do mapa e prepara-lo para a exibição
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        // botao para acessar a tela de cadastro
+        // botão para acessar a tela de cadastro
         btnCadastrarCartao = findViewById(R.id.btnCadastrarCartao)
         btnCadastrarCartao.setOnClickListener {
             // validacao para saber se o usuario está logado
@@ -98,7 +96,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
                 // se estiver ele muda de tela
                 nextScreen(RegisterCreditCard::class.java)
             } else {
-                // se nao, aparece uma mensagem pedindo para estar logado
+                // se não, aparece uma mensagem pedindo para estar logado
                 Toast.makeText(this, "Para acessar essa funcionalidade, você precisa fazer login.", Toast.LENGTH_SHORT).show()
             }
         }
@@ -122,7 +120,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
 
     }
 
-    // funcao para traçar rota do usuario ate o armário
+    // função para traçar rota do usuário até o armário
     fun directions(destinationLatitude: Double, destinationLongitude: Double) {
         val origin = userLoc
 
@@ -144,10 +142,10 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
             .color(Color.BLUE)
             .width(5f)
 
-        // remover a Polyline atual do mapa
+        // remover a rota atual do mapa
         currentPolyline?.remove()
 
-        // adicionar a nova Polyline ao mapa e guardar a referência
+        // adicionar a nova rota ao mapa e guardar a referência
         currentPolyline = mMap.addPolyline(polylineOptions)
     }
 
@@ -156,10 +154,9 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         directions(destination.latitude, destination.longitude)
     }
 
-
-        // função para adicionar marcadores no mapa
+    // função para adicionar marcadores no mapa
     private fun addMarkers(googleMap: GoogleMap) {
-        // faz um foreach em todos os aramrios
+        // faz um foreach em todos os armários
         places.forEach { place ->
             val marker = googleMap.addMarker(
                 MarkerOptions()
@@ -176,15 +173,15 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
     // função chamada quando o mapa está pronto para ser utilizado
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        // chama a funcao para adicionar os marcadores
+        // chama a função para adicionar os marcadores
 
         addMarkers(mMap)
-        // verifica se o usuario permitiu acessar a localizacao
+        // verifica se o usuario permitiu acessar a localização
         if (checkPermission()) {
-            // marca no mapa a sua localizacao
+            // marca no mapa a sua localização
             mMap.isMyLocationEnabled = true
         } else {
-            // se nao chama funcao para pedir a sua localizacao
+            // se nao chama função para pedir a sua localização
             requestPermissions()
         }
 
@@ -202,7 +199,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
             // exibir o diálogo
             dialog.show(supportFragmentManager, "MarkerInfoDialog")
 
-            // retornar true para indicar que o clique no marcador foi consumido
+            // retorna true para indicar que o clique no marcador foi consumido
             true
         }
     }
@@ -231,14 +228,14 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
                     // chamar a função getData para buscar os preços no Firebase
                     (context as? homeScreen)?.getData(place)
 
-                    // fechar o diálogo
+                    // fecha o diálogo
                     dismiss()
                 }
 
-                // botao para traçar a rota
+                // botão para traçar a rota
                 val bntRota = view.findViewById<Button>(R.id.btnRota)
                 bntRota.setOnClickListener{
-                    // chama a funcao directions para traçar a rota
+                    // chama a função directions para traçar a rota
                     val homeScreenActivity = activity as homeScreen
                     homeScreenActivity.selectedMarkerLatLng = LatLng(place.latitude, place.longitude)
                     homeScreenActivity.directions(place.latitude, place.longitude)
@@ -250,23 +247,23 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         }
     }
 
-    //funcao para buscar os precos do banco de dados
+    //função para buscar os preços do banco de dados
     private fun getData(clickedPlace: Place) {
         // abre a instancia firestore
         val firestore = FirebaseFirestore.getInstance()
         val name = clickedPlace.name
-        // faz a consulta na colecao lockers pelo id de dos armarios
+        // faz a consulta na coleção lockers pelo id de dos armários
         firestore.collection("Lockers")
             .whereEqualTo("id", name)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
-                    // se receber o snapshot ele atrubue a varievel preices a lista de preços que vem do banco de dados
+                    // se receber o snapshot ele atribue a varievel prices a lista de preços que vem do banco de dados
                     val document = querySnapshot.documents[0]
                     val prices = document["prices"] as? List<Long>
                     if (prices != null) {
                         clickedPlace.prices = prices.map { it.toInt() } // convertendo de Long para Int
-                        // chama funcao que envia os dados para outra activity
+                        // chama função que envia os dados para outra activity
                         openDetailsScreen(clickedPlace)
                         Log.i("SUCESSO", "DADOS COLETADOS $prices")
                     } else {
@@ -297,7 +294,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         startActivity(intent)
     }
 
-    // funçao generica para navegar para outra tela
+    // função genérica para navegar para outra tela
     private fun nextScreen(screen: Class<*>) {
         val newScreen = Intent(this, screen)
         startActivity(newScreen)
@@ -317,11 +314,11 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         return LatLng(latLng.lat, latLng.lng)
     }
 
-    // funcao que pega a localizacao atual do usuario
+    // função que pega a localização atual do usuário
     private fun getCurrentLocation() {
         // verifiva se teve permissao
         if(checkPermission()) {
-            // verifica se pode acessar a localizacao
+            // verifica se pode acessar a localização
             if(isLocationEnabled()) {
                 fusedLocationProviderClient.lastLocation.addOnCompleteListener(this) {task->
                     val location: Location?= task.result
@@ -329,7 +326,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
                         Toast.makeText(this, "Erro em pegar a sua localizacao, tente de novo mais tarde", Toast.LENGTH_SHORT).show()
                         Log.e("debug", "Erro em busar loc")
                     } else {
-                        // user loc recebe a localizacao do usuario
+                        // user loc recebe a localização do usuário
                         userLoc = LatLng(location.latitude, location.longitude)
                         // e define a camera na localizacao do usuario
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, 18f))
@@ -343,7 +340,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
                 startActivity(intent)
             }
         } else {
-            // chama a funcao para requisitar a permissao de pegar a localizacao
+            // chama a função para requisitar a permissão de pegar a localização
             requestPermissions()
         }
     }
@@ -385,20 +382,16 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        // se for aceito, o app, recebe a localizacao do usuario
+        // se for aceito, o app, recebe a localização do usuario
         if(requestCode== PERMISSION_REQUEST_ACCESS_LOCATION) {
             if(grantResults.isNotEmpty() && grantResults[0]==PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(applicationContext, "Localizaçao permitida", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Localização permitida", Toast.LENGTH_SHORT).show()
                 getCurrentLocation()
             } else {
-                Toast.makeText(applicationContext, "Localizaçao negada", Toast.LENGTH_SHORT).show()
-
+                Toast.makeText(applicationContext, "Localização negada", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
-
-
 }
 
 // interface para lidar com a solicitação de direções

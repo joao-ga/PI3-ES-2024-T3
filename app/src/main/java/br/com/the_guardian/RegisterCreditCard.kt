@@ -3,10 +3,10 @@ package br.com.the_guardian
 // impotações
 import android.content.ContentValues
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import com.google.firebase.Firebase
@@ -86,19 +86,18 @@ class RegisterCreditCard : AppCompatActivity() {
                     addCreditCard(card)
                 }
             }
-
         }
 
         btnVoltar = findViewById(R.id.btnVoltar)
         btnVoltar.setOnClickListener {
-            // botao para voltar para a home
+            // botão para voltar para a home
             nextScreen(homeScreen::class.java)
         }
 
     }
 
     // função que adiciona o cartão no banco de dados
-    private fun addCreditCard(card: RegisterCreditCard.CreditCards) {
+    private fun addCreditCard(card: CreditCards) {
         // faz um map nos dados do cartão
         val cc = hashMapOf(
             "idUser" to card.idUser,
