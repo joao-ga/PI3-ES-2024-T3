@@ -38,9 +38,6 @@ class QrCodeScreen : AppCompatActivity() {
                 e.printStackTrace()
             }
 
-            // exibe o código gerado em um TextView na tela
-            var textCode = findViewById<TextView>(R.id.codigo)
-            textCode.text = text.toString()
 
     }
 
