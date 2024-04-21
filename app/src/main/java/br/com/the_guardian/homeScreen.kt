@@ -1,6 +1,7 @@
 package br.com.the_guardian
 
 // importações
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -66,12 +67,14 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
     // variáveis e propriedades da tela
     private lateinit var mMap: GoogleMap
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var userLoc: LatLng
     private lateinit var sharedPreferences: SharedPreferences
     private var selectedMarkerLatLng: LatLng? = null
     private lateinit var btnCadastrarCartao: AppCompatButton
     private lateinit var btnSair: AppCompatButton
+    private lateinit var btnMinhasLocacoes: AppCompatButton
     private var currentPolyline: Polyline? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,6 +84,8 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         // inicialização de variáveis
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
 
         // obter a localização atual do usuário
         getCurrentLocation()
@@ -88,6 +93,13 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         // obter referencia do fragmento do mapa e prepara-lo para a exibição
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        // botao para ver as locacoes
+        btnMinhasLocacoes = findViewById(R.id.btnMinhasLocacoes)
+        btnMinhasLocacoes.setOnClickListener {
+            userLocation()
+        }
+
 
         // botão para acessar a tela de cadastro
         btnCadastrarCartao = findViewById(R.id.btnCadastrarCartao)
@@ -392,6 +404,31 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
             } else {
                 Toast.makeText(applicationContext, "Localização negada", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun userLocation() {
+        val currentUser = auth.currentUser?.uid
+        if (currentUser != null) {
+            db.collection("Users").whereEqualTo("uid", currentUser)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        val document = querySnapshot.documents[0]
+                        val hasLocker = document["hasLocker"]
+                        if (hasLocker.toString() == "true") {
+                            // O usuário já possui um armário locado
+                            nextScreen(QrCodeScreen::class.java)
+                        } else {
+                            Toast.makeText(this, "Nenhuma locação pendênte!", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Log.d(ContentValues.TAG, "Documento do usuário não encontrado")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(ContentValues.TAG, "Falha ao obter o documento do usuário:", exception)
+                }
         }
     }
 }
