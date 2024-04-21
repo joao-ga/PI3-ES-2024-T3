@@ -38,6 +38,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.DirectionsApi
 import com.google.maps.GeoApiContext
 import java.io.Serializable
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
 class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
 
@@ -162,6 +163,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
                 MarkerOptions()
                     .title(place.name)
                     .position(LatLng(place.latitude, place.longitude))
+                    .icon(BitmapDescriptorFactory.defaultMarker(125.0f))
             )
             // adiciona os marcadores
             if (marker != null) {

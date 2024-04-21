@@ -9,27 +9,82 @@
     android:background="@color/grey"
     tools:context=".QrCodeScreen">
 
-    <TextView
-        android:id="@+id/apresentation"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/rectangle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Apresente esse codigo a um de nossos gerentes">
+        style="@style/logo"
+        android:paddingTop="100dp"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="60dp"
+        android:text="@string/qrcode"
+        android:textAlignment="center"
+        android:textColor="@color/grey_button"
+        android:textSize="20sp"
+        android:layout_marginTop="-65dp"
+        android:fontFamily="@font/kronaone_regular"
+
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnVoltar"
+        style="style/button_voltar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="-100dp"
+        android:contentDescription="@string/botão_voltar"
+        android:drawableStart="@drawable/baseline_arrow_back_ios_new_24"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp" />
+
+
+
+
+    <TextView
+        android:id="@+id/apresentation"
+        android:layout_marginTop="100dp"
+        android:textAlignment="center"
+        android:fontFamily="@font/kronaone_regular"
+        android:textSize="20sp"
+        android:textColor="@color/dark_blue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/apresente_este_c_digo_ao_gerente">
     </TextView>
 
     <ImageView
         android:id="@+id/qrCode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="qrCode"
-        android:layout_marginTop="10dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="100dp"
+        android:contentDescription="@string/qrcode_imagem"
+        android:background="@drawable/qrcode"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp">
     </ImageView>
 
-    <TextView
-        android:id="@+id/codigo"
-        android:layout_width="match_parent"
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnCancelarloc"
+        style="@style/login_button"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-    </TextView>
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"
+        android:text="@string/cancelar_loc"
+        android:textAlignment="center"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:textColor="@color/grey"/>
+
+
+
+
 
 </androidx.appcompat.widget.LinearLayoutCompat>

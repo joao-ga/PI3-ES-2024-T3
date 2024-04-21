@@ -23,18 +23,20 @@
         android:textSize="20sp"
         android:fontFamily="@font/kronaone_regular"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="-50dp" />
+        android:layout_marginTop="-50dp"
+        android:layout_marginStart="15dp"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_voltar"
         style="@style/button_voltar"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="-38dp"
+        android:layout_marginTop="-45dp"
         android:drawableStart="@drawable/baseline_arrow_back_ios_new_24"
         android:paddingStart="3dp"
         android:paddingEnd="3dp"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck"
+        android:layout_marginStart="20dp"/>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"

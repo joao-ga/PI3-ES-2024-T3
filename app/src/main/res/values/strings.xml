@@ -32,6 +32,7 @@
     <string name="voltar_login"><b>LOGIN</b></string>
     <string name="cadastro_realizado">Cadastro realizado</string>
     <string name="cadastro_negado">Cadastro negado</string>
+    <string name="botão_voltar" />
 
     <!--- Strings da tela de cadastro de cartão-->
     <string name="cadastracartao">CADASTRAR CARTÃO</string>
@@ -50,6 +51,7 @@
     <string name="home">HOME</string>
     <string name="habilita_cartão">Cadastrar cartão</string>
     <string name="descrição">Sair do aplicativo</string>
+    <string name="minhas_locacoes">Minhas Locações</string>
 
     <!--Strings da tela de opção de aliguel-->
     <string name="aluga_armar">ALUGAR ARMÁRIOS</string>
@@ -67,6 +69,10 @@
 <!--Strings da dialog de traçar rota-->
     <string name="rota">TRAÇAR ROTA</string>
     <string name="consulta">CONSULTAR</string>
+    <string name="qrcode">QRCODE</string>
+    <string name="apresente_este_c_digo_ao_gerente">Apresente este código ao gerente!</string>
+    <string name="qrcode_imagem">qrCode</string>
+    <string name="cancelar_loc">Cancelar locação</string>
 
 
 </resources>
