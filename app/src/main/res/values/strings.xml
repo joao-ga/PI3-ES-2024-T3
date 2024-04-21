@@ -51,6 +51,7 @@
     <string name="home">HOME</string>
     <string name="habilita_cartão">Cadastrar cartão</string>
     <string name="descrição">Sair do aplicativo</string>
+    <string name="minhas_locacoes">Minhas Locações</string>
 
     <!--Strings da tela de opção de aliguel-->
     <string name="aluga_armar">ALUGAR ARMÁRIOS</string>

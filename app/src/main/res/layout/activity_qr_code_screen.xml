@@ -80,7 +80,8 @@
         android:text="@string/cancelar_loc"
         android:textAlignment="center"
         android:paddingStart="4dp"
-        android:paddingEnd="4dp" />
+        android:paddingEnd="4dp"
+        android:textColor="@color/grey"/>
 
 
 
