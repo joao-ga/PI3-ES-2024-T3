@@ -86,7 +86,6 @@ class DataScreen : AppCompatActivity() {
     private lateinit var btnVoltar: AppCompatButton
     private lateinit var actualLocker: homeScreen.Place
     private lateinit var db: FirebaseFirestore
-    private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
     private var locacaoAtual: Locacao? = null
     private lateinit var userId: String // Movendo a declaração para o escopo adequado
@@ -109,7 +108,6 @@ class DataScreen : AppCompatActivity() {
 
         // Inicialização da FirebaseAuth
         auth = FirebaseAuth.getInstance()
-        database = Firebase.database.reference
         db = FirebaseFirestore.getInstance()
 
         // Obtendo o usuário atual
@@ -273,9 +271,7 @@ class DataScreen : AppCompatActivity() {
                 .addOnSuccessListener { querySnapshot ->
                     if (!querySnapshot.isEmpty) {
                         val document = querySnapshot.documents[0]
-                        Log.d("debugg", document.toString())
                         val hasLocker = document["hasLocker"]
-                        Log.d("debugg", hasLocker.toString())
                         if (hasLocker.toString() == "true") {
                             // O usuário já possui um armário locado
                             locacaoConfirmada = true
@@ -291,7 +287,6 @@ class DataScreen : AppCompatActivity() {
     }
 
     private fun atualizarStatusLocacaoUsuario() {
-        Log.d("debugg", "entrou na função atualizarStatus")
         val currentUser = auth.currentUser?.uid
         if (currentUser != null) {
             db.collection("Users")
