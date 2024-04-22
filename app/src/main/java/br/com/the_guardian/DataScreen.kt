@@ -14,12 +14,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.database
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 data class Locacao(
     val userId: String,
@@ -184,6 +186,7 @@ class DataScreen : AppCompatActivity() {
         // Configurar o botão Consultar para iniciar a tela de QrCode
         btnConsultar = findViewById(R.id.btn_consultar)
         btnConsultar.isEnabled = disponibility
+
         btnConsultar.setOnClickListener {
             var isAnyRadioButtonChecked = false
 
@@ -197,7 +200,7 @@ class DataScreen : AppCompatActivity() {
             }
 
             // realiza o calculo da distancia para verificar se pode ou não realizar a locação
-            fun calcularDistancia(segunda: LatLng):Double {
+            fun calcularDistancia(segunda: LatLng): Double {
                 val localizacaoAtual = Location("")
                 localizacaoAtual.latitude = userLocLatitude
                 localizacaoAtual.longitude = userLocLongitude
@@ -223,47 +226,149 @@ class DataScreen : AppCompatActivity() {
                 return false
             }
 
+            suspend fun verificarUsuarioTemCartao(): Boolean {
+                val currentUser = auth.currentUser?.uid
+                var hasCard = false
+                if (currentUser != null) {
+                    hasCard = suspendCoroutine { continuation ->
+                        db.collection("CreditCards").whereEqualTo("idUser", currentUser)
+                            .get()
+                            .addOnSuccessListener { querySnapshot ->
+                                if (!querySnapshot.isEmpty) {
+                                    continuation.resume(true)
+                                } else {
+                                    Log.d(TAG, "Cartão do usuário não encontrado")
+                                    continuation.resume(false)
+                                }
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.d(
+                                    TAG,
+                                    "Falha ao obter se o usuário possui algum cartão:",
+                                    exception
+                                )
+                                continuation.resume(false)
+                            }
+                    }
+                }
+                return hasCard
+            }
+
+            fun atualizarStatusLocacaoUsuario() {
+                val currentUser = auth.currentUser?.uid
+                if (currentUser != null) {
+                    db.collection("Users")
+                        .whereEqualTo("uid", currentUser)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            for (document in documents) {
+                                db.collection("Users")
+                                    .document(document.id)
+                                    .update("hasLocker", true)
+                                    .addOnSuccessListener {
+                                        Log.d(TAG, "Status de locação atualizado com sucesso!")
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w(TAG, "Erro ao atualizar o status de locação", e)
+                                    }
+                            }
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(TAG, "Erro ao obter documentos", e)
+                        }
+                }
+            }
+
+            fun usuarioEstaLogado(): Boolean {
+                val usuarioAtual = auth.currentUser
+                return usuarioAtual != null
+            }
+
             // se algum botão foi selecionado, inicia a tela de QrCode com o preço selecionado
             if (isAnyRadioButtonChecked) {
-                if(usuarioEstaLogado()) {
-                    if(checkLocation()) {
-                        if(!locacaoConfirmada) {
-                            if (locacaoAtual == null) {
-                                val precoSelecionadoText = findViewById<RadioButton>(checkedRadioButtonId).text.toString()
-                                val precoNumerico = precoSelecionadoText.substringAfter("R$ ").toDoubleOrNull()
-                                if (precoNumerico != null) {
-                                    val locker = actualLocker
-                                    val priceSelected = precoNumerico
-                                    locacaoAtual = Locacao(userId,userLoc, locker,  priceSelected)
-                                    locacoesConfirmadas.add(locacaoAtual!!)
-                                    confirmacao(locacaoAtual!!)
-                                    atualizarStatusLocacaoUsuario()
-                                    val intent = Intent(this, QrCodeScreen::class.java).apply {
-                                        putExtra("checkedRadioButtonText", precoSelecionadoText)
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (usuarioEstaLogado()) {
+                        if (verificarUsuarioTemCartao()) {
+                            if (checkLocation()) {
+                                if (!locacaoConfirmada) {
+                                    if (locacaoAtual == null) {
+                                        val precoSelecionadoText =
+                                            findViewById<RadioButton>(checkedRadioButtonId).text.toString()
+                                        val precoNumerico =
+                                            precoSelecionadoText.substringAfter("R$ ")
+                                                .toDoubleOrNull()
+                                        if (precoNumerico != null) {
+                                            val locker = actualLocker
+                                            val priceSelected = precoNumerico
+                                            locacaoAtual =
+                                                Locacao(userId, userLoc, locker, priceSelected)
+                                            locacoesConfirmadas.add(locacaoAtual!!)
+                                            confirmacao(locacaoAtual!!)
+                                            atualizarStatusLocacaoUsuario()
+                                            val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
+                                                putExtra("checkedRadioButtonText", precoSelecionadoText)
+                                            }
+                                            startActivity(intent)
+
+                                        } else {
+                                            Toast.makeText(
+                                                baseContext,
+                                                "Preço selecionado inválido",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    } else {
+                                        Toast.makeText(
+                                            baseContext,
+                                            "Você já possui uma locação pendente.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
-                                    startActivity(intent)
                                 } else {
-                                    Toast.makeText(this, "Preço selecionado inválido", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        baseContext,
+                                        "Você já possui uma locação confirmada.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             } else {
-                                Toast.makeText(this, "Você já possui uma locação pendente.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    baseContext,
+                                    "Para realizar a locação você devera estar a no máximo 1 km de distância",
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         } else {
-                            Toast.makeText(this, "Você já possui uma locação confirmada.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                baseContext,
+                                "Para alugar um armário você precisa ter um cartão cadastrado",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     } else {
-                        Toast.makeText(baseContext, "Para realizar a locação você devera estar a no máximo 1 km de distância", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            baseContext,
+                            "Para acessar essa funcionalidade faça o login",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-                } else {
-                    Toast.makeText(baseContext, "Para acessar essa funcionalidade faça o login", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "Escolha uma opção", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Escolha uma opção",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
-    private fun verificarLocacaoUsuario() {// adaptar esssa função para checar se o usuario possui um cartao cadastrado
+    fun enviarParaTelaQRCode() {
+        val intent = Intent(this, QrCodeScreen::class.java).apply {}
+        startActivity(intent)
+    }
+
+    fun verificarLocacaoUsuario() {
         val currentUser = auth.currentUser?.uid
         if (currentUser != null) {
             db.collection("Users").whereEqualTo("uid", currentUser)
@@ -284,40 +389,5 @@ class DataScreen : AppCompatActivity() {
                     Log.d(TAG, "Falha ao obter o documento do usuário:", exception)
                 }
         }
-    }
-
-    private fun atualizarStatusLocacaoUsuario() {
-        val currentUser = auth.currentUser?.uid
-        if (currentUser != null) {
-            db.collection("Users")
-                .whereEqualTo("uid", currentUser)
-                .get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        db.collection("Users")
-                            .document(document.id)
-                            .update("hasLocker", true)
-                            .addOnSuccessListener {
-                                Log.d(TAG, "Status de locação atualizado com sucesso!")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.w(TAG, "Erro ao atualizar o status de locação", e)
-                            }
-                    }
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Erro ao obter documentos", e)
-                }
-        }
-    }
-
-    private fun enviarParaTelaQRCode() {
-        val intent = Intent(this, QrCodeScreen::class.java).apply{}
-        startActivity(intent)
-    }
-
-    private fun usuarioEstaLogado(): Boolean {
-        val usuarioAtual = auth.currentUser
-        return usuarioAtual != null
     }
 }
