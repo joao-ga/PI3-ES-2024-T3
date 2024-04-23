@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -119,12 +120,12 @@ class RegisterCreditCard : AppCompatActivity() {
                             etSecCode.setText(cardInfo.secCode ?: "")
 
                             // Habilita a edição dos campos
-                            etNumCartao.isEnabled = true
-                            etName.isEnabled = true
-                            etExpDate.isEnabled = true
-                            etSecCode.isEnabled = true
+                            etNumCartao.isEnabled = false
+                            etName.isEnabled = false
+                            etExpDate.isEnabled = false
+                            etSecCode.isEnabled = false
 
-                            btnEnviar.isEnabled = false
+                            btnEnviar.visibility = View.GONE
                             btnEnviar.setBackgroundResource(R.color.dark_grey)
 
                         } else {
