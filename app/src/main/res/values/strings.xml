@@ -1,7 +1,7 @@
 <resources>
 
     <!--Strings da tela de login-->
-    <string name="app_name">the-guardian</string>
+    <string name="app_name">The Guardian</string>
     <string name="welcome_back">Bem-vindo de volta,</string>
     <string name="get_started">Para começarmos, entre usando seu email e senha.</string>
     <string name="email_login">Email</string>
