@@ -10,6 +10,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
+import br.com.the_guardian.DataScreen.Companion.locacaoConfirmada
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.zxing.BarcodeFormat
@@ -110,6 +111,7 @@ class QrCodeScreen : AppCompatActivity() {
                             .document(document.id)
                             .update("hasLocker", false)
                             .addOnSuccessListener {
+                                locacaoConfirmada =  false
                                 nextScreen(homeScreen::class.java)
                                 Toast.makeText(this, "Pendência de locação cancelada!", Toast.LENGTH_SHORT).show()
                                 Log.d(ContentValues.TAG, "Status de locação atualizado com sucesso!")
