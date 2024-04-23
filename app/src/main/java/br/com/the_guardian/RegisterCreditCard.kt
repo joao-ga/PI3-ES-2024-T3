@@ -17,6 +17,11 @@ import com.google.firebase.database.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.functions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class RegisterCreditCard : AppCompatActivity() {
 
@@ -69,21 +74,33 @@ class RegisterCreditCard : AppCompatActivity() {
 
             // criação da instância card, que recebe dados da classe CreditCard
             val card = CreditCards(idUser, cardNumber, cardName, expDate, secCode)
+            CoroutineScope(Dispatchers.Main).launch {
+                if(!verificarUsuarioTemCartao()) {
+                    if (idUser != null) {
+                        if (idUser.isEmpty() || cardNumber.isEmpty() || cardName.isEmpty() || expDate.isEmpty() || secCode.isEmpty()) {
+                            Toast.makeText(
+                                baseContext,
+                                "Preencha todos os campos!",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                baseContext,
+                                "Cartão de Crédito inserido com sucesso",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                            addCreditCard(card)
 
-            if (idUser != null) {
-                if(idUser.isEmpty() || cardNumber.isEmpty() || cardName.isEmpty() || expDate.isEmpty() || secCode.isEmpty()) {
-                    Toast.makeText(
-                        baseContext,
-                        "Preencha todos os campos!",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                        }
+                    }
                 } else {
-                    Toast.makeText(
-                        baseContext,
-                        "Cartão de Crédito inserido com sucesso",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                    addCreditCard(card)
+
+                    // desenvolver aqui a logica se o usuario ja tem
+                    // o cartao cadastrado
+                    // a variavel cardInfo tem os dados usa-los
+                    // para preencher os inputs do cartao
+                    getCreditCardInfos()
+
                 }
             }
         }
@@ -127,4 +144,65 @@ class RegisterCreditCard : AppCompatActivity() {
         startActivity(loginScreen)
 
     }
+
+    private suspend fun verificarUsuarioTemCartao(): Boolean {
+        val currentUser = auth.currentUser?.uid
+        var hasCard = false
+        if (currentUser != null) {
+            hasCard = suspendCoroutine { continuation ->
+                db.collection("CreditCards").whereEqualTo("idUser", currentUser)
+                    .get()
+                    .addOnSuccessListener { querySnapshot ->
+                        if (!querySnapshot.isEmpty) {
+                            continuation.resume(true)
+                        } else {
+                            Log.d(ContentValues.TAG, "Cartão do usuário não encontrado")
+                            continuation.resume(false)
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d(
+                            ContentValues.TAG,
+                            "Falha ao obter se o usuário possui algum cartão:",
+                            exception
+                        )
+                        continuation.resume(false)
+                    }
+            }
+        }
+        return hasCard
+    }
+
+    private fun getCreditCardInfos() {
+        val firestore = FirebaseFirestore.getInstance()
+        val currentUser = auth.currentUser?.uid
+
+        if (currentUser != null) {
+            firestore.collection("CreditCards")
+                .whereEqualTo("idUser", currentUser)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        val document = querySnapshot.documents[0]
+                        // essa é a variavel que armazena os dados
+                        val cardInfo = document.data
+                        if (cardInfo != null) {
+                            Log.d("debugg", cardInfo.toString())
+                        } else {
+                            Log.e("error", "Os dados do cartão de crédito estão vazios.")
+                        }
+                    } else {
+                        Log.d("debugg", "Nenhum cartão de crédito encontrado para este usuário.")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.e("DataScreen", "Erro ao recuperar dados do Firestore: $exception")
+                    Toast.makeText(this, "Erro ao recuperar dados do Firestore: ${exception.message}", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Log.e("error", "Usuário atual é nulo.")
+            Toast.makeText(this, "Erro: usuário não autenticado.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 }
