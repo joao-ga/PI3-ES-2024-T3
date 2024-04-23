@@ -260,7 +260,7 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnEnviar"
         android:layout_width="250dp"
-        android:layout_height="49dp"
+        android:layout_height="69dp"
         style="@style/login_button"
         android:text="@string/confirmar"
         android:layout_gravity="center"
@@ -281,7 +281,7 @@
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
         android:drawableStart="@drawable/baseline_arrow_back_ios_new_24"
-        android:layout_marginTop="-633dp"
+        android:layout_marginTop="-651dp"
         android:layout_marginStart="30dp"
         />
 
