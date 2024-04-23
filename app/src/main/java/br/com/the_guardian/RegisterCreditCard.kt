@@ -86,14 +86,7 @@ class RegisterCreditCard : AppCompatActivity() {
                             Toast.LENGTH_SHORT,
                         ).show()
                     } else {
-                        // Verifica se o usuário já possui um cartão cadastrado
-                        if (verificarUsuarioTemCartao()) {
-                            // Atualiza os dados do cartão existente
-                            updateCreditCard(card)
-                        } else {
-                            // Insere um novo cartão
-                            addCreditCard(card)
-                        }
+                        addCreditCard(card)
                     }
                 }
             }
@@ -104,10 +97,6 @@ class RegisterCreditCard : AppCompatActivity() {
             // botão para voltar para a home
             nextScreen(homeScreen::class.java)
         }
-    }
-
-    private fun updateCreditCard(card: CreditCards) {
-        //chamar a função do backend que atualizará o cartão com as atuais informações
     }
 
     private fun getCreditCardInfos() {
@@ -134,6 +123,10 @@ class RegisterCreditCard : AppCompatActivity() {
                             etName.isEnabled = true
                             etExpDate.isEnabled = true
                             etSecCode.isEnabled = true
+
+                            btnEnviar.isEnabled = false
+                            btnEnviar.setBackgroundResource(R.color.dark_grey)
+
                         } else {
                             Log.e("error", "Os dados do cartão de crédito estão vazios.")
                         }

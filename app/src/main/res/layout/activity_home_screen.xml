@@ -60,7 +60,7 @@ Textview que indica a tela menu ou "home"-->
         android:layout_width="185dp"
         android:layout_height="99dp"
         android:layout_marginTop="10dp"
-        android:text="@string/habilita_cartão"
+        android:text="Cartão de Crédito"
         android:background="@drawable/button_border_round"
         android:textColor="@color/grey"
         android:fontFamily="@font/jurabold"
