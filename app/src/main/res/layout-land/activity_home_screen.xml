@@ -29,7 +29,7 @@
             android:layout_gravity="end"
             android:layout_marginTop="-69dp"
             android:layout_marginEnd="20dp"
-            android:drawableRight="@drawable/baseline_logout_24"
+            android:drawableEnd="@drawable/baseline_logout_24"
             android:background="@color/dark_blue"
             />
     <!--TextView indicando a tela HOME-->
@@ -50,7 +50,7 @@
             android:layout_marginTop="40dp"
             app:cardCornerRadius="6dp">
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="750dp"

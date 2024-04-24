@@ -25,7 +25,7 @@ Textview que indica a tela menu ou "home"-->
         android:layout_gravity="end"
         android:layout_marginTop="-69dp"
         android:layout_marginEnd="20dp"
-        android:drawableRight="@drawable/baseline_logout_24"
+        android:drawableEnd="@drawable/baseline_logout_24"
         android:background="@color/dark_blue"
         />
 <!--TextView indicando a tela HOME-->
@@ -46,7 +46,7 @@ Textview que indica a tela menu ou "home"-->
         android:layout_marginTop="40dp"
         app:cardCornerRadius="6dp">
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="386dp"
@@ -60,7 +60,7 @@ Textview que indica a tela menu ou "home"-->
         android:layout_width="185dp"
         android:layout_height="99dp"
         android:layout_marginTop="10dp"
-        android:text="Cartão de Crédito"
+        android:text="@string/habilita_cartão"
         android:background="@drawable/button_border_round"
         android:textColor="@color/grey"
         android:fontFamily="@font/jurabold"
