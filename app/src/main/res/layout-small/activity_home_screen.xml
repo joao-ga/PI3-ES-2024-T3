@@ -80,7 +80,7 @@
         android:layout_width="180dp"
         android:layout_height="99dp"
         android:layout_marginTop="-110dp"
-        android:text="@string/minhas_locacoes"
+        android:text="@string/locacoes_pendentes"
         android:background="@drawable/button_border_round"
         android:textColor="@color/grey"
         android:fontFamily="@font/jurabold"
