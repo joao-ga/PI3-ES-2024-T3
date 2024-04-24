@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/grey"
-    tools:context="br.com.the_guardian.registerScreen">
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/grey"
+        tools:context="br.com.the_guardian.registerScreen">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/rectangle"
@@ -20,16 +24,17 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-90dp"
+        android:layout_width="120dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="-70dp"
         android:src="@drawable/llogopng"
         android:adjustViewBounds="true"
         android:maxHeight="87dp"
+        android:layout_marginStart="120dp"
         />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="0dp"
@@ -38,7 +43,7 @@
         android:text="@string/bem_vindo"
         android:textAlignment="textStart"
         android:textColor="@color/dark_blue"
-        android:textSize="30sp" />
+        android:textSize="20sp" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
@@ -50,7 +55,7 @@
         android:text="@string/para_come_ar_entre_com_suas_credenciais"
         android:textAlignment="textStart"
         android:textColor="@color/dark_blue"
-        android:textSize="17sp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.396"
         app:layout_constraintStart_toStartOf="parent"
@@ -150,8 +155,8 @@
         android:id="@+id/btnEnviar"
         style="@style/login_button"
         android:fontFamily="@font/kronaone_regular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
         android:textSize="22sp"
         android:width="250dp"
         android:layout_gravity="center"
@@ -162,8 +167,8 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/AppCompatTextView4"
         android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp"
         android:layout_marginStart="-20dp"
         android:layout_gravity="center"
         android:font="@font/jurabold"
@@ -181,10 +186,10 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnVoltar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
         android:layout_marginStart="246dp"
-        android:layout_marginTop="-57dp"
+        android:layout_marginTop="-35dp"
         android:textSize="15sp"
         android:text="@string/voltar_login"
         android:fontFamily="@font/jurabold"
@@ -223,4 +228,5 @@
 
 
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</ScrollView>

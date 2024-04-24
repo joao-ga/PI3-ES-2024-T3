@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayoutCompat2"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/grey"
-    android:orientation="vertical"
-    tools:context="br.com.the_guardian.loginScreen">
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompat2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/grey"
+        tools:context="br.com.the_guardian.loginScreen">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/rectangle"
@@ -22,21 +26,21 @@
         android:layout_height="89dp"
         android:layout_marginTop="-90dp"
         android:src="@drawable/llogopng"
-        android:layout_marginStart="112dp"
+        android:layout_marginStart="93dp"
         android:layout_marginBottom="4dp"
         />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textbemvindo"
-        android:layout_width="279dp"
+        android:layout_width="220dp"
         android:layout_height="25dp"
         android:text="@string/welcome_back"
         android:fontFamily="@font/kronaone_regular"
         android:textAlignment="textStart"
         android:textColor="@color/dark_blue"
-        android:textSize="20sp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="50dp"
+        android:textSize="16sp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="7dp"
         />
 
@@ -48,19 +52,19 @@
         android:textAlignment="textStart"
         android:textColor="@color/dark_blue"
         android:fontFamily="@font/juraregular"
-        android:textSize="16sp"
-        android:layout_marginStart="50dp"
+        android:textSize="14sp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="7dp"
         />
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:layout_width="310dp"
-        android:layout_height="55dp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:id="@+id/etEmailLogin"
         style="@style/email_barra"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
         android:drawableEnd="@drawable/email_svg"
         android:hint="@string/email_login"
         android:inputType="textEmailAddress"
@@ -70,10 +74,10 @@
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etSenhaLogin"
-        android:layout_width="310dp"
-        android:layout_height="55dp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         style="@style/email_barra"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="40dp"
         android:drawableEnd="@drawable/eye_svgrepo_com"
         android:hint="@string/senha_login"
@@ -86,31 +90,31 @@
         android:id="@+id/EmailText"
         android:layout_width="51dp"
         android:layout_height="24dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="-177dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="-170dp"
         android:hint="@string/email_login"
         android:fontFamily="@font/juraregular"
         android:textColor="@color/dark_blue"
-        android:textSize="20sp"
+        android:textSize="16sp"
         />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/SenhaText"
         android:layout_width="70dp"
         android:layout_height="24dp"
-        android:layout_marginStart="48dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="69dp"
         android:hint="@string/senha_login"
         android:fontFamily="@font/juraregular"
         android:textColor="@color/dark_blue"
-        android:textSize="20sp"
+        android:textSize="16sp"
         />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvEsqueceuSenha"
-        android:layout_width="125dp"
+        android:layout_width="150dp"
         android:layout_height="30dp"
-        android:layout_marginStart="230dp"
+        android:layout_marginStart="200dp"
         android:layout_marginTop="60dp"
         android:text="@string/esqueci_senha"
         android:fontFamily="@font/jurabold"
@@ -119,11 +123,11 @@
         />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="270dp"
-        android:layout_height="50dp"
+        android:layout_width="230dp"
+        android:layout_height="40dp"
         android:id="@+id/btnEnviarLogin"
         style="@style/login_button"
-        android:layout_marginStart="65dp"
+        android:layout_marginStart="60dp"
         android:layout_marginTop="10dp"
         android:text="@string/login"
         android:fontFamily="@font/kronaone_regular"
@@ -135,7 +139,7 @@
         android:id="@+id/tvCadastrar"
         android:layout_width="240dp"
         android:layout_height="30dp"
-        android:layout_marginStart="86dp"
+        android:layout_marginStart="60dp"
         android:layout_marginTop="13dp"
         android:textAlignment="center"
         android:text="@string/sem_cadastro"
@@ -149,7 +153,7 @@
         android:layout_height="30dp"
         android:text="@string/ou"
         android:fontFamily="@font/jurabold"
-        android:layout_marginStart="190dp"
+        android:layout_marginStart="170dp"
         android:layout_marginTop="-10dp"
         android:textColor="@color/dark_blue"
         android:textSize="16sp"/>
@@ -159,7 +163,7 @@
         android:layout_width="75dp"
         android:layout_height="26dp"
         android:layout_marginTop="-9dp"
-        android:layout_marginStart="166dp"
+        android:layout_marginStart="145dp"
         android:fontFamily="@font/jurasemibold"
         android:text="@string/ver_mapa"
         android:textColor="@color/purple"
@@ -201,4 +205,5 @@
         android:visibility="gone"
         android:layout_marginStart="135dp"
         />
-</androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</ScrollView>

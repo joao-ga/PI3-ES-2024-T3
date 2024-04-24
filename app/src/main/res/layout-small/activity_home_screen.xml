@@ -25,59 +25,59 @@
         android:layout_gravity="end"
         android:layout_marginTop="-69dp"
         android:layout_marginEnd="20dp"
-        android:drawableRight="@drawable/baseline_logout_24"
+        android:drawableStart="@drawable/baseline_logout_24"
         android:background="@color/dark_blue"
         />
     <!--TextView indicando a tela HOME-->
     <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="30dp"
         android:text="@string/home"
         android:layout_marginTop="-39dp"
-        android:layout_marginStart="150dp"
+        android:layout_marginStart="130dp"
         android:textColor="@color/grey"
         android:fontFamily="@font/kronaone_regular"
-        android:textSize="24sp"/>
+        android:textSize="20sp"/>
     <!--MAPA-->
     <androidx.cardview.widget.CardView
-        android:layout_width="386dp"
-        android:layout_height="470dp"
-        android:layout_marginStart="13dp"
+        android:layout_width="330dp"
+        android:layout_height="250dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="40dp"
         app:cardCornerRadius="6dp">
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="386dp"
-            android:layout_height="470dp"
+            android:layout_width="330dp"
+            android:layout_height="250dp"
             tools:context=".MapsActivity" />
     </androidx.cardview.widget.CardView>
 
     <!--Botão que cadastra o cartão-->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnCadastrarCartao"
-        android:layout_width="185dp"
+        android:layout_width="159dp"
         android:layout_height="99dp"
         android:layout_marginTop="10dp"
         android:text="@string/habilita_cartão"
         android:background="@drawable/button_border_round"
         android:textColor="@color/grey"
         android:fontFamily="@font/jurabold"
-        android:layout_marginStart="13dp"
+        android:layout_marginStart="15dp"
         android:layout_marginBottom="10dp"
         android:textAlignment="textStart"
         android:paddingStart="10dp"
         android:textAllCaps="false"
-        android:textSize="14sp"
+        android:textSize="13sp"
         android:drawableEnd="@drawable/cardenfeite"
-        android:paddingEnd="-25dp"
+        android:paddingEnd="-39dp"
         android:paddingTop="10dp"
         />
     <!--Botão que mostra as locações do usuário-->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnMinhasLocacoes"
-        android:layout_width="180dp"
+        android:layout_width="159dp"
         android:layout_height="99dp"
         android:layout_marginTop="-110dp"
         android:text="@string/locacoes_pendentes"
@@ -85,10 +85,10 @@
         android:textColor="@color/grey"
         android:fontFamily="@font/jurabold"
         android:paddingTop="18dp"
-        android:layout_marginStart="218dp"
+        android:layout_marginStart="185dp"
         android:layout_marginBottom="10dp"
         android:textAlignment="viewStart"
-        android:textSize="14sp"
+        android:textSize="13sp"
         android:paddingStart="10dp"
         android:paddingEnd="0dp"
         android:textAllCaps="false"

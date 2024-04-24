@@ -22,7 +22,7 @@
         android:layout_height="89dp"
         android:layout_marginTop="-90dp"
         android:src="@drawable/llogopng"
-        android:layout_marginStart="112dp"
+        android:layout_marginStart="117dp"
         android:layout_marginBottom="4dp"
         />
 
@@ -59,7 +59,7 @@
         android:layout_height="55dp"
         android:id="@+id/etEmailLogin"
         style="@style/email_barra"
-        android:layout_marginStart="45dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="60dp"
         android:drawableEnd="@drawable/email_svg"
         android:hint="@string/email_login"
@@ -73,7 +73,7 @@
         android:layout_width="310dp"
         android:layout_height="55dp"
         style="@style/email_barra"
-        android:layout_marginStart="45dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="40dp"
         android:drawableEnd="@drawable/eye_svgrepo_com"
         android:hint="@string/senha_login"
@@ -108,7 +108,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvEsqueceuSenha"
-        android:layout_width="125dp"
+        android:layout_width="190dp"
         android:layout_height="20dp"
         android:layout_marginStart="230dp"
         android:layout_marginTop="60dp"
@@ -123,7 +123,7 @@
         android:layout_height="50dp"
         android:id="@+id/btnEnviarLogin"
         style="@style/login_button"
-        android:layout_marginStart="65dp"
+        android:layout_marginStart="70dp"
         android:layout_marginTop="10dp"
         android:text="@string/login"
         android:fontFamily="@font/kronaone_regular"

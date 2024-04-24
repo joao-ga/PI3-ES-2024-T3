@@ -25,10 +25,10 @@
             android:exported="true" />
         <activity
             android:name=".homeScreen"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".RegisterCreditCard"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".loginScreen"
             android:exported="true">
@@ -45,7 +45,7 @@
 
         <activity
             android:name=".registerScreen"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>

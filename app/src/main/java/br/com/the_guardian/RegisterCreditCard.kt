@@ -66,6 +66,14 @@ class RegisterCreditCard : AppCompatActivity() {
         etSecCode = findViewById(R.id.etSecCode)
         btnEnviar = findViewById(R.id.btnEnviar)
 
+
+        // Inicialização do botão "Voltar" aqui, para garantir que ele esteja sempre visível
+        btnVoltar = findViewById(R.id.btnVoltar)
+        btnVoltar.setOnClickListener {
+            // botão para voltar para a home
+            nextScreen(homeScreen::class.java)
+        }
+
         getCreditCardInfos()
 
         btnEnviar.setOnClickListener {
@@ -93,11 +101,6 @@ class RegisterCreditCard : AppCompatActivity() {
             }
         }
 
-        btnVoltar = findViewById(R.id.btnVoltar)
-        btnVoltar.setOnClickListener {
-            // botão para voltar para a home
-            nextScreen(homeScreen::class.java)
-        }
     }
 
     private fun getCreditCardInfos() {
@@ -125,7 +128,6 @@ class RegisterCreditCard : AppCompatActivity() {
                             etExpDate.isEnabled = false
                             etSecCode.isEnabled = false
 
-                            btnEnviar.visibility = View.GONE
                             btnEnviar.setBackgroundResource(R.color.dark_grey)
 
                         } else {
@@ -177,6 +179,7 @@ class RegisterCreditCard : AppCompatActivity() {
         startActivity(loginScreen)
 
     }
+
 
     private suspend fun verificarUsuarioTemCartao(): Boolean {
         val currentUser = auth.currentUser?.uid
