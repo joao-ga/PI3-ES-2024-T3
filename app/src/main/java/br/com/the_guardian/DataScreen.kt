@@ -266,6 +266,7 @@ class DataScreen : AppCompatActivity() {
                                     .document(document.id)
                                     .update("hasLocker", true)
                                     .addOnSuccessListener {
+                                        locacaoConfirmada = true
                                         Log.d(TAG, "Status de locação atualizado com sucesso!")
                                     }
                                     .addOnFailureListener { e ->
