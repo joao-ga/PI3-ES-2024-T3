@@ -74,5 +74,6 @@
     <string name="qrcode_imagem">qrCode</string>
     <string name="cancelar_loc">Cancelar locação</string>
 
+    <string name="volte">voltar</string>
 
 </resources>

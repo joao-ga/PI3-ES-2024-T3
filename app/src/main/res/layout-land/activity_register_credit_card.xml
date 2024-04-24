@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/grey"
+        tools:context=".RegisterCreditCard">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/rectangle"
+            android:layout_width="800dp"
+            android:layout_height="80dp"
+            style="@style/logo"
+            android:paddingTop="100dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="60dp"
+            android:layout_marginEnd="40dp"
+            android:text="@string/cadastracartao"
+            android:textAlignment="viewStart"
+            android:textColor="@color/grey_button"
+            android:textSize="20sp"
+            android:layout_marginTop="-50dp"
+            android:layout_marginStart="225dp"
+            android:fontFamily="@font/kronaone_regular"
+
+            />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/cartao"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bgcartao"
+            android:paddingTop="40dp"
+            android:paddingBottom="30dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="-20dp"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iconchip"
+            android:layout_width="30dp"
+            android:layout_height="24dp"
+            style="@style/chip_card"
+            android:layout_marginBottom="1dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="-140dp"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etNumCartaoamostra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="55dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginTop="3dp"
+            android:textAlignment="textStart"
+            android:textColorHint="@color/grey_texto_card"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingStart="23dp"
+            android:paddingEnd="1dp"
+            android:fontFamily="@font/juraregular"
+            android:hint="@string/numberamostra"
+            android:textSize="15sp"
+            />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="55dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginTop="3dp"
+            android:textAlignment="textStart"
+            android:textColorHint="@color/grey_texto_card"
+            android:paddingBottom="1dp"
+            android:paddingTop="1dp"
+            android:paddingStart="23dp"
+            android:paddingEnd="1dp"
+            android:fontFamily="@font/juraregular"
+            android:hint="@string/nameamostra"
+            android:textSize="15sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="260dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="-24dp"
+            android:textAlignment="textStart"
+            android:textColorHint="@color/grey_texto_card"
+            android:paddingBottom="1dp"
+            android:paddingTop="0dp"
+            android:paddingStart="7dp"
+            android:paddingEnd="1dp"
+            android:fontFamily="@font/juraregular"
+            android:hint="@string/dataamostra"
+            android:textSize="15sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textcvv"
+            android:layout_width="128dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="-130dp"
+            android:layout_marginBottom="17dp"
+            android:fontFamily="@font/juraregular"
+            android:text="@string/cvv"
+            android:textColor="@color/dark_blue"
+            android:textSize="14sp"
+            android:layout_marginStart="410dp"
+            android:layout_marginEnd="55dp" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etSecCode"
+            android:layout_width="200dp"
+            android:layout_height="35dp"
+            style="@style/barranumbercard"
+            android:inputType="numberPassword"
+            android:layout_marginStart="410dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="-12dp"
+            android:height="100dp"
+            android:width="143dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="1dp"
+            android:textAlignment="textStart"
+            android:textColorHint="@color/grey_texto_card"
+            android:fontFamily="@font/juraregular"
+            android:textSize="14sp"
+            android:hint="@string/cvv"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textumerocard"
+            android:layout_width="128dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="-2dp"
+            android:fontFamily="@font/juraregular"
+            android:text="@string/cartaonumber"
+            android:textAlignment="textStart"
+            android:textColor="@color/dark_blue"
+            android:textSize="14sp"
+            android:layout_marginStart="410dp"
+            android:layout_marginEnd="55dp"
+            android:contentDescription="@string/cartaonumber"/>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etNumCartao"
+            android:layout_width="200dp"
+            android:layout_height="35dp"
+            style="@style/barranumbercard"
+            android:inputType="number"
+            android:layout_marginStart="410dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="1dp"
+            android:textAlignment="textStart"
+            android:textColorHint="@color/grey_texto_card"
+            android:height="100dp"
+            android:width="299dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="1dp"
+            android:fontFamily="@font/juraregular"
+            android:hint="@string/cartaonumber"
+            android:textSize="14sp"
+            />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textnomecard"
+            android:layout_width="128dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="1sp"
+            android:fontFamily="@font/juraregular"
+            android:text="@string/cartaoname"
+            android:textAlignment="textStart"
+            android:textColor="@color/dark_blue"
+            android:textSize="14sp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginStart="410dp"
+            android:layout_marginEnd="55dp" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etName"
+            android:layout_width="200dp"
+            android:layout_height="35dp"
+            android:inputType="text"
+            android:hint="@string/cartaoname"
+            style="@style/barranumbercard"
+            android:layout_marginStart="410dp"
+            android:layout_marginEnd="30dp"
+            android:textAlignment="textStart"
+            android:textColorHint="@color/grey_texto_card"
+            android:height="100dp"
+            android:width="299dp"
+            android:layout_marginTop="0dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="1dp"
+            android:fontFamily="@font/juraregular"
+            android:textSize="14sp"
+            />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textodata"
+            android:layout_width="128dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="1dp"
+            android:fontFamily="@font/juraregular"
+            android:text="@string/dataexpira"
+            android:textAlignment="textStart"
+            android:textColor="@color/dark_blue"
+            android:textSize="14sp"
+            android:layout_marginStart="410dp"
+            android:layout_marginEnd="0dp" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etExpDate"
+            android:layout_width="200dp"
+            android:layout_height="35dp"
+            style="@style/barranumbercard"
+            android:inputType="text"
+            android:layout_marginStart="410dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="2dp"
+            android:height="100dp"
+            android:width="143dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="0dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="1dp"
+            android:hint="@string/dataexpira"
+            android:textAlignment="textStart"
+            android:textColorHint="@color/grey_texto_card"
+            android:fontFamily="@font/juraregular"
+            android:textSize="14sp"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="293dp"
+            android:layout_height="47dp"
+            android:text="@string/aviso"
+            android:textSize="12sp"
+            android:fontFamily="@font/jurabold"
+            android:layout_marginStart="60dp"
+            android:textAlignment="viewStart"
+            android:layout_marginTop="-50dp"
+            android:textColor="@color/dark_blue"
+            />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnEnviar"
+            style="@style/login_button"
+            android:layout_width="200dp"
+            android:layout_height="39dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="135dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="70dp"
+            android:fontFamily="@font/kronaone_regular"
+            android:text="@string/confirmar"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            tools:ignore="TextSizeCheck" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnVoltar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            style="@style/button_voltar"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:drawableStart="@drawable/baseline_arrow_back_ios_new_24"
+            android:layout_marginTop="-338dp"
+            android:layout_marginStart="50dp"
+            android:contentDescription="@string/volte"
+            />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</ScrollView>

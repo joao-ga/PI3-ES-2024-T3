@@ -11,18 +11,18 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/rectangle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="800dp"
+        android:layout_height="80dp"
         style="@style/logo"
         android:paddingTop="100dp" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageView3"
-        android:layout_width="176dp"
+        android:layout_width="120dp"
         android:layout_height="89dp"
         android:layout_marginTop="-90dp"
         android:src="@drawable/llogopng"
-        android:layout_marginStart="112dp"
+        android:layout_marginStart="290dp"
         android:layout_marginBottom="4dp"
         />
 
@@ -32,11 +32,11 @@
         android:layout_height="25dp"
         android:text="@string/welcome_back"
         android:fontFamily="@font/kronaone_regular"
-        android:textAlignment="textStart"
+        android:textAlignment="center"
         android:textColor="@color/dark_blue"
         android:textSize="20sp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="7dp"
         />
 
@@ -49,18 +49,18 @@
         android:textColor="@color/dark_blue"
         android:fontFamily="@font/juraregular"
         android:textSize="16sp"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="7dp"
         />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:layout_width="310dp"
-        android:layout_height="55dp"
+        android:layout_height="48dp"
         android:id="@+id/etEmailLogin"
         style="@style/email_barra"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginStart="360dp"
+        android:layout_marginTop="-55dp"
         android:drawableEnd="@drawable/email_svg"
         android:hint="@string/email_login"
         android:inputType="textEmailAddress"
@@ -71,10 +71,10 @@
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etSenhaLogin"
         android:layout_width="310dp"
-        android:layout_height="55dp"
+        android:layout_height="48dp"
         style="@style/email_barra"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="360dp"
+        android:layout_marginTop="25dp"
         android:drawableEnd="@drawable/eye_svgrepo_com"
         android:hint="@string/senha_login"
         android:fontFamily="@font/juraregular"
@@ -86,31 +86,31 @@
         android:id="@+id/EmailText"
         android:layout_width="51dp"
         android:layout_height="24dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="-177dp"
+        android:layout_marginStart="360dp"
+        android:layout_marginTop="-150dp"
         android:hint="@string/email_login"
         android:fontFamily="@font/juraregular"
         android:textColor="@color/dark_blue"
-        android:textSize="20sp"
+        android:textSize="16sp"
         />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/SenhaText"
         android:layout_width="70dp"
         android:layout_height="24dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="69dp"
+        android:layout_marginStart="360dp"
+        android:layout_marginTop="50dp"
         android:hint="@string/senha_login"
         android:fontFamily="@font/juraregular"
         android:textColor="@color/dark_blue"
-        android:textSize="20sp"
+        android:textSize="16sp"
         />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvEsqueceuSenha"
-        android:layout_width="125dp"
+        android:layout_width="130dp"
         android:layout_height="20dp"
-        android:layout_marginStart="230dp"
+        android:layout_marginStart="540dp"
         android:layout_marginTop="60dp"
         android:text="@string/esqueci_senha"
         android:fontFamily="@font/jurabold"
@@ -119,15 +119,15 @@
         />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="270dp"
-        android:layout_height="50dp"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
         android:id="@+id/btnEnviarLogin"
         style="@style/login_button"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="360dp"
+        android:layout_marginTop="-20dp"
         android:text="@string/login"
         android:fontFamily="@font/kronaone_regular"
-        android:textSize="24sp"
+        android:textSize="16sp"
         android:textColor="@color/grey"
         />
 
@@ -135,9 +135,9 @@
         android:id="@+id/tvCadastrar"
         android:layout_width="240dp"
         android:layout_height="30dp"
-        android:layout_marginStart="86dp"
-        android:layout_marginTop="13dp"
-        android:textAlignment="center"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="-90dp"
+        android:textAlignment="textStart"
         android:text="@string/sem_cadastro"
         android:fontFamily="@font/jurasemibold"
         android:textSize="16sp"
@@ -149,7 +149,7 @@
         android:layout_height="30dp"
         android:text="@string/ou"
         android:fontFamily="@font/jurabold"
-        android:layout_marginStart="190dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="-10dp"
         android:textColor="@color/dark_blue"
         android:textSize="16sp"/>
@@ -159,7 +159,7 @@
         android:layout_width="75dp"
         android:layout_height="26dp"
         android:layout_marginTop="-9dp"
-        android:layout_marginStart="166dp"
+        android:layout_marginStart="26dp"
         android:fontFamily="@font/jurasemibold"
         android:text="@string/ver_mapa"
         android:textColor="@color/purple"
