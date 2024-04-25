@@ -69,7 +69,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private lateinit var userLoc: LatLng
+    private var userLoc: LatLng = LatLng(0.0, 0.0)
     private lateinit var sharedPreferences: SharedPreferences
     private var selectedMarkerLatLng: LatLng? = null
     private lateinit var btnCadastrarCartao: AppCompatButton
@@ -88,7 +88,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         db = FirebaseFirestore.getInstance()
 
         // obter a localização atual do usuário
-        getCurrentLocation()
+        //getCurrentLocation()
 
         // obter referencia do fragmento do mapa e prepara-lo para a exibição
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -194,10 +194,15 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         if (checkPermission()) {
             // marca no mapa a sua localização
             mMap.isMyLocationEnabled = true
+
+            getCurrentLocation()
         } else {
             // se nao chama função para pedir a sua localização
             requestPermissions()
         }
+
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, 18f))
 
         mMap.setOnMarkerClickListener { marker ->
             val place = marker.tag as? Place ?: return@setOnMarkerClickListener false

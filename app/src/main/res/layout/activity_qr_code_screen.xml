@@ -33,7 +33,7 @@
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_voltar"
+        android:id="@+id/btnVoltar"
         style="@style/button_voltar"
         android:layout_width="50dp"
         android:layout_height="50dp"
