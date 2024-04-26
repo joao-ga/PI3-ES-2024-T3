@@ -29,7 +29,7 @@
     <string name="senha_cadastro">Senha</string>
     <string name="cadastrar_se">Cadastre-se</string>
     <string name="j_possu_uma_conta"><font color="#1C2733"> Já possui uma conta? </font> LOGIN \n</string>
-    <string name="voltar_login"><b>LOGIN</b></string>
+    <string name="voltar_login"><b> <font color="#1C2733"> Já possui uma conta? </font> LOGIN</b></string>
     <string name="cadastro_realizado">Cadastro realizado</string>
     <string name="cadastro_negado">Cadastro negado</string>
      />

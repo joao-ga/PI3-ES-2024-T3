@@ -19,7 +19,6 @@
             style="@style/logo"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:paddingTop="100dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"  />
 
@@ -141,7 +140,7 @@
             style="@style/login_button"
             android:layout_width="250dp"
             android:layout_height="49dp"
-            android:layout_marginTop="92dp"
+            android:layout_marginTop="40dp"
             android:fontFamily="@font/kronaone_regular"
             android:gravity="center"
             android:text="@string/login"
@@ -153,8 +152,8 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvCadastrar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="240dp"
+            android:layout_height="30dp"
             android:layout_marginStart="8dp"
             android:fontFamily="@font/jurasemibold"
             android:text="@string/sem_cadastro"
@@ -169,7 +168,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="112dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="25dp"
             android:fontFamily="@font/jurabold"
             android:text="@string/ou"
             android:textColor="@color/dark_blue"
@@ -182,7 +181,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="75dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="0dp"
             android:fontFamily="@font/jurasemibold"
             android:text="@string/ver_mapa"
             android:textColor="@color/purple"
@@ -190,7 +189,8 @@
             app:layout_constraintEnd_toEndOf="@id/tvCadastrar"
             app:layout_constraintHorizontal_bias="0.048"
             app:layout_constraintStart_toStartOf="@id/tvCadastrar"
-            app:layout_constraintTop_toBottomOf="@+id/ou" />
+            app:layout_constraintTop_toBottomOf="@+id/ou"
+            />
 
             <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvLoginEnviado"
@@ -215,25 +215,25 @@
             android:textColor="@color/red"
             android:textSize="20sp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@id/tvEntrarAnonimamente"
-            app:layout_constraintHorizontal_bias="0.048"
-            app:layout_constraintStart_toStartOf="@id/tvEntrarAnonimamente"
-            app:layout_constraintTop_toBottomOf="@+id/tvEntrarAnonimamente"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/tvEntrarAnonimamente"
+             />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvStatusEsqueceuSenha"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/informemail"
             android:textAlignment="center"
             android:textColor="@color/red"
             android:textSize="16sp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@id/tvEntrarAnonimamente"
-            app:layout_constraintHorizontal_bias="0.048"
-            app:layout_constraintStart_toStartOf="@id/tvEntrarAnonimamente"
-            app:layout_constraintTop_toBottomOf="@+id/tvEntrarAnonimamente"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvLoginNegado"
+            android:layout_marginTop="16dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+

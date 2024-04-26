@@ -71,29 +71,29 @@
             android:id="@+id/qrCode"
             android:layout_width="260dp"
             android:layout_height="260dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="120dp"
             android:background="@drawable/qrcode"
             android:contentDescription="@string/qrcode_imagem"
             android:foregroundGravity="center"
-            app:layout_constraintEnd_toEndOf="@id/rectangle"
-            app:layout_constraintStart_toStartOf="@id/rectangle"
-            app:layout_constraintTop_toBottomOf="@+id/apresentation" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rectangle" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnCancelarloc"
             style="@style/login_button"
             android:layout_width="250dp"
             android:layout_height="49dp"
-            android:layout_marginTop="420dp"
+            android:layout_marginTop="40dp"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
             android:text="@string/cancelar_loc"
             android:textAlignment="center"
             android:textColor="@color/grey"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/qrCode"
+            app:layout_constraintTop_toBottomOf="@+id/qrCode"
             app:layout_constraintStart_toStartOf="@id/qrCode"
-            app:layout_constraintTop_toTopOf="@id/qrCode"
+            app:layout_constraintEnd_toEndOf="@id/qrCode"
             />
 
 
