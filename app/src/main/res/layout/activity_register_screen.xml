@@ -1,226 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/grey"
-    tools:context="br.com.the_guardian.registerScreen">
+    >
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/rectangle"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/logo"
-        android:paddingTop="100dp"
-        />
+        android:id="@+id/linearLayoutCompat4"
+        android:background="@color/grey"
+        android:orientation="vertical"
+        tools:context="br.com.the_guardian.registerScreen">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/rectangle"
+            style="@style/logo"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:paddingTop="100dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"  />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageView3"
+            android:layout_width="176dp"
+            android:layout_height="89dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/llogopng"
+            app:layout_constraintBottom_toBottomOf="@+id/rectangle"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintStart_toStartOf="@id/rectangle"/>
 
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-90dp"
-        android:src="@drawable/llogopng"
-        android:adjustViewBounds="true"
-        android:maxHeight="87dp"
-        />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appCompatTextView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="120dp"
+            android:fontFamily="@font/kronaone_regular"
+            android:text="@string/bem_vindo"
+            android:textAlignment="textStart"
+            android:textColor="@color/dark_blue"
+            android:textSize="30sp"
+            app:layout_constraintTop_toTopOf="@id/rectangle"
+            app:layout_constraintEnd_toEndOf="@id/rectangle"
+            app:layout_constraintStart_toStartOf="@id/rectangle" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginStart="30dp"
-        android:fontFamily="@font/kronaone_regular"
-        android:text="@string/bem_vindo"
-        android:textAlignment="textStart"
-        android:textColor="@color/dark_blue"
-        android:textSize="30sp" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appCompatTextView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-30dp"
+            android:font="@font/jurabold"
+            android:text="@string/para_come_ar_entre_com_suas_credenciais"
+            android:textAlignment="textStart"
+            android:textColor="@color/dark_blue"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="@id/appCompatTextView3"
+            app:layout_constraintEnd_toEndOf="@id/appCompatTextView3"
+            app:layout_constraintStart_toStartOf="@id/appCompatTextView3" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="20dp"
-        android:font="@font/jurabold"
-        android:text="@string/para_come_ar_entre_com_suas_credenciais"
-        android:textAlignment="textStart"
-        android:textColor="@color/dark_blue"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.396"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="textStart"
-        style="@style/email_barra"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="15dp"
-        android:fontFamily="@font/juraregular"
-        android:width="350dp"
-        android:height="50dp"
-        android:textColorHint="@color/white"
-        android:hint="@string/nome_cadastro" />
+            <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etName"
+            style="@style/email_barra"
+            android:layout_width="330dp"
+            android:layout_height="52dp"
+            android:fontFamily="@font/juraregular"
+            android:layout_marginTop="40dp"
+            android:hint="@string/nome_cadastro"
+            android:textAlignment="textStart"
+            android:textColorHint="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/appCompatTextView4"
+            app:layout_constraintStart_toStartOf="@id/appCompatTextView4"
+            app:layout_constraintTop_toBottomOf="@+id/appCompatTextView4"
+                />
 
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etCpf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/email_barra"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="15dp"
-        android:fontFamily="@font/juraregular"
-        android:textColorHint="@color/white"
-        android:width="350dp"
-        android:height="50dp"
-        android:hint="@string/cpf_cadastro" />
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etCpf"
+            style="@style/email_barra"
+            android:layout_width="330dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/juraregular"
+            android:hint="@string/cpf_cadastro"
+            android:textColorHint="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/etName"
+            app:layout_constraintStart_toStartOf="@id/etName"
+            app:layout_constraintTop_toBottomOf="@+id/etName"/>
 
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etNascimento"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/email_barra"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="15dp"
-        android:fontFamily="@font/juraregular"
-        android:textColorHint="@color/white"
-        android:width="350dp"
-        android:height="50dp"
-        android:hint="@string/data_nascimento"
-        android:inputType="text" />
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etNascimento"
+            style="@style/email_barra"
+            android:layout_width="330dp"
+            android:layout_height="52dp"
+            android:fontFamily="@font/juraregular"
+            android:hint="@string/data_nascimento"
+            android:inputType="text"
+            android:textColorHint="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/etCpf"
+            app:layout_constraintStart_toStartOf="@id/etCpf"
+            app:layout_constraintTop_toBottomOf="@+id/etCpf"
+            android:layout_marginTop="30dp"
+            />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/email_barra"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="15dp"
-        android:fontFamily="@font/juraregular"
-        android:textColorHint="@color/white"
-        android:width="350dp"
-        android:height="50dp"
-        android:hint="@string/telefone_cadastro"/>
-
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/email_barra"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="15dp"
-        android:fontFamily="@font/juraregular"
-        android:textColorHint="@color/white"
-        android:width="350dp"
-        android:height="50dp"
-        android:hint="@string/e_mail_cadastro" />
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/email_barra"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="15dp"
-        android:fontFamily="@font/juraregular"
-        android:textColorHint="@color/white"
-        android:width="350dp"
-        android:height="50dp"
-        android:hint="@string/senha_cadastro"
-        android:inputType="textPassword" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnEnviar"
-        style="@style/login_button"
-        android:fontFamily="@font/kronaone_regular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:width="250dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="0dp"
-        android:text="@string/cadastrar_se"
-        android:textColor="@color/grey"/>
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/AppCompatTextView4"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="-20dp"
-        android:layout_gravity="center"
-        android:font="@font/jurabold"
-        android:text="@string/j_possu_uma_conta"
-        android:textAlignment="textStart"
-        android:textColor="@color/dark_blue"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.396"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="RtlCompat" />
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etPhone"
+            style="@style/email_barra"
+            android:layout_width="330dp"
+            android:layout_height="52dp"
+            android:fontFamily="@font/juraregular"
+            android:hint="@string/telefone_cadastro"
+            android:textColorHint="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/etNascimento"
+            app:layout_constraintStart_toStartOf="@id/etNascimento"
+            app:layout_constraintTop_toBottomOf="@+id/etNascimento"
+            android:layout_marginTop="30dp"
+            />
 
 
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etEmail"
+            style="@style/email_barra"
+            android:layout_width="330dp"
+            android:layout_height="52dp"
+            android:fontFamily="@font/juraregular"
+            android:hint="@string/e_mail_cadastro"
+            android:textColorHint="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/etPhone"
+            app:layout_constraintStart_toStartOf="@id/etPhone"
+            app:layout_constraintTop_toBottomOf="@+id/etPhone"
+            android:layout_marginTop="30dp"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnVoltar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="246dp"
-        android:layout_marginTop="-57dp"
-        android:textSize="15sp"
-        android:text="@string/voltar_login"
-        android:fontFamily="@font/jurabold"
-        android:textColor="@color/purple"
-        android:background="@android:color/transparent"
-        app:layout_constraintHorizontal_bias="0.361"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnEnviar" />
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etPassword"
+            style="@style/email_barra"
+            android:layout_width="330dp"
+            android:layout_height="52dp"
+            android:fontFamily="@font/juraregular"
+            android:hint="@string/senha_cadastro"
+            android:inputType="textPassword"
+            android:textColorHint="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/etEmail"
+            app:layout_constraintStart_toStartOf="@id/etEmail"
+            app:layout_constraintTop_toBottomOf="@+id/etEmail"
+            android:layout_marginTop="30dp"/>
 
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvCadastroEnviado"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="60dp"
-        android:text="@string/cadastro_realizado"
-        android:textAlignment="center"
-        android:textColor="@color/green"
-        android:textSize="20sp"
-        android:visibility="gone" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvCadastroNegado"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="60dp"
-        android:text="@string/cadastro_negado"
-        android:textAlignment="center"
-        android:textColor="@color/red"
-        android:textSize="20sp"
-        android:visibility="gone" />
-
-
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnEnviar"
+            style="@style/login_button"
+            android:layout_width="250dp"
+            android:layout_height="49dp"
+            android:width="250dp"
+            android:fontFamily="@font/kronaone_regular"
+            android:text="@string/cadastrar_se"
+            android:textColor="@color/grey"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="@id/etPassword"
+            app:layout_constraintStart_toStartOf="@id/etPassword"
+            app:layout_constraintTop_toBottomOf="@+id/etPassword"
+            android:layout_marginTop="30dp"/>
 
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:id="@+id/AppCompatTextView5"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="25dp"-->
+<!--            android:layout_marginTop="12dp"-->
+<!--            android:font="@font/jurabold"-->
+<!--            android:text="@string/j_possu_uma_conta"-->
+<!--            android:textAlignment="textStart"-->
+<!--            android:textColor="@color/dark_blue"-->
+<!--            android:textSize="17sp"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/btnEnviar"-->
+<!--            app:layout_constraintHorizontal_bias="0.615"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/btnEnviar" />-->
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnVoltar"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/j_possu_uma_conta"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/jurabold"
+            android:textColor="@color/purple"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="@id/btnEnviar"
+            android:layout_marginStart="@id/btnEnviar"
+            app:layout_constraintTop_toBottomOf="@+id/btnEnviar" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCadastroEnviado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cadastro_realizado"
+            android:textAlignment="center"
+            android:textColor="@color/green"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/btnEnviar"
+            app:layout_constraintStart_toStartOf="@id/btnEnviar"
+            app:layout_constraintTop_toBottomOf="@id/btnVoltar" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCadastroNegado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cadastro_negado"
+            android:textAlignment="center"
+            android:textColor="@color/red"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/btnEnviar"
+            app:layout_constraintStart_toStartOf="@id/btnEnviar"
+            app:layout_constraintTop_toBottomOf="@id/btnVoltar"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

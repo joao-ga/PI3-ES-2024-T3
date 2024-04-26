@@ -6,7 +6,7 @@
     <string name="get_started">Para começarmos, entre usando seu email e senha.</string>
     <string name="email_login">Email</string>
     <string name="senha_login">Senha</string>
-    <string name="sem_cadastro"> Não tem conta? <font color="#5218FA">cadastre-se</font></string>
+    <string name="sem_cadastro"> <font color="#1C2733"> Não tem conta?</font> <font color="#5218FA">cadastre-se</font></string>
     <string name="login">LOGIN</string>
     <string name="login_realizado">Login Realizado</string>
     <string name="Login_negado">Login Negado</string>
@@ -28,11 +28,11 @@
     <string name="e_mail_cadastro">E-mail</string>
     <string name="senha_cadastro">Senha</string>
     <string name="cadastrar_se">Cadastre-se</string>
-    <string name="j_possu_uma_conta">Já possuí uma conta?\n</string>
+    <string name="j_possu_uma_conta"><font color="#1C2733"> Já possui uma conta? </font> LOGIN \n</string>
     <string name="voltar_login"><b>LOGIN</b></string>
     <string name="cadastro_realizado">Cadastro realizado</string>
     <string name="cadastro_negado">Cadastro negado</string>
-    <string name="botão_voltar" />
+     />
 
     <!--- Strings da tela de cadastro de cartão-->
     <string name="cadastracartao">CADASTRAR CARTÃO</string>
@@ -42,7 +42,7 @@
     <string name="cvv">CVV</string>
     <string name="confirmar">Confirmar</string>
     <string name="numberamostra">0000  0000  0000  0000</string>
-    <string name="nameamostra">nome</string>
+    <string name="nameamostra">Nome</string>
     <string name="dataamostra">00/00</string>
     <string name="aviso">Ao realizar uma locação, será <font color= "#5218FA">cobrado a caução de uma diária </font>, e
         estornado de acordo com o período utilizado do armário.</string>
