@@ -163,36 +163,21 @@
             app:layout_constraintEnd_toEndOf="@id/etPassword"
             app:layout_constraintStart_toStartOf="@id/etPassword"
             app:layout_constraintTop_toBottomOf="@+id/etPassword"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginTop="10dp"/>
 
-
-<!--        <androidx.appcompat.widget.AppCompatTextView-->
-<!--            android:id="@+id/AppCompatTextView5"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="25dp"-->
-<!--            android:layout_marginTop="12dp"-->
-<!--            android:font="@font/jurabold"-->
-<!--            android:text="@string/j_possu_uma_conta"-->
-<!--            android:textAlignment="textStart"-->
-<!--            android:textColor="@color/dark_blue"-->
-<!--            android:textSize="17sp"-->
-<!--            app:layout_constraintEnd_toEndOf="@id/btnEnviar"-->
-<!--            app:layout_constraintHorizontal_bias="0.615"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/btnEnviar" />-->
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnVoltar"
-            android:layout_width="match_parent"
+            android:layout_width="247dp"
             android:layout_height="25dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/j_possu_uma_conta"
+            android:layout_marginTop="1dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/jurabold"
+            android:text="@string/voltar_login"
             android:textColor="@color/purple"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="@id/btnEnviar"
-            android:layout_marginStart="@id/btnEnviar"
+            app:layout_constraintStart_toStartOf="@id/btnEnviar"
             app:layout_constraintTop_toBottomOf="@+id/btnEnviar" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -206,7 +191,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@id/btnEnviar"
             app:layout_constraintStart_toStartOf="@id/btnEnviar"
-            app:layout_constraintTop_toBottomOf="@id/btnVoltar" />
+            app:layout_constraintTop_toBottomOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvCadastroNegado"
