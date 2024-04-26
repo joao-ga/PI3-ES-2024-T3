@@ -97,6 +97,9 @@ class registerScreen : AppCompatActivity() {
 
         // botão para voltar pra tela de login
         btnVoltar = findViewById(R.id.btnVoltar)
+        val textoBotao = getString(R.string.j_possu_uma_conta)
+        // Defina o texto para o botão
+        btnVoltar.text = textoBotao
         btnVoltar.setOnClickListener {
             // função que muda de tela
             nextScreen(loginScreen::class.java)
