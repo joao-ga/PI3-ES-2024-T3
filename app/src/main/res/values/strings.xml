@@ -16,7 +16,7 @@
     <string name="preference_file_key">loginScreen</string>
     <string name="ver_mapa"><b>ver mapa</b></string>
     <string name="ou">ou</string>
-    <string name="informemail" >Informe um email</string>
+    <string name="informemail">Informe um email</string>
 
     <!--Strings da telka de cadastro de usuário-->
     <string name="bem_vindo">Bem vindo!</string>
@@ -32,7 +32,7 @@
     <string name="voltar_login"><b> <font color="#1C2733"> Já possui uma conta? </font> LOGIN</b></string>
     <string name="cadastro_realizado">Cadastro realizado</string>
     <string name="cadastro_negado">Cadastro negado</string>
-     />
+    />
 
     <!--- Strings da tela de cadastro de cartão-->
     <string name="cadastracartao">CADASTRAR CARTÃO</string>
@@ -44,7 +44,7 @@
     <string name="numberamostra">0000  0000  0000  0000</string>
     <string name="nameamostra">Nome</string>
     <string name="dataamostra">00/00</string>
-    <string name="aviso">Ao realizar uma locação, será <font color= "#5218FA">cobrado a caução de uma diária </font>, e
+    <string name="aviso">Ao realizar uma locação, será <font color="#5218FA">cobrado a caução de uma diária </font>, e
         estornado de acordo com o período utilizado do armário.</string>
 
     <!---Strings da tela menu-->
@@ -56,17 +56,20 @@
     <!--Strings da tela de opção de aliguel-->
     <string name="aluga_armar">ALUGAR ARMÁRIOS</string>
     <string name="confirmaloc">CONFIRMAR</string>
-    <string name="avisoarmario">A opção das 18h é válida, somente a partir das: <font color= "#5218FA">7h e 8h da manhã </font>.</string>
+    <string name="avisoarmario">A opção das 18h é válida, somente a partir das: <font color="#5218FA">7h e 8h da manhã </font>.</string>
     <string name="prox">Escolha uma opção</string>
+
     <style name="markertitle">ALUGAR</style>
+
     <style name="voltardescr">voltar</style>
+
     <string name="time_30_min">30 min</string>
     <string name="time_1h">1h</string>
     <string name="time_2h">2h</string>
     <string name="time_4h">3h</string>
     <string name="time_18h">até às 18h</string>
 
-<!--Strings da dialog de traçar rota-->
+    <!--Strings da dialog de traçar rota-->
     <string name="rota">TRAÇAR ROTA</string>
     <string name="consulta">CONSULTAR</string>
     <string name="qrcode">QRCODE</string>
