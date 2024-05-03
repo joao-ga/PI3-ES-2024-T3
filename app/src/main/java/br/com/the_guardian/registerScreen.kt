@@ -50,7 +50,8 @@ class registerScreen : AppCompatActivity() {
         val phone: String? = null,
         val cpf:String? = null,
         val birth:String? = null,
-        val hasLocker:Boolean = false)
+        val hasLocker:Boolean = false,
+        val isManager: Boolean = false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -166,7 +167,8 @@ class registerScreen : AppCompatActivity() {
             "cpf" to u.cpf,
             "birth" to u.birth,
             "phone" to u.phone,
-            "hasLocker" to u.hasLocker
+            "hasLocker" to u.hasLocker,
+            "isManager" to u.isManager
         )
         // chama a função do Firebase para cadastrar o usuário
         functions.getHttpsCallable("addUser").call(user)

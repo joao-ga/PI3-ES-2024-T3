@@ -117,7 +117,7 @@ class loginScreen : AppCompatActivity() {
                     Log.d(ContentValues.TAG, "signInWithEmail:success")
                     val user = auth.currentUser
                     if(user?.isEmailVerified == true) {
-                        nextScreen(homeScreen::class.java)
+                        verificarTipoUsuario()
                     } else {
                         Toast.makeText(
                             baseContext,
@@ -142,7 +142,7 @@ class loginScreen : AppCompatActivity() {
         super.onStart()
         val isLoggedIn = sharedPreferences.getBoolean(getString(R.string.logged_in_key), false)
         if (isLoggedIn) {
-            nextScreen(homeScreen::class.java)
+            verificarTipoUsuario()
         }
     }
 
@@ -186,6 +186,31 @@ class loginScreen : AppCompatActivity() {
                     Log.d(ContentValues.TAG, "Falha ao obter o documento do usuário:", exception)
                 }
         }
+    }
+    private fun verificarTipoUsuario() {
+        val currentUser = auth.currentUser?.uid
+        db.collection("Users")
+            .whereEqualTo("uid", currentUser)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents[0]
+                    val isManager = document["isManager"]
+                    Log.d("is manager", isManager.toString())
+                    if (isManager.toString() == "true") {
+                        // Se o usuário for um gerente, direcione-o para a interface do gerente
+                        nextScreen(WriteNfc::class.java)
+                    } else {
+                        // Se não for um gerente, direcione-o para a interface padrão
+                        nextScreen(homeScreen::class.java)
+                    }
+                } else {
+                    Log.d(ContentValues.TAG, "Documento do usuário não encontrado")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(ContentValues.TAG, "Falha ao obter o tipo de usuário:", exception)
+            }
     }
 
     private fun enviarParaTelaQRCode() {

@@ -97,9 +97,14 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         // botao para ver as locacoes
         btnMinhasLocacoes = findViewById(R.id.btnMinhasLocacoes)
         btnMinhasLocacoes.setOnClickListener {
-            userLocation()
+            if(usuarioEstaLogado()) {
+                // se estiver ele muda de tela
+                userLocation()
+            } else {
+                // se não, aparece uma mensagem pedindo para estar logado
+                Toast.makeText(this, "Para acessar essa funcionalidade, você precisa fazer login.", Toast.LENGTH_SHORT).show()
+            }
         }
-
 
         // botão para acessar a tela de cadastro
         btnCadastrarCartao = findViewById(R.id.btnCadastrarCartao)
@@ -201,7 +206,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
             requestPermissions()
         }
 
-
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, 18f))
 
         mMap.setOnMarkerClickListener { marker ->
@@ -250,7 +254,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
                     // fecha o diálogo
                     dismiss()
                 }
-
                 // botão para traçar a rota
                 val bntRota = view.findViewById<Button>(R.id.btnRota)
                 bntRota.setOnClickListener{
@@ -259,9 +262,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
                     homeScreenActivity.selectedMarkerLatLng = LatLng(place.latitude, place.longitude)
                     homeScreenActivity.directions(place.latitude, place.longitude)
                 }
-
             }
-
             return view
         }
     }
