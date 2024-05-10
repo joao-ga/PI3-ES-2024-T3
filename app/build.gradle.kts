@@ -65,4 +65,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.1.0")
     implementation ("com.google.maps:google-maps-services:2.1.2")
     implementation("com.google.zxing:core:3.4.1")
+    implementation ("com.google.zxing:core:3.4.1")
+    implementation ("com.journeyapps:zxing-android-embedded:4.2.0")
+
 }

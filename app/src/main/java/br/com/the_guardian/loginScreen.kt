@@ -199,7 +199,7 @@ class loginScreen : AppCompatActivity() {
                     Log.d("is manager", isManager.toString())
                     if (isManager.toString() == "true") {
                         // Se o usuário for um gerente, direcione-o para a interface do gerente
-                        nextScreen(WriteNfc::class.java)
+                        nextScreen(HomeGerente::class.java)
                     } else {
                         // Se não for um gerente, direcione-o para a interface padrão
                         nextScreen(homeScreen::class.java)

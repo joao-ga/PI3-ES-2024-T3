@@ -4,9 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -30,17 +34,24 @@ class HomeGerente : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
+        checkPermission()
+
         btnLiberarloc = findViewById(R.id.btnLiberarloc)
         btnAbrirArm = findViewById(R.id.btnAbrirArm)
         btnSair = findViewById(R.id.btnSair)
 
 
         btnLiberarloc.setOnClickListener {
-            nextScreen(LiberarLocScreen::class.java)
+           if(checkPermission()) {
+               nextScreen(LiberarLocScreen::class.java)
+           } else {
+               Toast.makeText(this, "VocÊ precisa conceder a permissão de camera!", Toast.LENGTH_LONG).show()
+           }
+
         }
 
         btnAbrirArm.setOnClickListener {
-            nextScreen(AbrirArmScreen::class.java)
+            //nextScreen(AbrirArmScreen::class.java)
         }
 
 
@@ -65,5 +76,29 @@ class HomeGerente : AppCompatActivity() {
     private fun nextScreen(screen: Class<*>) {
         val newScreen = Intent(this, screen)
         startActivity(newScreen)
+    }
+
+    private val CODE_PERMISSION_CAMERA = 123
+
+    private fun checkPermission(): Boolean {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(android.Manifest.permission.CAMERA),
+                CODE_PERMISSION_CAMERA)
+            return false
+        }
+        return true
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == CODE_PERMISSION_CAMERA) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permissão concedida
+            } else {
+                Toast.makeText(this, "Permissão negada para utilizar a câmera!", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
