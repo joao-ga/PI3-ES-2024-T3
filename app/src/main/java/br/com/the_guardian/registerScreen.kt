@@ -140,7 +140,7 @@ class registerScreen : AppCompatActivity() {
                     val uid = auth.currentUser?.uid
                     if (uid != null) {
                         // Chama a função addUser passando o UID do usuário
-                        addUser(uid, User(uid, etName.text.toString(), email, etPhone.text.toString(), etCpf.text.toString(), etNascimento.text.toString(), false))
+                        addUser(uid, User(uid, etName.text.toString(), email, etPhone.text.toString(), etCpf.text.toString(), etNascimento.text.toString(), false, false))
                     } else {
                         Log.e(TAG, "UID do usuário é nulo após a autenticação.")
                     }
