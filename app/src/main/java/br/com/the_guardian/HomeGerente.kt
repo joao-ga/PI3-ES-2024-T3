@@ -41,15 +41,6 @@ class HomeGerente : AppCompatActivity() {
         btnSair = findViewById(R.id.btnSair)
 
 
-        btnLiberarloc.setOnClickListener {
-           if(checkPermission()) {
-               nextScreen(LiberarLocScreen::class.java)
-           } else {
-               Toast.makeText(this, "VocÊ precisa conceder a permissão de camera!", Toast.LENGTH_LONG).show()
-           }
-
-        }
-
         btnAbrirArm.setOnClickListener {
             //nextScreen(AbrirArmScreen::class.java)
         }
