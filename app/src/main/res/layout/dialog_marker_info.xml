@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:textSize="17sp"
         android:textColor="@color/dark_blue"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="1dp"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:fontFamily="@font/jurabold"
@@ -46,18 +46,6 @@
         app:layout_constraintTop_toBottomOf="@id/marker_reference_home"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/marker_disponibility_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="17sp"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:textColor="@color/dark_blue"
-        android:fontFamily="@font/kronaone_regular"
-        app:layout_constraintTop_toBottomOf="@id/marker_address_home"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,7 +54,7 @@
         android:gravity="center"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/marker_disponibility_home"
+        app:layout_constraintTop_toBottomOf="@+id/marker_address_home"
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
