@@ -100,7 +100,7 @@
             android:layout_height="52dp"
             android:fontFamily="@font/juraregular"
             android:hint="@string/data_nascimento"
-            android:inputType="text"
+            android:inputType="date"
             android:textColorHint="@color/white"
             app:layout_constraintEnd_toEndOf="@id/etCpf"
             app:layout_constraintStart_toStartOf="@id/etCpf"

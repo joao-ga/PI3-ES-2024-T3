@@ -21,6 +21,9 @@ import com.google.firebase.functions.functions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -95,7 +98,15 @@ class RegisterCreditCard : AppCompatActivity() {
                             Toast.LENGTH_SHORT,
                         ).show()
                     } else {
-                        addCreditCard(card)
+                        if (isExpirationDateValid(expDate)) {
+                            addCreditCard(card)
+                        } else {
+                            Toast.makeText(
+                                baseContext,
+                                "Data de expiração inválida!",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
                     }
                 }
             }
@@ -180,33 +191,37 @@ class RegisterCreditCard : AppCompatActivity() {
 
     }
 
+    private fun isExpirationDateValid(expDate: String): Boolean {
+        val currentDate = Calendar.getInstance()
+        val sdf = SimpleDateFormat("MM/yy", Locale.getDefault())
+        val expirationDate = sdf.parse(expDate)
 
-    private suspend fun verificarUsuarioTemCartao(): Boolean {
-        val currentUser = auth.currentUser?.uid
-        var hasCard = false
-        if (currentUser != null) {
-            hasCard = suspendCoroutine { continuation ->
-                db.collection("CreditCards").whereEqualTo("idUser", currentUser)
-                    .get()
-                    .addOnSuccessListener { querySnapshot ->
-                        if (!querySnapshot.isEmpty) {
-                            continuation.resume(true)
-                        } else {
-                            Log.d(ContentValues.TAG, "Cartão do usuário não encontrado")
-                            continuation.resume(false)
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.d(
-                            ContentValues.TAG,
-                            "Falha ao obter se o usuário possui algum cartão:",
-                            exception
-                        )
-                        continuation.resume(false)
-                    }
+        // Verifica se a data de expiração é posterior à data atual
+        if (expirationDate != null && expirationDate.after(currentDate.time)) {
+            return true
+        }
+
+        // Verifica se a data de expiração é igual à data atual
+        if (expirationDate != null && expirationDate == currentDate.time) {
+            // Extrai o mês e o ano da data atual
+            val currentMonth = currentDate.get(Calendar.MONTH)
+            val currentYear = currentDate.get(Calendar.YEAR) % 100
+
+            // Extrai o mês e o ano da data de expiração
+            val expMonth = sdf.format(expirationDate).substring(0, 2).toInt()
+            val expYear = sdf.format(expirationDate).substring(3).toInt()
+
+            // Verifica se o ano de expiração é maior que o ano atual
+            if (expYear > currentYear) {
+                return true
+            }
+
+            // Verifica se o ano de expiração é igual ao ano atual e o mês é maior ou igual ao mês atual
+            if (expYear == currentYear && expMonth >= currentMonth) {
+                return true
             }
         }
-        return hasCard
+        return false
     }
 
 }
