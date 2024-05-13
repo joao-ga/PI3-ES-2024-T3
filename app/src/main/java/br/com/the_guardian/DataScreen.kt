@@ -38,48 +38,42 @@ class DataScreen : AppCompatActivity() {
             -22.833953,
             -47.052900,
             "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900",
-            "Em frente ao prédio h15",
-            false
+            "Em frente ao prédio h15"
         ),
         homeScreen.Place(
             "Armário 2",
             -22.833877,
             -47.052470,
             "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900",
-            "Em frente ao prédio h15",
-            true
+            "Em frente ao prédio h15"
         ),
         homeScreen.Place(
             "Armário 3",
             -22.834040,
             -47.051999,
             "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP",
-            "Em frente ao prédio h13",
-            false
+            "Em frente ao prédio h13"
         ),
         homeScreen.Place(
             "Armário 4",
             -22.834028,
             -47.051889,
             "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP",
-            "Em frente ao prédio h13",
-            true
+            "Em frente ao prédio h13"
         ),
         homeScreen.Place(
             "Armário 5",
             -22.833963,
             -47.051539,
             "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900",
-            "Em frente ao prédio h11",
-            false
+            "Em frente ao prédio h11"
         ),
         homeScreen.Place(
             "Armário 6",
             -22.833928,
             -47.051418,
             "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900",
-            "Em frente ao prédio h11",
-            true
+            "Em frente ao prédio h11"
         )
     )
 
@@ -132,7 +126,6 @@ class DataScreen : AppCompatActivity() {
         // atualizar a interface do usuário com os dados recuperados
         findViewById<TextView>(R.id.marker_title).text = "Alugar $name"
         findViewById<TextView>(R.id.marker_reference).text = reference
-        findViewById<TextView>(R.id.marker_disponibility).text = if (disponibility) "Está disponível: Sim" else "Está disponível: Não"
 
         // configuração dos botões de preço
         val radioButtons = listOf(

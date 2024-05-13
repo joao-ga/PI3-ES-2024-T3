@@ -167,15 +167,6 @@
             android:fontFamily="@font/jurabold"
             android:layout_marginTop="4dp"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/marker_disponibility"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/dark_blue"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:fontFamily="@font/jurabold"
-            android:layout_marginTop="4dp"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_consultar"

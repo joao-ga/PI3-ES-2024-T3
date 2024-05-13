@@ -26,8 +26,9 @@ class WriteNfc : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-    }
 
+
+    }
 
     override fun onResume() {
         super.onResume()
@@ -43,7 +44,7 @@ class WriteNfc : AppCompatActivity() {
             Toast.makeText(this, "Por favor, ative o NFC nas configurações do seu aparelho", Toast.LENGTH_SHORT)
                 .show()
         } else {
-            // lidar com a nfc - precisa receber e ser escrito na nfc os dados do armário alugado,
+            // lidar com a nfc - precisa receber e ser escrito na nfc os dados do armário alugado (qual armário e preço),
             // nome do usuário que alugou e foto(s) do(s) usuário(s)
         }
 

@@ -27,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polyline
@@ -39,18 +40,17 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.DirectionsApi
 import com.google.maps.GeoApiContext
 import java.io.Serializable
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
 class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
 
     // lista de lugares com armários
     private var places: MutableList<Place> = mutableListOf(
-        Place("Armário 1", -22.833953, -47.052900, "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", false),
-        Place("Armário 2", -22.833877, -47.052470, "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15", true),
-        Place("Armário 3", -22.834040, -47.051999, "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13", false),
-        Place("Armário 4", -22.834028, -47.051889, "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13", true),
-        Place("Armário 5", -22.833963, -47.051539, "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900", "Em frente ao prédio h11", false),
-        Place("Armário 6", -22.833928, -47.051418, "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900", "Em frente ao prédio h11", true)
+        Place("Armário 1", -22.833953, -47.052900, "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15"),
+        Place("Armário 2", -22.833877, -47.052470, "Av. Reitor Benedito José Barreto Fonseca - Parque dos Jacarandás, Campinas - SP, 13086-900", "Em frente ao prédio h15"),
+        Place("Armário 3", -22.834040, -47.051999, "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13"),
+        Place("Armário 4", -22.834028, -47.051889, "Av. Reitor Benedito José Barreto Fonseca, H13 - Parque dos Jacarandás, Campinas - SP", "Em frente ao prédio h13"),
+        Place("Armário 5", -22.833963, -47.051539, "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900", "Em frente ao prédio h11"),
+        Place("Armário 6", -22.833928, -47.051418, "Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP, 13086-900", "Em frente ao prédio h11")
     )
 
     // classe representando um lugar com armário
@@ -60,7 +60,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         val longitude: Double,
         val address: String,
         val reference: String,
-        val disponibility: Boolean,
         var prices: List<Int> = listOf() 
      ) : Serializable
 
@@ -241,7 +240,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
                 view.findViewById<TextView>(R.id.marker_title_home).text = place.name
                 view.findViewById<TextView>(R.id.marker_reference_home).text = place.reference
                 view.findViewById<TextView>(R.id.marker_address_home).text = place.address
-                view.findViewById<TextView>(R.id.marker_disponibility_home).text = if (place.disponibility) "Está disponível: Sim" else "Está disponível: Não"
 
                 val btnConsultar = view.findViewById<Button>(R.id.btnConsultar)
                 btnConsultar.setOnClickListener{
@@ -305,7 +303,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
             // passando os dados
             putExtra("name", clickedPlace.name)
             putExtra("reference", clickedPlace.reference)
-            putExtra("disponibility", clickedPlace.disponibility)
             putExtra("prices", clickedPlace.prices.toIntArray())
             putExtra("userLocLatitude", userLoc.latitude)
             putExtra("userLocLongitude", userLoc.longitude)
