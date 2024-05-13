@@ -166,15 +166,36 @@ class DataScreen : AppCompatActivity() {
         }
 
         // verifica a hora atual para habilitar ou desabilitar o botão do dia inteiro
+        radioButtons.forEach { radioButton ->
+            radioButton.isEnabled = disponibility
+            radioButton.setTextColor(if (disponibility) Color.rgb(160,228,24) else Color.GRAY)
+        }
+
+        // verifica a hora atual para habilitar ou desabilitar o botão do dia inteiro
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
 
-        //7 hrs é o correto, excluir esse comentario no merge
         if (hour in 7..8) {
             radioButtons.last().isEnabled = true
         } else {
             radioButtons.last().isEnabled = false
             radioButtons.last().setTextColor(Color.GRAY)
+        }
+
+        if(hour >= 15){
+            radioButtons[3].isEnabled = false
+            radioButtons[3].setTextColor(Color.GRAY)
+        }
+
+        if(hour >= 16){
+            radioButtons[2].isEnabled = false
+            radioButtons[2].setTextColor(Color.GRAY)
+        }
+
+        if(hour >= 17){
+            radioButtons[1].isEnabled = false
+            radioButtons[1].setTextColor(Color.GRAY)
         }
 
         // Configurar o botão Voltar para fechar a tela
@@ -308,6 +329,7 @@ class DataScreen : AppCompatActivity() {
                                             atualizarStatusLocacaoUsuario()
                                             val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
                                                 putExtra("checkedRadioButtonText", precoSelecionadoText)
+                                                putExtra("idArmario", name)
                                             }
                                             startActivity(intent)
 

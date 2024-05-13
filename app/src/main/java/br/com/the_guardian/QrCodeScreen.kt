@@ -4,11 +4,11 @@ package br.com.the_guardian
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import br.com.the_guardian.DataScreen.Companion.locacaoConfirmada
 import com.google.firebase.auth.FirebaseAuth
@@ -17,7 +17,6 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
-import kotlin.random.Random
 
 
 class QrCodeScreen : AppCompatActivity() {
@@ -46,19 +45,15 @@ class QrCodeScreen : AppCompatActivity() {
             nextScreen(homeScreen::class.java)
         }
 
-
-
         // referência para o ImageView onde o QR code será exibido
         val qrCode = findViewById<ImageView>(R.id.qrCode)
 
-        // Gera um código aleatório
-        var codigo = 0
-        while(codigo < 1000){
-            codigo = Random.nextInt(9999)
-        }
+        // Gera um código do id do usuário + o id do armário
+        var idUsuario = auth.currentUser?.uid
+        var idArmario = intent.getStringExtra("idArmario")
 
         // converte o código em um QR code e o exibe no ImageView
-        val text = codigo
+        val text = "$idUsuario$idArmario"
         try {
             val bitmap = textToImageEncode(text)
             qrCode.setImageBitmap(bitmap)
@@ -66,11 +61,12 @@ class QrCodeScreen : AppCompatActivity() {
             e.printStackTrace()
         }
 
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
     // função para converter um texto em um QR code na forma de Bitmap
     @Throws(WriterException::class)
-    private fun textToImageEncode(value: Int): Bitmap? {
+    private fun textToImageEncode(value: String): Bitmap? {
         val bitMatrix: BitMatrix
         try {
             // codifica o texto em um QR code
@@ -94,8 +90,8 @@ class QrCodeScreen : AppCompatActivity() {
         // cria um Bitmap a partir dos pixels do QR code e retorna
         val bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444)
         bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight)
-        return bitmap
 
+        return bitmap
     }
 
     private fun atualizarStatusLocacaoUsuario() {
