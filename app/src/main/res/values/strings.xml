@@ -79,4 +79,16 @@
 
     <string name="volte">voltar</string>
 
+
+    <!--GERENTE-->
+
+    <!--Home do gerente-->
+    <string name="bem_vindo_gerente">Bem-vindo(a), nome_gerente!</string>
+    <string name="libera_loc">Liberar locação</string>
+    <string name="abrir_armario">Abrir armário</string>
+    
+    <!--NFC write-->
+    <string name="libera_locacaonfc">LIBERAR LOCAÇÃO</string>
+    <string name="Vincule">VÍNCULE A PULSEIRA NFC</string>
+
 </resources>
