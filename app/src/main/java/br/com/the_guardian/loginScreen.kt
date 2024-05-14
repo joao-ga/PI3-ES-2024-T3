@@ -59,6 +59,9 @@ class loginScreen : AppCompatActivity() {
         tvEsqueceuSenha = findViewById(R.id.tvEsqueceuSenha)
         tvStatusEsqueceuSenha = findViewById(R.id.tvStatusEsqueceuSenha)
 
+        DataScreen.locacaoConfirmada = false
+        getLocationInfos()
+
         btnEnviarLogin.setOnClickListener {view->
             val email = etEmailLogin.text.toString()
             val senha = etSenhaLogin.text.toString()
@@ -86,7 +89,6 @@ class loginScreen : AppCompatActivity() {
             nextScreen(homeScreen::class.java)
         }
 
-        verificarLocacaoUsuario() // Chama a verificação após a inicialização
     }
 
     private fun recoverPassword(email: String) {
@@ -161,32 +163,6 @@ class loginScreen : AppCompatActivity() {
         startActivity(newScreen)
     }
 
-    private fun verificarLocacaoUsuario() {
-        val currentUser = auth.currentUser?.uid
-        Log.d("debugg", "entrou na funcao")
-        if (currentUser != null) {
-            db.collection("Users").whereEqualTo("uid", currentUser)
-                .get()
-                .addOnSuccessListener { querySnapshot ->
-                    if (!querySnapshot.isEmpty) {
-                        val document = querySnapshot.documents[0]
-                        Log.d("debugg", document.toString())
-                        val hasLocker = document["hasLocker"]
-                        Log.d("debugg", hasLocker.toString())
-                        if (hasLocker.toString() == "true") {
-                            Toast.makeText(this, "Você já tem um armário pendente, apresente o QR code para o gerente!", Toast.LENGTH_LONG).show()
-                            enviarParaTelaQRCode()
-                            DataScreen.locacaoConfirmada = true
-                        }
-                    } else {
-                        Log.d(ContentValues.TAG, "Documento do usuário não encontrado")
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Log.d(ContentValues.TAG, "Falha ao obter o documento do usuário:", exception)
-                }
-        }
-    }
     private fun verificarTipoUsuario() {
         val currentUser = auth.currentUser?.uid
         db.collection("Users")
@@ -213,8 +189,40 @@ class loginScreen : AppCompatActivity() {
             }
     }
 
-    private fun enviarParaTelaQRCode() {
-        val intent = Intent(this, QrCodeScreen::class.java).apply{}
-        startActivity(intent)
+    private fun getLocationInfos() {
+        val currentUser = auth.currentUser?.uid
+        if (currentUser != null) {
+            db.collection("Locations").whereEqualTo("uid", currentUser)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        val document = querySnapshot.documents[0]
+                        Log.d("debugg", document.toString())
+                        val isLocated = document["isLocated"]
+                        Log.d("debugg", isLocated.toString())
+                        if (isLocated.toString() == "true") {
+                            val locker = document["locker"]
+                            val user = document["uid"]
+                            val price = document["price"]
+                            val time = document["startTime"]
+                            Toast.makeText(this, "Você já tem um armário pendente, apresente o QR code para o gerente!", Toast.LENGTH_LONG).show()
+                            DataScreen.locacaoConfirmada = true
+                            val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
+                                putExtra("checkedRadioButtonText", price.toString())
+                                putExtra("idArmario", locker.toString())
+                                putExtra("user", user.toString())
+                                putExtra("time", time.toString())
+                            }
+                            startActivity(intent)
+
+                        }
+                    } else {
+                        Log.d(ContentValues.TAG, "Documento do usuário não encontrado")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(ContentValues.TAG, "Falha ao obter o documento do usuário:", exception)
+                }
+        }
     }
 }

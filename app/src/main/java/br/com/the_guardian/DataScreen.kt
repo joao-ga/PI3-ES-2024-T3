@@ -19,6 +19,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -109,10 +111,7 @@ class DataScreen : AppCompatActivity() {
         // Obtendo o usuário atual
         userId = auth.currentUser?.uid ?: ""
 
-        verificarLocacaoUsuario()
-        if(locacaoConfirmada) {
-            enviarParaTelaQRCode()
-        }
+        getLocationInfos()
 
         // recuperar os dados do lugar referênciado e os preços do intent
         val name = intent.getStringExtra("name")
@@ -160,7 +159,6 @@ class DataScreen : AppCompatActivity() {
         // verifica a hora atual para habilitar ou desabilitar o botão do dia inteiro
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
 
         if (hour in 7..8) {
             radioButtons.last().isEnabled = true
@@ -312,6 +310,7 @@ class DataScreen : AppCompatActivity() {
                                             locacoesConfirmadas.add(locacaoAtual!!)
                                             confirmacao(locacaoAtual!!)
                                             atualizarStatusLocacaoUsuario()
+                                            addLocationInfo(name, precoSelecionadoText)
                                             val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
                                                 putExtra("checkedRadioButtonText", precoSelecionadoText)
                                                 putExtra("idArmario", name)
@@ -371,23 +370,31 @@ class DataScreen : AppCompatActivity() {
         }
     }
 
-    fun enviarParaTelaQRCode() {
-        val intent = Intent(this, QrCodeScreen::class.java).apply {}
-        startActivity(intent)
-    }
-
-    fun verificarLocacaoUsuario() {
+    private fun getLocationInfos() {
         val currentUser = auth.currentUser?.uid
         if (currentUser != null) {
-            db.collection("Users").whereEqualTo("uid", currentUser)
+            db.collection("Locations").whereEqualTo("uid", currentUser)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     if (!querySnapshot.isEmpty) {
                         val document = querySnapshot.documents[0]
-                        val hasLocker = document["hasLocker"]
-                        if (hasLocker.toString() == "true") {
-                            // O usuário já possui um armário locado
+                        Log.d("debugg", document.toString())
+                        val isLocated = document["isLocated"]
+                        Log.d("debugg", isLocated.toString())
+                        if (isLocated.toString() == "true") {
                             locacaoConfirmada = true
+                            val locker = document["locker"]
+                            val user = document["uid"]
+                            val price = document["price"]
+                            val time = document["startTime"]
+                            Toast.makeText(this, "Você já tem um armário pendente, apresente o QR code para o gerente!", Toast.LENGTH_LONG).show()
+                            val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
+                                putExtra("checkedRadioButtonText", price.toString())
+                                putExtra("idArmario", locker.toString())
+                                putExtra("user", user.toString())
+                                putExtra("time", time.toString())
+                            }
+                            startActivity(intent)
                         }
                     } else {
                         Log.d(TAG, "Documento do usuário não encontrado")
@@ -395,6 +402,31 @@ class DataScreen : AppCompatActivity() {
                 }
                 .addOnFailureListener { exception ->
                     Log.d(TAG, "Falha ao obter o documento do usuário:", exception)
+                }
+        }
+    }
+
+    private fun addLocationInfo(locker: String?, price: String) {
+        val currentUser = auth.currentUser?.uid
+        val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+        if (currentUser != null) {
+            val locationData = hashMapOf(
+                "uid" to currentUser,
+                "locker" to locker,
+                "price" to price,
+                "startTime" to time,
+                "isLocated" to true
+            )
+            db.collection("Locations")
+                .add(locationData)
+                .addOnSuccessListener { documentReference ->
+                    locacaoConfirmada = true
+                    Log.d("LocationInfo", "DocumentSnapshot added with ID: ${documentReference.id}")
+                    Toast.makeText(this, "Locação confirmada!", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+                    Log.w("LocationInfo", "Error adding document", e)
+                    Toast.makeText(this, "Erro, tente novamente mais tarde", Toast.LENGTH_SHORT).show()
                 }
         }
     }
