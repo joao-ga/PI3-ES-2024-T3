@@ -2,22 +2,12 @@ package br.com.the_guardian
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.zxing.integration.android.IntentIntegrator
 
 class LiberarLocScreen : AppCompatActivity() {
@@ -49,11 +39,13 @@ class LiberarLocScreen : AppCompatActivity() {
                 if (result.contents != null) {
                     val contents = result.contents
                     Toast.makeText(this, contents, Toast.LENGTH_LONG).show()
+                    //passa esse QRcode para a activity onde registramos dados na nfc
+                    val intent = Intent(this, WriteNfc::class.java)
+                    intent.putExtra("qrCodeContent", contents)
+                    startActivity(intent)
                     Log.i("CONTENT SCAN ", contents)
-
                     // Chama o método para exibir o diálogo de seleção de pessoas
                     showSelectPersonDialog()
-
                 } else {
                     Toast.makeText(this, "Leitura cancelada", Toast.LENGTH_SHORT).show()
                 }
@@ -72,8 +64,6 @@ class LiberarLocScreen : AppCompatActivity() {
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
             .create()
-
-
 
         dialogView.findViewById<Button>(R.id.btnOnePerson).setOnClickListener {
             //nextScreen(cameraScreen::class.java)

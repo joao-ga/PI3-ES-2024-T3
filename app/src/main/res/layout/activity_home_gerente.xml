@@ -49,11 +49,11 @@
             app:layout_constraintTop_toTopOf="@id/rectangle" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/Apresentacao"
+            android:id="@+id/apresentacao"
             android:layout_width="270dp"
             android:layout_height="64dp"
             android:fontFamily="@font/jurabold"
-            android:paddingStart="0dp"
+            android:paddingStart="17dp"
             android:paddingEnd="2dp"
             android:text="@string/bem_vindo_gerente"
             android:textAlignment="textStart"
@@ -83,7 +83,7 @@
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@id/rectangle"
             app:layout_constraintStart_toStartOf="@id/rectangle"
-            app:layout_constraintTop_toBottomOf="@+id/Apresentacao"
+            app:layout_constraintTop_toBottomOf="@+id/apresentacao"
             tools:ignore="MissingConstraints" />
 
         <androidx.appcompat.widget.AppCompatButton
