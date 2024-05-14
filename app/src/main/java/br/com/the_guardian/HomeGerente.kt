@@ -40,6 +40,10 @@ class HomeGerente : AppCompatActivity() {
         btnAbrirArm = findViewById(R.id.btnAbrirArm)
         btnSair = findViewById(R.id.btnSair)
 
+        btnLiberarloc.setOnClickListener{
+            nextScreen(LiberarLocScreen::class.java)
+        }
+
 
         btnAbrirArm.setOnClickListener {
             //nextScreen(AbrirArmScreen::class.java)
