@@ -117,7 +117,6 @@ class DataScreen : AppCompatActivity() {
         // recuperar os dados do lugar referênciado e os preços do intent
         val name = intent.getStringExtra("name")
         val reference = intent.getStringExtra("reference")
-        val disponibility = intent.getBooleanExtra("disponibility", false)
         val prices = intent.getIntArrayExtra("prices")
         val userLocLatitude = intent.getDoubleExtra("userLocLatitude", 0.0)
         val userLocLongitude = intent.getDoubleExtra("userLocLongitude", 0.0)
@@ -154,15 +153,9 @@ class DataScreen : AppCompatActivity() {
 
         // configuração da disponibilidade e cor dos botões de preço com base na disponibilidade
         radioButtons.forEach { radioButton ->
-            radioButton.isEnabled = disponibility
-            radioButton.setTextColor(if (disponibility) Color.rgb(160,228,24) else Color.GRAY)
+            radioButton.setTextColor( Color.rgb(160,228,24))
         }
 
-        // verifica a hora atual para habilitar ou desabilitar o botão do dia inteiro
-        radioButtons.forEach { radioButton ->
-            radioButton.isEnabled = disponibility
-            radioButton.setTextColor(if (disponibility) Color.rgb(160,228,24) else Color.GRAY)
-        }
 
         // verifica a hora atual para habilitar ou desabilitar o botão do dia inteiro
         val calendar = Calendar.getInstance()
@@ -199,7 +192,6 @@ class DataScreen : AppCompatActivity() {
 
         // Configurar o botão Consultar para iniciar a tela de QrCode
         btnConsultar = findViewById(R.id.btn_consultar)
-        btnConsultar.isEnabled = disponibility
 
         btnConsultar.setOnClickListener {
             var isAnyRadioButtonChecked = false
