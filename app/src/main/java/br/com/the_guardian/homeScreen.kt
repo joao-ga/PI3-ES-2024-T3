@@ -98,7 +98,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         btnMinhasLocacoes.setOnClickListener {
             if(usuarioEstaLogado()) {
                 // se estiver ele muda de tela
-                userLocation()
+                getLocationInfos()
             } else {
                 // se não, aparece uma mensagem pedindo para estar logado
                 Toast.makeText(this, "Para acessar essa funcionalidade, você precisa fazer login.", Toast.LENGTH_SHORT).show()
@@ -410,22 +410,36 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
         }
     }
 
-    private fun userLocation() {
+
+    private fun getLocationInfos() {
         val currentUser = auth.currentUser?.uid
         if (currentUser != null) {
-            db.collection("Users").whereEqualTo("uid", currentUser)
+            db.collection("Locations").whereEqualTo("uid", currentUser)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     if (!querySnapshot.isEmpty) {
                         val document = querySnapshot.documents[0]
-                        val hasLocker = document["hasLocker"]
-                        if (hasLocker.toString() == "true") {
-                            // O usuário já possui um armário locado
-                            nextScreen(QrCodeScreen::class.java)
-                        } else {
-                            Toast.makeText(this, "Nenhuma locação pendênte!", Toast.LENGTH_SHORT).show()
+                        Log.d("debugg", document.toString())
+                        val isLocated = document["isLocated"]
+                        Log.d("debugg", isLocated.toString())
+                        if (isLocated.toString() == "true") {
+                            val locker = document["locker"]
+                            val user = document["uid"]
+                            val price = document["price"]
+                            val time = document["startTime"]
+                            Toast.makeText(this, "Você já tem um armário pendente, apresente o QR code para o gerente!", Toast.LENGTH_LONG).show()
+                            DataScreen.locacaoConfirmada = true
+                            val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
+                                putExtra("checkedRadioButtonText", price.toString())
+                                putExtra("idArmario", locker.toString())
+                                putExtra("user", user.toString())
+                                putExtra("time", time.toString())
+                            }
+                            startActivity(intent)
+
                         }
                     } else {
+                        Toast.makeText(this, "Você não tem nenhum armario pendente.", Toast.LENGTH_LONG).show()
                         Log.d(ContentValues.TAG, "Documento do usuário não encontrado")
                     }
                 }

@@ -38,7 +38,7 @@ class QrCodeScreen : AppCompatActivity() {
         btnVoltar = findViewById(R.id.btnVoltar)
 
         btnCancelarloc.setOnClickListener{
-            atualizarStatusLocacaoUsuario()
+            deleteLocationInfo()
         }
 
         btnVoltar.setOnClickListener {
@@ -94,32 +94,31 @@ class QrCodeScreen : AppCompatActivity() {
         return bitmap
     }
 
-    private fun atualizarStatusLocacaoUsuario() {
-        Log.d("debugg", "entrou na funcao atualizarStatus")
+    private fun deleteLocationInfo() {
         val currentUser = auth.currentUser?.uid
         if (currentUser != null) {
-            db.collection("Users")
-                .whereEqualTo("uid", currentUser)
+            db.collection("Locations").whereEqualTo("uid", currentUser)
                 .get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        db.collection("Users")
-                            .document(document.id)
-                            .update("hasLocker", false)
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        val document = querySnapshot.documents[0]
+                        document.reference.delete()
                             .addOnSuccessListener {
                                 locacaoConfirmada =  false
                                 nextScreen(homeScreen::class.java)
                                 Toast.makeText(this, "Pendência de locação cancelada!", Toast.LENGTH_SHORT).show()
-                                Log.d(ContentValues.TAG, "Status de locação atualizado com sucesso!")
+                                Log.d("debugg", "Documento excluído com sucesso")
                             }
-                            .addOnFailureListener { e ->
+                            .addOnFailureListener { exception ->
                                 Toast.makeText(this, "Erro em cancelar pendência, tente de novo mais tarde!", Toast.LENGTH_SHORT).show()
-                                Log.w(ContentValues.TAG, "Erro ao atualizar o status de locação", e)
+                                Log.d(ContentValues.TAG, "Falha ao excluir o documento do usuário:", exception)
                             }
+                    } else {
+                        Log.d(ContentValues.TAG, "Documento do usuário não encontrado")
                     }
                 }
-                .addOnFailureListener { e ->
-                    Log.w(ContentValues.TAG, "Erro ao obter documentos", e)
+                .addOnFailureListener { exception ->
+                    Log.d(ContentValues.TAG, "Falha ao obter o documento do usuário:", exception)
                 }
         }
     }
