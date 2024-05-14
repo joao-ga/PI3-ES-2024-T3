@@ -5,7 +5,6 @@ import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -24,8 +23,6 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class RegisterCreditCard : AppCompatActivity() {
 
@@ -140,6 +137,7 @@ class RegisterCreditCard : AppCompatActivity() {
                             etSecCode.isEnabled = false
 
                             btnEnviar.setBackgroundResource(R.color.dark_grey)
+                            btnEnviar.isEnabled = false
 
                         } else {
                             Log.e("error", "Os dados do cartão de crédito estão vazios.")
