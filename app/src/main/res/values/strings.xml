@@ -90,5 +90,8 @@
     <!--NFC write-->
     <string name="libera_locacaonfc">LIBERAR LOCAÇÃO</string>
     <string name="Vincule">VÍNCULE A PULSEIRA NFC</string>
+    <string name="pergunta">Quantas pessoas acessarão este armário?</string>
+    <string name="OnePerson">1 pessoa</string>
+    <string name="TwoPerson">2 pessoas</string>
 
 </resources>
