@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/Dialogo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/kronaone_regular"
+        android:text="@string/pergunta"
+        android:textAlignment="center"
+        android:textColor="@color/dark_blue"
+        android:textSize="25sp"
+        android:layout_marginTop="0dp"
+
+
+        tools:ignore="MissingConstraints" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnOnePerson"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:background="@drawable/button_border_round"
+        android:fontFamily="@font/jurabold"
+        android:text="@string/OnePerson"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textSize="20sp"
+
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="10dp"
+        tools:layout_editor_absoluteY="171dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnTwoPerson"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:background="@drawable/button_border_round"
+        android:fontFamily="@font/jurabold"
+        android:text="@string/TwoPerson"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textSize="20sp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="211dp"
+        tools:layout_editor_absoluteY="170dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -23,7 +22,6 @@ class HomeGerente : AppCompatActivity() {
     private lateinit var btnAbrirArm: AppCompatButton
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var btnSair: AppCompatButton
-    private lateinit var apresentacao: TextView
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
 
@@ -36,36 +34,15 @@ class HomeGerente : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-
-
         checkPermission()
 
         btnLiberarloc = findViewById(R.id.btnLiberarloc)
         btnAbrirArm = findViewById(R.id.btnAbrirArm)
         btnSair = findViewById(R.id.btnSair)
 
-        db.collection("Users")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val nome = document.getString("name")
-                    val isGerente = document.getBoolean("isManager") ?: false
-
-                    if (isGerente) {
-                        val apresentacao = findViewById<TextView>(R.id.apresentacao)
-                        val mensagemBemVindo = getString(R.string.bem_vindo_gerente, nome)
-                        apresentacao.text = mensagemBemVindo
-                        break
-                    }
-                }
-            }
-            .addOnFailureListener { exception ->
-                // Lidar com falha ao obter os documentos
-                println("Erro ao obter documentos: $exception")
-            }
-
-
-
+        btnLiberarloc.setOnClickListener{
+            nextScreen(LiberarLocScreen::class.java)
+        }
 
 
         btnAbrirArm.setOnClickListener {
