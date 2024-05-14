@@ -20,7 +20,7 @@ android {
     }
 
     buildFeatures {
-        buildConfig = false
+        buildConfig = true
     }
     buildTypes {
         release {
