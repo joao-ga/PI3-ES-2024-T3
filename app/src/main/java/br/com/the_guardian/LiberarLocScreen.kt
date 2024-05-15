@@ -57,12 +57,12 @@ class LiberarLocScreen : AppCompatActivity() {
             .create()
 
         dialogView.findViewById<Button>(R.id.btnOnePerson).setOnClickListener {
-            //nextScreen(cameraScreen::class.java)
+            nextScreen(CameraActivity::class.java)
             dialog.dismiss()
         }
 
         dialogView.findViewById<Button>(R.id.btnTwoPerson).setOnClickListener {
-            //nextScreen(cameraScreen::class.java)
+            nextScreen(CameraActivity::class.java)
             dialog.dismiss()
         }
 
