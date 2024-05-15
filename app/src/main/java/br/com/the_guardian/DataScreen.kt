@@ -283,9 +283,12 @@ class DataScreen : AppCompatActivity() {
                                             locacoesConfirmadas.add(locacaoAtual!!)
                                             confirmacao(locacaoAtual!!)
                                             addLocationInfo(name, precoSelecionadoText)
+                                            val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
                                             val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
-                                                putExtra("price", precoSelecionadoText)
+                                                putExtra("price", precoNumerico)
+                                                Log.d("Teste", "$precoNumerico")
                                                 putExtra("idArmario", name)
+                                                putExtra("time", time.toString())
                                             }
                                             startActivity(intent)
 
@@ -356,14 +359,12 @@ class DataScreen : AppCompatActivity() {
                         if (isLocated.toString() == "true") {
                             locacaoConfirmada = true
                             val locker = document["locker"]
-                            val user = document["uid"]
                             val price = document["price"]
                             val time = document["startTime"]
                             Toast.makeText(this, "Você já tem um armário pendente, apresente o QR code para o gerente!", Toast.LENGTH_LONG).show()
                             val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
                                 putExtra("price", price.toString())
                                 putExtra("idArmario", locker.toString())
-                                putExtra("user", user.toString())
                                 putExtra("time", time.toString())
                             }
                             startActivity(intent)
