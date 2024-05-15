@@ -26,8 +26,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Theguardian"
         tools:targetApi="31">
-        <activity
+       <activity
             android:name=".CameraActivity"
+            android:exported="false" />
+       <activity
+            android:name=".EncerrarLocScreen"
+            android:exported="true" />
+        <activity
+            android:name=".ConfirmarUsuario"
+            android:exported="false" />
+        <activity
+            android:name=".ReadNfc"
             android:exported="false" />
         <activity
             android:name=".LiberarLocScreen"
