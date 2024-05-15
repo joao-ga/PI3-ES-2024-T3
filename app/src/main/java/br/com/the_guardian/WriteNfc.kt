@@ -42,7 +42,7 @@ class WriteNfc : AppCompatActivity() {
         } else {
         // Recupera os dados escaneados do Intent
             qrCodeContent = intent.getStringExtra("QR_CODE_CONTENT")
-    }
+        }
     }
 
     override fun onResume() {

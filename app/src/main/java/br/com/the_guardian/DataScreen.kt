@@ -278,14 +278,13 @@ class DataScreen : AppCompatActivity() {
                                                 .toDoubleOrNull()
                                         if (precoNumerico != null) {
                                             val locker = actualLocker
-                                            val priceSelected = precoNumerico
                                             locacaoAtual =
-                                                Locacao(userId, userLoc, locker, priceSelected)
+                                                Locacao(userId, userLoc, locker, precoNumerico)
                                             locacoesConfirmadas.add(locacaoAtual!!)
                                             confirmacao(locacaoAtual!!)
                                             addLocationInfo(name, precoSelecionadoText)
                                             val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
-                                                putExtra("checkedRadioButtonText", precoSelecionadoText)
+                                                putExtra("price", precoSelecionadoText)
                                                 putExtra("idArmario", name)
                                             }
                                             startActivity(intent)
@@ -362,7 +361,7 @@ class DataScreen : AppCompatActivity() {
                             val time = document["startTime"]
                             Toast.makeText(this, "Você já tem um armário pendente, apresente o QR code para o gerente!", Toast.LENGTH_LONG).show()
                             val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
-                                putExtra("checkedRadioButtonText", price.toString())
+                                putExtra("price", price.toString())
                                 putExtra("idArmario", locker.toString())
                                 putExtra("user", user.toString())
                                 putExtra("time", time.toString())

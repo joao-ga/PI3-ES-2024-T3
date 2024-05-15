@@ -53,7 +53,6 @@ class HomeGerente : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { exception ->
-// Lidar com falha ao obter os documentos
                 println("Erro ao obter documentos: $exception")
             }
         btnLiberarloc = findViewById(R.id.btnLiberarloc)
