@@ -1,6 +1,7 @@
 package br.com.the_guardian
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -36,25 +37,10 @@ class HomeGerente : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
 
         checkPermission()
+        getManagerName()
 
 
-        db.collection("Users")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val nome = document.getString("name")
-                    val isGerente = document.getBoolean("isManager") ?: false
-                    if (isGerente) {
-                        val apresentacao = findViewById<TextView>(R.id.apresentacao)
-                        val mensagemBemVindo = getString(R.string.bem_vindo_gerente, nome)
-                        apresentacao.text = mensagemBemVindo
-                        break
-                    }
-                }
-            }
-            .addOnFailureListener { exception ->
-                println("Erro ao obter documentos: $exception")
-            }
+
         btnLiberarloc = findViewById(R.id.btnLiberarloc)
         btnAbrirArm = findViewById(R.id.btnAbrirArm)
         btnSair = findViewById(R.id.btnSair)
@@ -115,4 +101,27 @@ class HomeGerente : AppCompatActivity() {
             }
         }
     }
+
+    fun getManagerName() {
+        val currentUser = auth.currentUser?.uid
+        db.collection("Users").
+            whereEqualTo("uid", currentUser)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val nome = document.getString("name")
+                    val isGerente = document.getBoolean("isManager") ?: false
+                    if (isGerente) {
+                        val apresentacao = (this as Activity).findViewById<TextView>(R.id.apresentacao)
+                        val mensagemBemVindo = this.getString(R.string.bem_vindo_gerente, nome)
+                        apresentacao.text = mensagemBemVindo
+                        break
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                println("Erro ao obter documentos: $exception")
+            }
+    }
+
 }
