@@ -258,32 +258,6 @@ class DataScreen : AppCompatActivity() {
                 return hasCard
             }
 
-            fun atualizarStatusLocacaoUsuario() {
-                val currentUser = auth.currentUser?.uid
-                if (currentUser != null) {
-                    db.collection("Users")
-                        .whereEqualTo("uid", currentUser)
-                        .get()
-                        .addOnSuccessListener { documents ->
-                            for (document in documents) {
-                                db.collection("Users")
-                                    .document(document.id)
-                                    .update("hasLocker", true)
-                                    .addOnSuccessListener {
-                                        locacaoConfirmada = true
-                                        Log.d(TAG, "Status de locação atualizado com sucesso!")
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.w(TAG, "Erro ao atualizar o status de locação", e)
-                                    }
-                            }
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, "Erro ao obter documentos", e)
-                        }
-                }
-            }
-
             fun usuarioEstaLogado(): Boolean {
                 val usuarioAtual = auth.currentUser
                 return usuarioAtual != null
@@ -309,7 +283,6 @@ class DataScreen : AppCompatActivity() {
                                                 Locacao(userId, userLoc, locker, priceSelected)
                                             locacoesConfirmadas.add(locacaoAtual!!)
                                             confirmacao(locacaoAtual!!)
-                                            atualizarStatusLocacaoUsuario()
                                             addLocationInfo(name, precoSelecionadoText)
                                             val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
                                                 putExtra("checkedRadioButtonText", precoSelecionadoText)

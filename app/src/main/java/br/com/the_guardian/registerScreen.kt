@@ -50,7 +50,6 @@ class registerScreen : AppCompatActivity() {
         val phone: String? = null,
         val cpf:String? = null,
         val birth:String? = null,
-        val hasLocker:Boolean = false,
         val isManager: Boolean = false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +75,6 @@ class registerScreen : AppCompatActivity() {
         btnEnviar.setOnClickListener {view->
 
             // cria variaveis para receber os dados do usuário
-            val uid = currentUser?.uid.toString()
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
             val cpf = etCpf.text.toString()
@@ -140,7 +138,7 @@ class registerScreen : AppCompatActivity() {
                     val uid = auth.currentUser?.uid
                     if (uid != null) {
                         // Chama a função addUser passando o UID do usuário
-                        addUser(uid, User(uid, etName.text.toString(), email, etPhone.text.toString(), etCpf.text.toString(), etNascimento.text.toString(), false, false))
+                        addUser(uid, User(uid, etName.text.toString(), email, etPhone.text.toString(), etCpf.text.toString(), etNascimento.text.toString(), false))
                     } else {
                         Log.e(TAG, "UID do usuário é nulo após a autenticação.")
                     }
@@ -167,7 +165,6 @@ class registerScreen : AppCompatActivity() {
             "cpf" to u.cpf,
             "birth" to u.birth,
             "phone" to u.phone,
-            "hasLocker" to u.hasLocker,
             "isManager" to u.isManager
         )
         // chama a função do Firebase para cadastrar o usuário
