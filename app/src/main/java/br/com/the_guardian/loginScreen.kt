@@ -117,16 +117,7 @@ class loginScreen : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d(ContentValues.TAG, "signInWithEmail:success")
-                    val user = auth.currentUser
-                    if(user?.isEmailVerified == true) {
-                        verificarTipoUsuario()
-                    } else {
-                        Toast.makeText(
-                            baseContext,
-                            "Email não verificado",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                    }
+                    verificarTipoUsuario()
                     updateUI()
                 } else {
                     Log.w(ContentValues.TAG, "signInWithEmail:failure", task.exception)
@@ -177,8 +168,17 @@ class loginScreen : AppCompatActivity() {
                         // Se o usuário for um gerente, direcione-o para a interface do gerente
                         nextScreen(HomeGerente::class.java)
                     } else {
+                        val user = auth.currentUser
                         // Se não for um gerente, direcione-o para a interface padrão
-                        nextScreen(homeScreen::class.java)
+                        if(user?.isEmailVerified == true) {
+                            nextScreen(homeScreen::class.java)
+                        } else {
+                            Toast.makeText(
+                                baseContext,
+                                "Email não verificado",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
                     }
                 } else {
                     Log.d(ContentValues.TAG, "Documento do usuário não encontrado")
