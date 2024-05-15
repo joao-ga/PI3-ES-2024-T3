@@ -1,59 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/grey">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/Dialogo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
         android:fontFamily="@font/kronaone_regular"
+        android:padding="25dp"
         android:text="@string/pergunta"
         android:textAlignment="center"
         android:textColor="@color/dark_blue"
-        android:textSize="25sp"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/btnOnePerson"/>
-
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnOnePerson"
-        android:layout_width="180dp"
-        android:layout_height="60dp"
-        android:background="@drawable/button_border_round"
-        android:fontFamily="@font/jurabold"
-        android:text="@string/OnePerson"
-        android:textAlignment="center"
-        android:textColor="@color/grey"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@id/Dialogo"
-        android:layout_marginStart="20dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="10dp"
-        tools:layout_editor_absoluteY="171dp" />
+        app:layout_constraintBottom_toTopOf="@id/layoutButtons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnTwoPerson"
-        android:layout_width="180dp"
-        android:layout_height="60dp"
-        android:background="@drawable/button_border_round"
-        android:fontFamily="@font/jurabold"
-        android:text="@string/TwoPerson"
-        android:textAlignment="center"
-        android:textColor="@color/grey"
-        android:textSize="20sp"
-        tools:ignore="MissingConstraints"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="@id/Dialogo"
-        tools:layout_editor_absoluteX="211dp"
-        tools:layout_editor_absoluteY="170dp" />
+    <LinearLayout
+        android:id="@+id/layoutButtons"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnOnePerson"
+            style="@style/login_button"
+            android:layout_width="141dp"
+            android:layout_height="49dp"
+            android:layout_marginEnd="60dp"
+            android:fontFamily="@font/kronaone_regular"
+            android:text="@string/OnePerson"
+            android:textColor="@color/grey" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnTwoPerson"
+            style="@style/login_button"
+            android:layout_width="141dp"
+            android:layout_height="49dp"
+            android:fontFamily="@font/kronaone_regular"
+            android:text="@string/TwoPerson"
+            android:textColor="@color/grey" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
