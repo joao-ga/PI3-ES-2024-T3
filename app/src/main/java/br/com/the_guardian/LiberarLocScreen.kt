@@ -1,6 +1,5 @@
 package br.com.the_guardian
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,17 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.integration.android.IntentIntegrator
 
 class LiberarLocScreen : AppCompatActivity() {
+
+    private var scannedData: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_liberar_loc_screen)
-
         openCamera()
-
     }
-
-
-
-    private val REQUEST_CODE_SCAN = 0
 
     private fun openCamera() {
         val integrator = IntentIntegrator(this)
@@ -32,33 +28,28 @@ class LiberarLocScreen : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_SCAN) {
-            val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-            if (result != null) {
-                if (result.contents != null) {
-                    val contents = result.contents
-                    Toast.makeText(this, contents, Toast.LENGTH_LONG).show()
-                    //passa esse QRcode para a activity onde registramos dados na nfc
-                    val intent = Intent(this, WriteNfc::class.java)
-                    intent.putExtra("qrCodeContent", contents)
-                    startActivity(intent)
-                    Log.i("CONTENT SCAN ", contents)
-                    // Chama o método para exibir o diálogo de seleção de pessoas
-                    showSelectPersonDialog()
-                } else {
-                    Toast.makeText(this, "Leitura cancelada", Toast.LENGTH_SHORT).show()
-                }
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if (result.contents != null) {
+                val contents = result.contents
+                scannedData = contents // Salva os dados escaneados na variável
+                Toast.makeText(this, contents, Toast.LENGTH_LONG).show()
+                Log.i("CONTENT SCAN", contents)
+                showSelectPersonDialog()
+            } else {
+                Toast.makeText(this, "Leitura cancelada", Toast.LENGTH_SHORT).show()
             }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
         }
     }
+
     private fun nextScreen(screen: Class<*>) {
         val newScreen = Intent(this, screen)
+        newScreen.putExtra("QR_CODE_CONTENT", scannedData) // Adiciona os dados escaneados como extra
         startActivity(newScreen)
     }
 
-    // Método para exibir o diálogo de escolha do número de pessoas
-    @SuppressLint("MissingInflatedId")
     private fun showSelectPersonDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_select_person, null)
         val dialog = AlertDialog.Builder(this)
@@ -75,6 +66,6 @@ class LiberarLocScreen : AppCompatActivity() {
             dialog.dismiss()
         }
 
-        dialog.show()
+        dialog.show()  // Certifique-se de exibir o diálogo aqui
     }
 }
