@@ -82,10 +82,12 @@
 
     <!--GERENTE-->
 
-    <!--Home do gerente-->
+    <!--Home do gerente e liberar loc-->
     <string name="bem_vindo_gerente">Bem-vindo, %s!</string>
-    <string name="libera_loc">Liberar locação</string>
+    <string name="libera_loc">LIBERAR LOCAÇÃO</string>
     <string name="abrir_armario">Abrir armário</string>
+
+
     
     <!--NFC write-->
     <string name="libera_locacaonfc">LIBERAR LOCAÇÃO</string>
