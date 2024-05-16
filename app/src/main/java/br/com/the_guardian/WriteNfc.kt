@@ -41,7 +41,7 @@ class WriteNfc : AppCompatActivity() {
             Toast.makeText(this, "Por favor, ative o NFC nas configurações do seu aparelho", Toast.LENGTH_SHORT).show()
         } else {
         // Recupera os dados escaneados do Intent
-            qrCodeContent = intent.getStringExtra("QR_CODE_CONTENT")
+            qrCodeContent =  QrCodeData.scannedData
         }
     }
 

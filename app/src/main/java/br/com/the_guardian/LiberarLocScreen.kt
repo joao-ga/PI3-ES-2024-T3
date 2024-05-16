@@ -9,9 +9,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.integration.android.IntentIntegrator
 
+
+object QrCodeData {
+    var scannedData: String? = null
+}
 class LiberarLocScreen : AppCompatActivity() {
 
-    private var scannedData: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +35,7 @@ class LiberarLocScreen : AppCompatActivity() {
         if (result != null) {
             if (result.contents != null) {
                 val contents = result.contents
-                scannedData = contents // Salva os dados escaneados na variável
+                QrCodeData.scannedData = contents // Salva os dados escaneados na variável
                 Toast.makeText(this, contents, Toast.LENGTH_LONG).show()
                 Log.i("CONTENT SCAN", contents)
                 showSelectPersonDialog()
@@ -46,7 +49,7 @@ class LiberarLocScreen : AppCompatActivity() {
 
     private fun nextScreen(screen: Class<*>) {
         val newScreen = Intent(this, screen)
-        newScreen.putExtra("QR_CODE_CONTENT", scannedData) // Adiciona os dados escaneados como extra
+        newScreen.putExtra("QR_CODE_CONTENT", QrCodeData.scannedData) // Adiciona os dados escaneados como extra
         startActivity(newScreen)
     }
 

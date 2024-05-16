@@ -286,7 +286,6 @@ class DataScreen : AppCompatActivity() {
                                             val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
                                             val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
                                                 putExtra("price", precoNumerico)
-                                                Log.d("Teste", "$precoNumerico")
                                                 putExtra("idArmario", name)
                                                 putExtra("time", time.toString())
                                             }
