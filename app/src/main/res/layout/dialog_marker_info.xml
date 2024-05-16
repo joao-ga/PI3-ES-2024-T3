@@ -74,7 +74,7 @@
             android:textColor="@color/dark_blue"
             style="@style/login_button_GREY"
             android:fontFamily="@font/kronaone_regular"
-            android:text="@string/consulta" />
+            android:text="@string/alugararmario" />
 
     </LinearLayout>
 

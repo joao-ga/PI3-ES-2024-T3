@@ -76,5 +76,14 @@
         <item name="android:background">@drawable/nfc</item>
     </style>
 
+    <style name="botao_camera_redondo">
+        <item name="android:background">@drawable/botaocamera</item>
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:layout_width">57dp</item>
+        <item name="android:layout_height">57dp</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+
 
 </resources>
