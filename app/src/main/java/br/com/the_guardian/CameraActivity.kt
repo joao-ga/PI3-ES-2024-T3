@@ -15,11 +15,9 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-
 import br.com.the_guardian.databinding.ActivityCameraBinding
 import com.google.common.util.concurrent.ListenableFuture
 import java.io.File
-import java.lang.Exception
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -30,10 +28,10 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var cameraSelector: CameraSelector
     private var imageCapture: ImageCapture? = null
     private lateinit var imgCaptureExecutor: ExecutorService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_camera)
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -45,16 +43,14 @@ class CameraActivity : AppCompatActivity() {
 
         binding.btnTakePicture.setOnClickListener {
             takePicture()
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 blinkPreview()
             }
         }
-
     }
 
     private fun startCamera() {
         cameraProviderFuture.addListener({
-
             imageCapture = ImageCapture.Builder().build()
             val cameraProvider = cameraProviderFuture.get()
             val preview = Preview.Builder().build().also {
@@ -64,7 +60,6 @@ class CameraActivity : AppCompatActivity() {
             try {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
-
             } catch (e: Exception) {
                 Log.e("camera", "falha ao abrir a camera")
             }
@@ -84,13 +79,14 @@ class CameraActivity : AppCompatActivity() {
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                         Log.i("camera", "A imagem foi salva no diretorio: ${file.toUri()}")
+                        setResult(RESULT_OK)
+                        finish()
                     }
 
                     override fun onError(exception: ImageCaptureException) {
                         Toast.makeText(binding.root.context, "Erro ao salvar foto", Toast.LENGTH_LONG).show()
                         Log.e("camera", "Erro ao gravar arquivo da foto: $exception")
                     }
-
                 }
             )
         }

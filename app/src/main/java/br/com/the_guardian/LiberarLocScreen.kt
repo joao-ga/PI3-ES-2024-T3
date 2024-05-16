@@ -12,6 +12,8 @@ import com.google.zxing.integration.android.IntentIntegrator
 class LiberarLocScreen : AppCompatActivity() {
 
     private var scannedData: String? = null
+    private var numberOfPersons: Int = 0
+    private var currentPerson: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,33 +23,33 @@ class LiberarLocScreen : AppCompatActivity() {
 
     private fun openCamera() {
         val integrator = IntentIntegrator(this)
-        integrator.setOrientationLocked(false) // Permitir rotação
+        integrator.setOrientationLocked(false)
         integrator.setPrompt("ESCANEIE o QRcode")
-        integrator.setBeepEnabled(false) // Desativar som de beep
+        integrator.setBeepEnabled(false)
         integrator.initiateScan()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
             if (result.contents != null) {
                 val contents = result.contents
-                scannedData = contents // Salva os dados escaneados na variável
+                scannedData = contents
                 Toast.makeText(this, contents, Toast.LENGTH_LONG).show()
                 Log.i("CONTENT SCAN", contents)
                 showSelectPersonDialog()
             } else {
                 Toast.makeText(this, "Leitura cancelada", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            currentPerson++
+            if (currentPerson <= numberOfPersons) {
+                startCameraActivity()
+            } else {
+                startNfcWriteActivity()
+            }
         }
-    }
-
-    private fun nextScreen(screen: Class<*>) {
-        val newScreen = Intent(this, screen)
-        newScreen.putExtra("QR_CODE_CONTENT", scannedData) // Adiciona os dados escaneados como extra
-        startActivity(newScreen)
     }
 
     private fun showSelectPersonDialog() {
@@ -57,15 +59,35 @@ class LiberarLocScreen : AppCompatActivity() {
             .create()
 
         dialogView.findViewById<Button>(R.id.btnOnePerson).setOnClickListener {
-            nextScreen(CameraActivity::class.java)
+            numberOfPersons = 1
+            currentPerson = 1
+            startCameraActivity()
             dialog.dismiss()
         }
 
         dialogView.findViewById<Button>(R.id.btnTwoPerson).setOnClickListener {
-            nextScreen(CameraActivity::class.java)
+            numberOfPersons = 2
+            currentPerson = 1
+            startCameraActivity()
             dialog.dismiss()
         }
 
-        dialog.show()  // Certifique-se de exibir o diálogo aqui
+        dialog.show()
+    }
+
+    private fun startCameraActivity() {
+        val intent = Intent(this, CameraActivity::class.java)
+        intent.putExtra("CURRENT_PERSON", currentPerson.toString())
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+    }
+
+    private fun startNfcWriteActivity() {
+        val intent = Intent(this, WriteNfc::class.java)
+        intent.putExtra("QR_CODE_CONTENT", scannedData)
+        startActivity(intent)
+    }
+
+    companion object {
+        const val REQUEST_IMAGE_CAPTURE = 1
     }
 }
