@@ -27,7 +27,6 @@ class WriteNfc : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_write_nfc)
 
-        // Inicializa o NfcAdapter
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -36,91 +35,52 @@ class WriteNfc : AppCompatActivity() {
             insets
         }
 
-        // Verifica se o NFC está habilitado no dispositivo
-        if (!nfcAdapter!!.isEnabled) {
+        if (nfcAdapter == null || !nfcAdapter!!.isEnabled) {
             Toast.makeText(this, "Por favor, ative o NFC nas configurações do seu aparelho", Toast.LENGTH_SHORT).show()
         } else {
-        // Recupera os dados escaneados do Intent
             qrCodeContent = intent.getStringExtra("QR_CODE_CONTENT")
         }
     }
 
     override fun onResume() {
         super.onResume()
-
-        // Configura um PendingIntent para que esta atividade seja acionada quando uma tag NFC for detectada
         val pendingIntent = PendingIntent.getActivity(
             this, 0,
             Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-
-        // Configura os filtros de intenção para processar somente ações relacionadas a NFC
         val intentFilters = arrayOf(IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED))
-
-        // Registra os filtros de intenção e o PendingIntent
         nfcAdapter?.enableForegroundDispatch(this, pendingIntent, intentFilters, null)
     }
 
     override fun onPause() {
         super.onPause()
-
-        // Desabilita o envio em primeiro plano para evitar o consumo de energia quando a atividade não está em foco
         nfcAdapter?.disableForegroundDispatch(this)
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-
-        // Verifica se a intent contém uma tag NFC
         if (NfcAdapter.ACTION_TAG_DISCOVERED == intent.action) {
-            // Extrai as mensagens NDEF da intent
-            val rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
-            if (rawMessages != null) {
-                val ndefMessages = rawMessages.mapNotNull { it as? NdefMessage } // Flatten the list of messages
-                if (ndefMessages.isNotEmpty()) {
-                    // Percorre todas as mensagens NDEF
-                    for (message in ndefMessages) {
-                        // Percorre todos os registros de cada mensagem NDEF
-                        for (record in message.records) {
-                            // Extrai a tag NFC de cada registro
-                            val tag = record.toByteArray()
-                            // Verifica se há dados do QR Code e executa a lógica correspondente
-                            qrCodeContent?.let { qrContent ->
-                                // gravar os dados na tag:
-                                writeNfcTag(qrContent, tag)
-                            }
-                        }
-                    }
-                } else {
-                    Toast.makeText(this, "Nenhuma mensagem NDEF encontrada", Toast.LENGTH_SHORT).show()
-                }
+            val tag: Tag? = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+            if (tag != null && qrCodeContent != null) {
+                writeNfcTag(qrCodeContent!!, tag)
             } else {
-                Toast.makeText(this, "Nenhuma mensagem NDEF encontrada", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Nenhuma tag NFC ou conteúdo do QR Code encontrado", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun writeNfcTag(qrCodeContent: String, tag: ByteArray) {
+    private fun writeNfcTag(qrCodeContent: String, tag: Tag) {
         try {
-            // Converte o array de bytes em uma instância de Tag
-            val nfcTag: Tag = tag as Tag
-            // Obtém uma instância de Ndef para escrever na tag NFC
-            val ndef = Ndef.get(nfcTag)
+            val ndef = Ndef.get(tag)
             if (ndef != null) {
-                // Cria um NdefRecord com os dados do QR Code
                 val mimeRecord = NdefRecord.createMime("text/plain", qrCodeContent.toByteArray(Charset.defaultCharset()))
-                // Cria um NdefMessage contendo o NdefRecord
                 val ndefMessage = NdefMessage(mimeRecord)
-
-                // Habilita a conexão com a tag NFC
                 ndef.connect()
-                // Escreve o NdefMessage na tag NFC
                 ndef.writeNdefMessage(ndefMessage)
-                // Fecha a conexão com a tag NFC
                 ndef.close()
-
                 Toast.makeText(this, "Dados do QR Code escritos na tag NFC com sucesso", Toast.LENGTH_SHORT).show()
+                finish()
             } else {
                 Toast.makeText(this, "A tag NFC não suporta NDEF", Toast.LENGTH_SHORT).show()
             }
