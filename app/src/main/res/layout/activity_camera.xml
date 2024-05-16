@@ -10,18 +10,32 @@
     <androidx.camera.view.PreviewView
         android:id="@+id/cameraPreview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@id/btnTakePicture" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnTakePicture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="tirar foto"
-        android:layout_marginTop="20dp"
+        android:layout_width="57dp"
+        android:layout_height="57dp"
+        android:text="@string/tirarfoto"
+        style="@style/botao_camera_redondo"
+        android:layout_marginBottom="140dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:layout_width="211dp"
+        android:layout_height="36dp"
+        android:text="@string/tirarfoto"
+        android:textColor="@color/dark_blue"
+        android:textAlignment="center"
+        android:fontFamily="@font/kronaone_regular"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-
+        android:layout_marginBottom="70dp"
         />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

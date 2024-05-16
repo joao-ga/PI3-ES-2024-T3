@@ -71,7 +71,7 @@
 
     <!--Strings da dialog de traçar rota-->
     <string name="rota">TRAÇAR ROTA</string>
-    <string name="consulta">CONSULTAR</string>
+    <string name="alugararmario">ALUGAR</string>
     <string name="qrcode">QRCODE</string>
     <string name="apresente_este_c_digo_ao_gerente">Apresente este código ao gerente!</string>
     <string name="qrcode_imagem">qrCode</string>
@@ -94,5 +94,10 @@
     <string name="pergunta">Quantas pessoas acessarão este armário?</string>
     <string name="OnePerson">1 pessoa</string>
     <string name="TwoPerson">2 pessoas</string>
+
+
+    <!---camera-->
+    <string name="tirarfoto">TIRE UMA FOTO DO(S) USUÁRIO(S)</string>
+
 
 </resources>
