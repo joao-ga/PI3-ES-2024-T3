@@ -9,6 +9,7 @@ import android.nfc.tech.Ndef
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import br.com.the_guardian.QrCodeData
 import br.com.the_guardian.R
 import java.io.IOException
 import java.nio.charset.Charset
@@ -31,7 +32,7 @@ class WriteNfc : AppCompatActivity() {
             Toast.makeText(this, "Por favor, ative o NFC nas configurações do seu aparelho", Toast.LENGTH_SHORT).show()
         } else {
             // Recupera os dados escaneados do Intent
-            qrCodeContent = intent.getStringExtra("QR_CODE_CONTENT")
+            qrCodeContent = QrCodeData.scannedData
         }
 
         // Recupera os bytes da imagem do Intent

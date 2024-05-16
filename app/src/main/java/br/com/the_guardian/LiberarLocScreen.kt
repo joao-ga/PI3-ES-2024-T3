@@ -61,12 +61,6 @@ class LiberarLocScreen : AppCompatActivity() {
         }
     }
 
-    private fun nextScreen(screen: Class<*>) {
-        val newScreen = Intent(this, screen)
-        newScreen.putExtra("QR_CODE_CONTENT", QrCodeData.scannedData) // Adiciona os dados escaneados como extra
-        startActivity(newScreen)
-    }
-
     private fun showSelectPersonDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_select_person, null)
         val dialog = AlertDialog.Builder(this)
