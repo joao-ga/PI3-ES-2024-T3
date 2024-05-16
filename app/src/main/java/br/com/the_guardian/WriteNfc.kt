@@ -86,10 +86,17 @@ class WriteNfc : AppCompatActivity() {
             val nfcTag: Tag = tag as Tag
             val ndef = Ndef.get(nfcTag)
             if (ndef != null) {
-                // Concatena os bytes da imagem e os bytes do QR code, se eles não forem nulos
+                // Concatena os bytes do UID do usuário, o caractere delimitador '$' e os bytes da imagem, se ele não for nulo
                 val combinedData = mutableListOf<Byte>()
+
+                // Converte o UID do usuário para ByteArray e adiciona ao combinedData
+                val uidBytes = nfcData.qrCodeContent?.toByteArray(Charset.defaultCharset()) ?: byteArrayOf()
+                combinedData.addAll(uidBytes.toList())
+
+                // Adiciona o caractere delimitador '$'
+                combinedData.add('$'.code.toByte())
+
                 nfcData.imageBytes?.let { combinedData.addAll(it.toList()) }
-                nfcData.qrCodeContent?.let { combinedData.addAll(it.toByteArray(Charset.defaultCharset()).toList()) }
 
                 // Converte a lista combinada de bytes de volta para ByteArray
                 val combinedBytes = combinedData.toByteArray()
@@ -102,7 +109,7 @@ class WriteNfc : AppCompatActivity() {
                 ndef.writeNdefMessage(ndefMessage)
                 ndef.close()
 
-                Toast.makeText(this, "Dados do QR Code e da imagem escritos na tag NFC com sucesso", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Dados do UID do usuário e da imagem escritos na tag NFC com sucesso", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "A tag NFC não suporta NDEF", Toast.LENGTH_SHORT).show()
             }

@@ -25,6 +25,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import java.io.IOException
+import java.nio.charset.Charset
 
 class EncerrarLocScreen : AppCompatActivity() {
 
@@ -90,14 +91,26 @@ class EncerrarLocScreen : AppCompatActivity() {
                     for (message in ndefMessages) {
                         // Percorre todos os registros de cada mensagem NDEF
                         for (record in message.records) {
-                            // Extrai a tag NFC de cada registro
-                            val tag = record.toByteArray()
-                            // Limpar os dados na tag:
-                            clearNfcTag(tag)
-                            endLocation()
+                            // Extrai os bytes do registro
+                            val payload = record.payload
 
-                            val dialog = ConfirmarUsuario.FullScreenDialogFragment()
-                            dialog.show(supportFragmentManager, "dialog_loc_status")
+                            // Converte os bytes do payload para uma string
+                            val payloadString = String(payload, Charset.defaultCharset())
+
+                            // Divide a string pelo delimitador '$'
+                            val parts = payloadString.split('$')
+
+                            // Se houver pelo menos dois partes
+                            if (parts.size >= 2) {
+                                // A primeira parte é o uid
+                                val uid = parts[1]
+
+                                endLocation(uid)
+                                clearNfcTag(payload)
+                            } else {
+                                // Se não houver delimitador, significa que os dados na tag NFC estão em um formato incorreto
+                                Toast.makeText(this, "Formato de dados NFC incorreto", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 } else {
@@ -185,37 +198,34 @@ class EncerrarLocScreen : AppCompatActivity() {
             handler.removeCallbacksAndMessages(null)
         }
     }
-
-    private fun endLocation() {
-        // Rceber os dados da nfc
+    private fun endLocation(uid: String) {
+        // Receber os dados da nfc
         // Seprar o uid dos dados e guardar em uma variavel
         // dubistituir na linha a baixo o "teste" para a variavel
 
-        val User = "teste"
-        if (User != null) {
-            db.collection("Locations").whereEqualTo("uid", User)
-                .get()
-                .addOnSuccessListener { querySnapshot ->
-                    if (!querySnapshot.isEmpty) {
-                        val document = querySnapshot.documents[0]
-                        document.reference.delete()
-                            .addOnSuccessListener {
-                                DataScreen.locacaoConfirmada =  false
-                                Toast.makeText(this, "locação encerrada!", Toast.LENGTH_SHORT).show()
-                                Log.d("debugg", "Documento excluído com sucesso")
-                            }
-                            .addOnFailureListener { exception ->
-                                Toast.makeText(this, "Erro em cancelar pendência, tente de novo mais tarde!", Toast.LENGTH_SHORT).show()
-                                Log.d(ContentValues.TAG, "Falha ao excluir o documento do usuário:", exception)
-                            }
-                    } else {
-                        Log.d(ContentValues.TAG, "Documento do usuário não encontrado")
-                    }
+        val user = uid
+        db.collection("Locations").whereEqualTo("uid", user)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents[0]
+                    document.reference.delete()
+                        .addOnSuccessListener {
+                            DataScreen.locacaoConfirmada =  false
+                            Toast.makeText(this, "locação encerrada!", Toast.LENGTH_SHORT).show()
+                            Log.d("debugg", "Documento excluído com sucesso")
+                        }
+                        .addOnFailureListener { exception ->
+                            Toast.makeText(this, "Erro em cancelar pendência, tente de novo mais tarde!", Toast.LENGTH_SHORT).show()
+                            Log.d(ContentValues.TAG, "Falha ao excluir o documento do usuário:", exception)
+                        }
+                } else {
+                    Log.d(ContentValues.TAG, "Documento do usuário não encontrado")
                 }
-                .addOnFailureListener { exception ->
-                    Log.d(ContentValues.TAG, "Falha ao obter o documento do usuário:", exception)
-                }
-        }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(ContentValues.TAG, "Falha ao obter o documento do usuário:", exception)
+            }
     }
 
     private fun nextScreen(screen: Class<*>) {

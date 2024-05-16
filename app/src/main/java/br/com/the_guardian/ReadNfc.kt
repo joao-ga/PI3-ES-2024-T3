@@ -3,6 +3,7 @@ package br.com.the_guardian
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.BitmapFactory
 import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.nfc.Tag
@@ -38,6 +39,9 @@ class ReadNfc : AppCompatActivity() {
         if (!nfcAdapter!!.isEnabled) {
             Toast.makeText(this, "Por favor, ative o NFC nas configurações do seu aparelho", Toast.LENGTH_SHORT).show()
         }
+
+        // Converter os bytes de volta para uma imagem
+        //val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     }
 
     override fun onResume() {
@@ -109,18 +113,34 @@ class ReadNfc : AppCompatActivity() {
 
                 // Percorre todos os registros de cada mensagem NDEF
                 for (record in ndefMessage.records) {
-                    // Extrai a tag NFC de cada registro
+                    // Extrai os bytes do registro
                     val payload = record.payload
-                    val qrCodeContent = String(payload, Charset.defaultCharset())
-                    Toast.makeText(this, "Dados do QR Code lidos na tag NFC: $qrCodeContent", Toast.LENGTH_SHORT).show()
 
-                    // Se a tag NFC não estiver vazia, redireciona o usuário para a tela AbrirArmario
-                    if (qrCodeContent.isNotEmpty()) {
-                        val intent = Intent(this, ConfirmarUsuario::class.java)
-                        startActivity(intent)
-                    }
-                    else{
-                        Toast.makeText(this, "Erro ao ler pulseira, tente novamente!", Toast.LENGTH_SHORT).show()
+                    // Converte os bytes do payload para uma string
+                    val payloadString = String(payload, Charset.defaultCharset())
+
+                    // Divide a string pelo delimitador '$'
+                    val parts = payloadString.split('$')
+
+                    // Se houver pelo menos dois partes
+                    if (parts.size >= 2) {
+
+                        // Se houver imagem, a segunda parte é a imagem
+                        if (parts.size > 1) {
+                            val imageBytes = parts[1].toByteArray()
+                            // Faça o que precisar com os bytes da imagem
+
+                            // Converte os bytes da imagem de volta para um bitmap
+                            val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+
+                            // Passa o bitmap para a atividade ConfirmarUsuario
+                            val intent = Intent(this, ConfirmarUsuario::class.java)
+                            intent.putExtra("imageBitmap", bitmap)
+                            startActivity(intent)
+                        }
+                    } else {
+                        // Se não houver delimitador, significa que os dados na tag NFC estão em um formato incorreto
+                        Toast.makeText(this, "Formato de dados NFC incorreto", Toast.LENGTH_SHORT).show()
                     }
                 }
             } else {
@@ -134,4 +154,5 @@ class ReadNfc : AppCompatActivity() {
             Toast.makeText(this, "Erro desconhecido ao ler na tag NFC", Toast.LENGTH_SHORT).show()
         }
     }
+
 }
