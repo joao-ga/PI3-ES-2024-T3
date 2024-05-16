@@ -1,5 +1,7 @@
 package br.com.the_guardian
 
+import WriteNfc
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -78,7 +80,14 @@ class CameraActivity : AppCompatActivity() {
                 imgCaptureExecutor,
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        Log.i("camera", "A imagem foi salva no diretorio: ${file.toUri()}")
+                        val fileName = "FOTO_JPEG_${System.currentTimeMillis()}"
+                        val file = File(externalMediaDirs[0], fileName)
+                        // Salvar a imagem
+                        val imageBytes = file.readBytes() // Convertendo a imagem em bytes
+                        val intent = Intent(this@CameraActivity, WriteNfc::class.java)
+                        intent.putExtra("IMAGE_BYTES", imageBytes)
+                        startActivity(intent)
+
                         setResult(RESULT_OK)
                         finish()
                     }

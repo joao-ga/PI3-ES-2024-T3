@@ -283,11 +283,7 @@ class DataScreen : AppCompatActivity() {
                                             locacoesConfirmadas.add(locacaoAtual!!)
                                             confirmacao(locacaoAtual!!)
                                             addLocationInfo(name, precoSelecionadoText)
-                                            val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
                                             val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
-                                                putExtra("price", precoNumerico)
-                                                putExtra("idArmario", name)
-                                                putExtra("time", time.toString())
                                             }
                                             startActivity(intent)
 
@@ -357,14 +353,8 @@ class DataScreen : AppCompatActivity() {
                         Log.d("debugg", isLocated.toString())
                         if (isLocated.toString() == "true") {
                             locacaoConfirmada = true
-                            val locker = document["locker"]
-                            val price = document["price"]
-                            val time = document["startTime"]
                             Toast.makeText(this, "Você já tem um armário pendente, apresente o QR code para o gerente!", Toast.LENGTH_LONG).show()
                             val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
-                                putExtra("price", price.toString())
-                                putExtra("idArmario", locker.toString())
-                                putExtra("time", time.toString())
                             }
                             startActivity(intent)
                         }

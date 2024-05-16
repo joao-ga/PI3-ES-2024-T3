@@ -94,6 +94,7 @@ class EncerrarLocScreen : AppCompatActivity() {
                             val tag = record.toByteArray()
                             // Limpar os dados na tag:
                             clearNfcTag(tag)
+                            endLocation()
 
                             val dialog = ConfirmarUsuario.FullScreenDialogFragment()
                             dialog.show(supportFragmentManager, "dialog_loc_status")
@@ -186,10 +187,10 @@ class EncerrarLocScreen : AppCompatActivity() {
     }
 
     private fun endLocation() {
-        // receber o UID do usuario pela leitura da tag nfc
-        // guardar o uid na tag nfc
-        // ao ler a tag receber o uid e deixar em uma variavel global
-        // acesar essa variavel aqui, como o User
+        // Rceber os dados da nfc
+        // Seprar o uid dos dados e guardar em uma variavel
+        // dubistituir na linha a baixo o "teste" para a variavel
+
         val User = "teste"
         if (User != null) {
             db.collection("Locations").whereEqualTo("uid", User)

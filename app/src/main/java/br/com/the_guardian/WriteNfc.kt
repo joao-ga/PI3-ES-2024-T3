@@ -13,7 +13,7 @@ import br.com.the_guardian.R
 import java.io.IOException
 import java.nio.charset.Charset
 
-data class NfcData(val picture: String?, val qrCodeContent: String?)
+data class NfcData(val imageBytes: ByteArray?, val qrCodeContent: String?)
 
 class WriteNfc : AppCompatActivity() {
 
@@ -30,14 +30,15 @@ class WriteNfc : AppCompatActivity() {
         if (nfcAdapter == null || !nfcAdapter!!.isEnabled) {
             Toast.makeText(this, "Por favor, ative o NFC nas configurações do seu aparelho", Toast.LENGTH_SHORT).show()
         } else {
-        // Recupera os dados escaneados do Intent
-            qrCodeContent =  QrCodeData.scannedData
-
+            // Recupera os dados escaneados do Intent
+            qrCodeContent = intent.getStringExtra("QR_CODE_CONTENT")
         }
 
-        val picture = intent.getStringExtra("CURRENT_PERSON")
+        // Recupera os bytes da imagem do Intent
+        val imageBytes = intent.getByteArrayExtra("IMAGE_BYTES")
 
-        nfcData = NfcData(picture, qrCodeContent)
+        // Cria a instância da classe NfcData com os dados recebidos
+        nfcData = NfcData(imageBytes, qrCodeContent)
     }
 
     override fun onResume() {
@@ -85,15 +86,23 @@ class WriteNfc : AppCompatActivity() {
             val nfcTag: Tag = tag as Tag
             val ndef = Ndef.get(nfcTag)
             if (ndef != null) {
-                val combinedData = "${nfcData.picture},${nfcData.qrCodeContent}".toByteArray(Charset.defaultCharset())
-                val mimeRecord = NdefRecord.createMime("text/plain", combinedData)
+                // Concatena os bytes da imagem e os bytes do QR code, se eles não forem nulos
+                val combinedData = mutableListOf<Byte>()
+                nfcData.imageBytes?.let { combinedData.addAll(it.toList()) }
+                nfcData.qrCodeContent?.let { combinedData.addAll(it.toByteArray(Charset.defaultCharset()).toList()) }
+
+                // Converte a lista combinada de bytes de volta para ByteArray
+                val combinedBytes = combinedData.toByteArray()
+
+                // Cria um NdefRecord com os dados combinados
+                val mimeRecord = NdefRecord.createMime("application/octet-stream", combinedBytes)
                 val ndefMessage = NdefMessage(mimeRecord)
 
                 ndef.connect()
                 ndef.writeNdefMessage(ndefMessage)
                 ndef.close()
 
-                Toast.makeText(this, "Dados do QR Code escritos na tag NFC com sucesso", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Dados do QR Code e da imagem escritos na tag NFC com sucesso", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "A tag NFC não suporta NDEF", Toast.LENGTH_SHORT).show()
             }

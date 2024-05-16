@@ -1,5 +1,6 @@
 package br.com.the_guardian
 
+import WriteNfc
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -91,7 +92,7 @@ class LiberarLocScreen : AppCompatActivity() {
 
     private fun startCameraActivity() {
         val intent = Intent(this, CameraActivity::class.java)
-        intent.putExtra("CURRENT_PERSON", currentPerson.toString())
+        intent.putExtra("CURRENT_PERSON", currentPerson)
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
     }
 
