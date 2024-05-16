@@ -3,6 +3,7 @@ package br.com.the_guardian
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.PendingIntent
+import android.content.ContentValues
 import android.content.Intent
 import android.content.IntentFilter
 import android.nfc.NdefMessage
@@ -13,6 +14,7 @@ import android.nfc.tech.Ndef
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
@@ -21,11 +23,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
+import com.google.firebase.firestore.FirebaseFirestore
 import java.io.IOException
 
 class EncerrarLocScreen : AppCompatActivity() {
 
     private var nfcAdapter: NfcAdapter? = null
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -179,6 +183,43 @@ class EncerrarLocScreen : AppCompatActivity() {
             // Cancelar qualquer ação agendada quando o diálogo for pausado
             handler.removeCallbacksAndMessages(null)
         }
+    }
+
+    private fun endLocation() {
+        // receber o UID do usuario pela leitura da tag nfc
+        // guardar o uid na tag nfc
+        // ao ler a tag receber o uid e deixar em uma variavel global
+        // acesar essa variavel aqui, como o User
+        val User = "teste"
+        if (User != null) {
+            db.collection("Locations").whereEqualTo("uid", User)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        val document = querySnapshot.documents[0]
+                        document.reference.delete()
+                            .addOnSuccessListener {
+                                DataScreen.locacaoConfirmada =  false
+                                Toast.makeText(this, "locação encerrada!", Toast.LENGTH_SHORT).show()
+                                Log.d("debugg", "Documento excluído com sucesso")
+                            }
+                            .addOnFailureListener { exception ->
+                                Toast.makeText(this, "Erro em cancelar pendência, tente de novo mais tarde!", Toast.LENGTH_SHORT).show()
+                                Log.d(ContentValues.TAG, "Falha ao excluir o documento do usuário:", exception)
+                            }
+                    } else {
+                        Log.d(ContentValues.TAG, "Documento do usuário não encontrado")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(ContentValues.TAG, "Falha ao obter o documento do usuário:", exception)
+                }
+        }
+    }
+
+    private fun nextScreen(screen: Class<*>) {
+        val newScreen = Intent(this, screen)
+        startActivity(newScreen)
     }
 
 }

@@ -9,6 +9,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.integration.android.IntentIntegrator
 
+
+object QrCodeData {
+    var scannedData: String? = null
+}
 class LiberarLocScreen : AppCompatActivity() {
 
     private var scannedData: String? = null
@@ -35,7 +39,11 @@ class LiberarLocScreen : AppCompatActivity() {
         if (result != null) {
             if (result.contents != null) {
                 val contents = result.contents
+              
+                QrCodeData.scannedData = contents // Salva os dados escaneados na variável
+
                 scannedData = contents
+              
                 Toast.makeText(this, contents, Toast.LENGTH_LONG).show()
                 Log.i("CONTENT SCAN", contents)
                 showSelectPersonDialog()
@@ -50,6 +58,12 @@ class LiberarLocScreen : AppCompatActivity() {
                 startNfcWriteActivity()
             }
         }
+    }
+
+    private fun nextScreen(screen: Class<*>) {
+        val newScreen = Intent(this, screen)
+        newScreen.putExtra("QR_CODE_CONTENT", QrCodeData.scannedData) // Adiciona os dados escaneados como extra
+        startActivity(newScreen)
     }
 
     private fun showSelectPersonDialog() {

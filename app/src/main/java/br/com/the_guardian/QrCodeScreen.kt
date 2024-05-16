@@ -50,13 +50,13 @@ class QrCodeScreen : AppCompatActivity() {
 
         // Gera um código do id do usuário + o id do armário + o preço + a hora de inicio da locação
         var idUsuario = auth.currentUser?.uid
-        var idArmario = intent.getStringExtra("idArmario")
-        var price = intent.getDoubleExtra("price", 0.0)
-        Log.d("Teste2", "$price")
-        var startTime = intent.getStringExtra("time")
+        //var idArmario = intent.getStringExtra("idArmario")
+        //var price = intent.getDoubleExtra("price", 0.0)
+        //Log.d("Teste2", "$price")
+        //var startTime = intent.getStringExtra("time")
 
         // converte o código em um QR code e o exibe no ImageView
-        val text = "$idUsuario$idArmario$price$startTime"
+        val text = "$idUsuario"
         try {
             val bitmap = textToImageEncode(text)
             qrCode.setImageBitmap(bitmap)
