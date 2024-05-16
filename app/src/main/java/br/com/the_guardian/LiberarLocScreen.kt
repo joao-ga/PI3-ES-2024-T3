@@ -77,7 +77,7 @@ class LiberarLocScreen : AppCompatActivity() {
 
     private fun startCameraActivity() {
         val intent = Intent(this, CameraActivity::class.java)
-        intent.putExtra("CURRENT_PERSON", currentPerson)
+        intent.putExtra("CURRENT_PERSON", currentPerson.toString())
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
     }
 
