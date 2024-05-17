@@ -1,11 +1,14 @@
 package br.com.the_guardian
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.BitmapFactory
 import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
+import android.nfc.Tag
+import android.nfc.tech.Ndef
 import android.os.Bundle
 import android.util.Base64
 import android.widget.Toast
@@ -68,50 +71,48 @@ class ReadNfc : AppCompatActivity() {
 
         // Verifica se a intent contém uma tag NFC
         if (NfcAdapter.ACTION_TAG_DISCOVERED == intent.action) {
-            // Extrai as mensagens NDEF da intent
-            val rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
-            if (rawMessages != null) {
-                val ndefMessages = rawMessages.mapNotNull { it as? NdefMessage }
-                if (ndefMessages.isNotEmpty()) {
-                    // Percorre todas as mensagens NDEF
-                    for (message in ndefMessages) {
-                        // Percorre todos os registros de cada mensagem NDEF
-                        for (record in message.records) {
-                            // Extrai os bytes do payload do registro
-                            val payload = record.payload
+            // Extrai a tag NFC da intent
+            val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
 
-                            // Converte os bytes do payload para uma string
-                            val payloadString = String(payload, Charset.forName("UTF-8"))
+            // Verifica se a tag é válida
+            if (tag != null) {
+                // Lê os dados da tag NFC
+                val ndef = Ndef.get(tag)
+                if (ndef != null) {
+                    ndef.connect()
 
-                            // Divide a string pelo delimitador '$'
-                            val parts = payloadString.split('$')
+                    // Lê a mensagem NDEF da tag
+                    val ndefMessage = ndef.ndefMessage
+                    if (ndefMessage != null) {
+                        // Itera sobre os registros da mensagem NDEF
+                        for (record in ndefMessage.records) {
+                            // Converte o payload do registro para uma string
+                            val payloadString = String(record.payload, Charset.forName("UTF-8"))
 
-                            // Se houver pelo menos duas partes
-                            if (parts.size >= 2) {
-                                // A segunda parte é a imagem em base64
-                                val imageBase64 = parts[1]
-                                // Decodifica a string base64 para obter os bytes da imagem
-                                val imageBytes = Base64.decode(imageBase64, Base64.DEFAULT)
+                            // Armazena o UID lido
+                            val uid = payloadString
 
-                                // Converte os bytes da imagem de volta para um bitmap
-                                val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-
-                                // Passa o bitmap para a atividade ConfirmarUsuario
-                                val confirmIntent = Intent(this, ConfirmarUsuario::class.java)
-                                confirmIntent.putExtra("imageBitmap", bitmap)
+                            // passar para a próxima atividade
+                            val confirmIntent = Intent(this, ConfirmarUsuario::class.java)
+                                confirmIntent.putExtra("uid", uid)
                                 startActivity(confirmIntent)
-                            } else {
-                                // Se não houver delimitador, significa que os dados na tag NFC estão em um formato incorreto
-                                Toast.makeText(this, "Formato de dados NFC incorreto", Toast.LENGTH_SHORT).show()
-                            }
+
+
+                            // Exemplo: exibir o UID em um Toast
+                            Toast.makeText(this, "UID lido da tag NFC: $uid", Toast.LENGTH_SHORT).show()
                         }
+                    } else {
+                        Toast.makeText(this, "Nenhuma mensagem NDEF encontrada na tag NFC", Toast.LENGTH_SHORT).show()
                     }
+
+                    ndef.close()
                 } else {
-                    Toast.makeText(this, "Nenhuma mensagem NDEF encontrada", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "A tag NFC não suporta NDEF", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "Nenhuma mensagem NDEF encontrada", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Tag NFC inválida", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 }

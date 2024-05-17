@@ -377,7 +377,8 @@ class DataScreen : AppCompatActivity() {
                 "locker" to locker,
                 "price" to price,
                 "startTime" to time,
-                "isLocated" to true
+                "isLocated" to true,
+                "photo" to null
             )
             db.collection("Locations")
                 .add(locationData)

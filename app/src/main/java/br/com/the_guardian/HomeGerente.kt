@@ -39,8 +39,6 @@ class HomeGerente : AppCompatActivity() {
         checkPermission()
         getManagerName()
 
-
-
         btnLiberarloc = findViewById(R.id.btnLiberarloc)
         btnAbrirArm = findViewById(R.id.btnAbrirArm)
         btnSair = findViewById(R.id.btnSair)

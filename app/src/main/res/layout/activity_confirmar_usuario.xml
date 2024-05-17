@@ -13,13 +13,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CONFIRME O CLIENTE"
-        app:layout_constraintBottom_toTopOf="@+id/imagemUsuario"
+        app:layout_constraintBottom_toTopOf="@+id/photoImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imagemUsuario"
+        android:id="@+id/photoImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="TODO"
@@ -37,6 +37,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagemUsuario" />
+        app:layout_constraintTop_toBottomOf="@+id/photoImageView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

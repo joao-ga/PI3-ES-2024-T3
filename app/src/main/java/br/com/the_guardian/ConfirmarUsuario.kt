@@ -7,20 +7,27 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ConfirmarUsuario : AppCompatActivity() {
 
     private lateinit var btnProsseguir: Button
+    private lateinit var db: FirebaseFirestore
+    private lateinit var uid: String
+    private lateinit var photoImageView: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,14 +35,21 @@ class ConfirmarUsuario : AppCompatActivity() {
         setContentView(R.layout.activity_confirmar_usuario)
 
         btnProsseguir = findViewById(R.id.btnProsseguir)
+        photoImageView = findViewById(R.id.photoImageView)
+        db = FirebaseFirestore.getInstance()
 
-        btnProsseguir.setOnClickListener{
+        uid = intent.getStringExtra("uid").toString()
+
+        // Load the image from Firestore
+        loadImageFromFirestore()
+
+        btnProsseguir.setOnClickListener {
             val dialog = AcaoArmario()
             dialog.show(supportFragmentManager, "dialog_lock_options")
         }
     }
 
-    class AcaoArmario : BottomSheetDialogFragment(){
+    class AcaoArmario : BottomSheetDialogFragment() {
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -44,15 +58,13 @@ class ConfirmarUsuario : AppCompatActivity() {
             val btnOpenLock = view.findViewById<Button>(R.id.btnOpenLock)
             val btnCloseLock = view.findViewById<Button>(R.id.btnCloseLock)
 
-            btnOpenLock.setOnClickListener{
+            btnOpenLock.setOnClickListener {
                 val dialog = FullScreenDialogFragment()
-                dialog.show(parentFragmentManager, "dialog_loc_status")
+                dialog.show(childFragmentManager, "dialog_loc_status")
             }
 
-            btnCloseLock.setOnClickListener{
-                btnCloseLock.setOnClickListener{
-                    activity?.let { nextScreen(it, EncerrarLocScreen::class.java) }
-                }
+            btnCloseLock.setOnClickListener {
+                activity?.let { nextScreen(it, EncerrarLocScreen::class.java) }
             }
 
             return view
@@ -106,11 +118,43 @@ class ConfirmarUsuario : AppCompatActivity() {
         }
     }
 
-
     companion object {
         fun nextScreen(context: Context, screen: Class<*>) {
             val intent = Intent(context, screen)
             context.startActivity(intent)
         }
     }
+
+    private fun loadImageFromFirestore() {
+        db.collection("Locations")
+            .whereEqualTo("uid", uid)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (querySnapshot != null && !querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents.firstOrNull()
+                    if (document != null) {
+                        val photoPath = document.getString("photoPath")
+                        if (!photoPath.isNullOrEmpty()) {
+                            displayPhoto(photoPath)
+                        } else {
+                            Log.d("Firestore", "Photo path is null or empty")
+                        }
+                    } else {
+                        Log.d("Firestore", "No document found with the specified uid")
+                    }
+                } else {
+                    Log.d("Firestore", "No documents found")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Firestore", "get failed with ", exception)
+            }
+    }
+
+    private fun displayPhoto(photoUrl: String) {
+        Glide.with(this)
+            .load(photoUrl)
+            .into(photoImageView)
+    }
+
 }
