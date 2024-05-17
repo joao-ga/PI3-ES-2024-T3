@@ -6,15 +6,13 @@ import android.content.IntentFilter
 import android.graphics.BitmapFactory
 import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
-import android.nfc.Tag
-import android.nfc.tech.Ndef
 import android.os.Bundle
+import android.util.Base64
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import java.io.IOException
 import java.nio.charset.Charset
 
 class ReadNfc : AppCompatActivity() {
@@ -36,12 +34,9 @@ class ReadNfc : AppCompatActivity() {
         }
 
         // Verifica se o NFC está habilitado no dispositivo
-        if (!nfcAdapter!!.isEnabled) {
+        if (nfcAdapter == null || !nfcAdapter!!.isEnabled) {
             Toast.makeText(this, "Por favor, ative o NFC nas configurações do seu aparelho", Toast.LENGTH_SHORT).show()
         }
-
-        // Converter os bytes de volta para uma imagem
-        //val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     }
 
     override fun onResume() {
@@ -76,16 +71,39 @@ class ReadNfc : AppCompatActivity() {
             // Extrai as mensagens NDEF da intent
             val rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
             if (rawMessages != null) {
-                val ndefMessages = rawMessages.mapNotNull { it as? NdefMessage } // Flatten the list of messages
+                val ndefMessages = rawMessages.mapNotNull { it as? NdefMessage }
                 if (ndefMessages.isNotEmpty()) {
                     // Percorre todas as mensagens NDEF
                     for (message in ndefMessages) {
                         // Percorre todos os registros de cada mensagem NDEF
                         for (record in message.records) {
-                            // Extrai a tag NFC de cada registro
-                            val tag = record.toByteArray()
-                            // Ler os dados na tag:
-                            readNfcTag(tag)
+                            // Extrai os bytes do payload do registro
+                            val payload = record.payload
+
+                            // Converte os bytes do payload para uma string
+                            val payloadString = String(payload, Charset.forName("UTF-8"))
+
+                            // Divide a string pelo delimitador '$'
+                            val parts = payloadString.split('$')
+
+                            // Se houver pelo menos duas partes
+                            if (parts.size >= 2) {
+                                // A segunda parte é a imagem em base64
+                                val imageBase64 = parts[1]
+                                // Decodifica a string base64 para obter os bytes da imagem
+                                val imageBytes = Base64.decode(imageBase64, Base64.DEFAULT)
+
+                                // Converte os bytes da imagem de volta para um bitmap
+                                val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+
+                                // Passa o bitmap para a atividade ConfirmarUsuario
+                                val confirmIntent = Intent(this, ConfirmarUsuario::class.java)
+                                confirmIntent.putExtra("imageBitmap", bitmap)
+                                startActivity(confirmIntent)
+                            } else {
+                                // Se não houver delimitador, significa que os dados na tag NFC estão em um formato incorreto
+                                Toast.makeText(this, "Formato de dados NFC incorreto", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 } else {
@@ -96,63 +114,4 @@ class ReadNfc : AppCompatActivity() {
             }
         }
     }
-
-    private fun readNfcTag(tag: ByteArray) {
-        try {
-            // Converte o array de bytes em uma instância de Tag
-            val nfcTag: Tag = tag as Tag
-            // Obtém uma instância de Ndef para ler na tag NFC
-            val ndef = Ndef.get(nfcTag)
-            if (ndef != null) {
-                // Habilita a conexão com a tag NFC
-                ndef.connect()
-                // Lê o NdefMessage na tag NFC
-                val ndefMessage = ndef.ndefMessage
-                // Fecha a conexão com a tag NFC
-                ndef.close()
-
-                // Percorre todos os registros de cada mensagem NDEF
-                for (record in ndefMessage.records) {
-                    // Extrai os bytes do registro
-                    val payload = record.payload
-
-                    // Converte os bytes do payload para uma string
-                    val payloadString = String(payload, Charset.defaultCharset())
-
-                    // Divide a string pelo delimitador '$'
-                    val parts = payloadString.split('$')
-
-                    // Se houver pelo menos dois partes
-                    if (parts.size >= 2) {
-
-                        // Se houver imagem, a segunda parte é a imagem
-                        if (parts.size > 1) {
-                            val imageBytes = parts[1].toByteArray()
-                            // Faça o que precisar com os bytes da imagem
-
-                            // Converte os bytes da imagem de volta para um bitmap
-                            val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-
-                            // Passa o bitmap para a atividade ConfirmarUsuario
-                            val intent = Intent(this, ConfirmarUsuario::class.java)
-                            intent.putExtra("imageBitmap", bitmap)
-                            startActivity(intent)
-                        }
-                    } else {
-                        // Se não houver delimitador, significa que os dados na tag NFC estão em um formato incorreto
-                        Toast.makeText(this, "Formato de dados NFC incorreto", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } else {
-                Toast.makeText(this, "A tag NFC não suporta NDEF", Toast.LENGTH_SHORT).show()
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Toast.makeText(this, "Erro ao ler na tag NFC", Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "Erro desconhecido ao ler na tag NFC", Toast.LENGTH_SHORT).show()
-        }
-    }
-
 }

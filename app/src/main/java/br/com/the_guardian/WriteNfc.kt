@@ -1,6 +1,8 @@
+
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.Uri
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
@@ -35,8 +37,13 @@ class WriteNfc : AppCompatActivity() {
             qrCodeContent = QrCodeData.scannedData
         }
 
-        // Recupera os bytes da imagem do Intent
-        val imageBytes = intent.getByteArrayExtra("IMAGE_BYTES")
+        // Recupera a URI da imagem do Intent
+        val imageUri = intent.getStringExtra("IMAGE_URI")?.let { Uri.parse(it) }
+
+        // Lê os bytes da imagem a partir do URI
+        val imageBytes = imageUri?.let { uri ->
+            contentResolver.openInputStream(uri)?.readBytes()
+        }
 
         // Cria a instância da classe NfcData com os dados recebidos
         nfcData = NfcData(imageBytes, qrCodeContent)
@@ -61,31 +68,20 @@ class WriteNfc : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         if (NfcAdapter.ACTION_TAG_DISCOVERED == intent.action) {
-            val rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
-            if (rawMessages != null) {
-                val ndefMessages = rawMessages.mapNotNull { it as? NdefMessage }
-                if (ndefMessages.isNotEmpty()) {
-                    for (message in ndefMessages) {
-                        for (record in message.records) {
-                            val tag = record.toByteArray()
-                            nfcData?.let { nfcData ->
-                                writeNfcTag(nfcData, tag)
-                            }
-                        }
-                    }
-                } else {
-                    Toast.makeText(this, "Nenhuma mensagem NDEF encontrada", Toast.LENGTH_SHORT).show()
+            val tag: Tag? = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+            if (tag != null) {
+                nfcData?.let { nfcData ->
+                    writeNfcTag(nfcData, tag)
                 }
             } else {
-                Toast.makeText(this, "Nenhuma mensagem NDEF encontrada", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Nenhuma tag NFC encontrada", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun writeNfcTag(nfcData: NfcData, tag: ByteArray) {
+    private fun writeNfcTag(nfcData: NfcData, tag: Tag) {
         try {
-            val nfcTag: Tag = tag as Tag
-            val ndef = Ndef.get(nfcTag)
+            val ndef = Ndef.get(tag)
             if (ndef != null) {
                 // Concatena os bytes do UID do usuário, o caractere delimitador '$' e os bytes da imagem, se ele não for nulo
                 val combinedData = mutableListOf<Byte>()

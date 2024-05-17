@@ -16,7 +16,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
+import androidx.core.content.FileProvider
 import br.com.the_guardian.databinding.ActivityCameraBinding
 import com.google.common.util.concurrent.ListenableFuture
 import java.io.File
@@ -70,7 +70,7 @@ class CameraActivity : AppCompatActivity() {
 
     private fun takePicture() {
         imageCapture?.let {
-            val fileName = "FOTO_JPEG_${System.currentTimeMillis()}"
+            val fileName = "FOTO_JPEG_${System.currentTimeMillis()}.jpg"
             val file = File(externalMediaDirs[0], fileName)
 
             val outputFileOptions = ImageCapture.OutputFileOptions.Builder(file).build()
@@ -80,12 +80,10 @@ class CameraActivity : AppCompatActivity() {
                 imgCaptureExecutor,
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        val fileName = "FOTO_JPEG_${System.currentTimeMillis()}"
-                        val file = File(externalMediaDirs[0], fileName)
-                        // Salvar a imagem
-                        val imageBytes = file.readBytes() // Convertendo a imagem em bytes
-                        val intent = Intent(this@CameraActivity, WriteNfc::class.java)
-                        intent.putExtra("IMAGE_BYTES", imageBytes)
+                        val photoUri = FileProvider.getUriForFile(this@CameraActivity, "br.com.the_guardian.fileprovider", file)
+                        val intent = Intent(this@CameraActivity, WriteNfc::class.java).apply {
+                            putExtra("IMAGE_URI", photoUri.toString())
+                        }
                         startActivity(intent)
 
                         setResult(RESULT_OK)

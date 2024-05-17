@@ -1,6 +1,5 @@
 package br.com.the_guardian
 
-import WriteNfc
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log

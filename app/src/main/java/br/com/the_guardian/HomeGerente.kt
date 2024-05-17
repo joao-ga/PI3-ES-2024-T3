@@ -51,7 +51,7 @@ class HomeGerente : AppCompatActivity() {
 
 
         btnAbrirArm.setOnClickListener {
-            //nextScreen(AbrirArmScreen::class.java)
+            nextScreen(ReadNfc::class.java)
         }
 
 
