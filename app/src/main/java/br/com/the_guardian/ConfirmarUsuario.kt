@@ -28,6 +28,7 @@ class ConfirmarUsuario : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     private lateinit var uid: String
     private lateinit var photoImageView: ImageView
+    private lateinit var photoImageView2: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +37,7 @@ class ConfirmarUsuario : AppCompatActivity() {
 
         btnProsseguir = findViewById(R.id.btnProsseguir)
         photoImageView = findViewById(R.id.photoImageView)
+        photoImageView2 = findViewById(R.id.photoImageView2)
         db = FirebaseFirestore.getInstance()
 
         uid = intent.getStringExtra("uid").toString()
@@ -43,6 +45,7 @@ class ConfirmarUsuario : AppCompatActivity() {
 
         // Load the image from Firestore
         loadImageFromFirestore()
+        loadImageFromFirestore2()
 
         btnProsseguir.setOnClickListener {
             val dialog = AcaoArmario()
@@ -136,7 +139,7 @@ class ConfirmarUsuario : AppCompatActivity() {
                     if (document != null) {
                         val photoPath = document.getString("photo")
                         if (!photoPath.isNullOrEmpty()) {
-                            displayPhoto(photoPath)
+                            displayPhoto(photoPath, photoImageView)
                         } else {
                             Log.d("Firestore", "Photo path is null or empty")
                         }
@@ -152,10 +155,36 @@ class ConfirmarUsuario : AppCompatActivity() {
             }
     }
 
-    private fun displayPhoto(photoUrl: String) {
+    private fun loadImageFromFirestore2() {
+        db.collection("Locations")
+            .whereEqualTo("uid", uid)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (querySnapshot != null && !querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents.firstOrNull()
+                    if (document != null) {
+                        val photoPath = document.getString("photo2")
+                        if (!photoPath.isNullOrEmpty()) {
+                            displayPhoto(photoPath, photoImageView2)
+                        } else {
+                            Log.d("Firestore", "Photo path is null or empty")
+                        }
+                    } else {
+                        Log.d("Firestore", "No document found with the specified uid")
+                    }
+                } else {
+                    Log.d("Firestore", "No documents found")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Firestore", "get failed with ", exception)
+            }
+    }
+
+    private fun displayPhoto(photoUrl: String, imgView: ImageView) {
         Glide.with(this)
             .load(photoUrl)
-            .into(photoImageView)
+            .into(imgView)
     }
 
 }
