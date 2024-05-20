@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -29,18 +28,34 @@
         android:theme="@style/Theme.Theguardian"
         tools:targetApi="31">
 
-       <activity
+        <activity
             android:name=".CameraActivity"
             android:exported="false" />
-       <activity
+        <activity
             android:name=".EncerrarLocScreen"
             android:exported="true" />
         <activity
             android:name=".ConfirmarUsuario"
             android:exported="false" />
+
         <activity
             android:name=".ReadNfc"
-            android:exported="false" />
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".LiberarLocScreen"
             android:exported="false"
@@ -53,10 +68,8 @@
             android:name=".WriteNfc"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
