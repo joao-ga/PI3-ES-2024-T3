@@ -57,41 +57,41 @@
         android:text="@string/confirme"
         android:textColor="@color/dark_blue"
         android:textSize="18sp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="-100dp"
         app:layout_constraintBottom_toTopOf="@+id/photoImageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.654"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.196" />
+         />
 
     <ImageView
         android:id="@+id/photoImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="360dp"
+        android:layout_height="569dp"
+        android:layout_marginTop="90dp"
+        android:contentDescription="@string/content_Description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        tools:ignore="SpeakableTextPresentCheck"
+        />
 
     <Button
         android:id="@+id/btnProsseguir"
         style="@style/login_button"
         android:layout_width="250dp"
         android:layout_height="49dp"
-        android:layout_marginTop="230dp"
+        android:layout_marginTop="5dp"
         android:fontFamily="@font/kronaone_regular"
         android:gravity="center"
-        android:text="@string/prosseguir"
+        android:text="@string/confirmapessoa"
         android:textColor="@color/grey"
-        android:textSize="20sp"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/photoImageView"
-        app:layout_constraintVertical_bias="1.0" />
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

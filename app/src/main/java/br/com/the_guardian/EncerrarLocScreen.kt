@@ -164,7 +164,7 @@ class EncerrarLocScreen : AppCompatActivity() {
                 val view = inflater.inflate(R.layout.dialog_loc_status, null)
 
                 val text = view.findViewById<TextView>(R.id.text)
-                text.text = "LOCAÇÃO ENCERRADA"
+                text.text = getString(R.string.locacao_encerrada)
 
                 // Adiciona o layout ao diálogo
                 builder.setView(view)
