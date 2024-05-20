@@ -3,22 +3,31 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/grey">
 
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ESCOLHA UMA OPÇÃO"
+        android:text="@string/opcaoescolha"
+        android:textColor="@color/dark_blue"
+        android:textSize="18sp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/kronaone_regular"
         app:layout_constraintBottom_toTopOf="@+id/btnOpenLock"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnOpenLock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Abrir Armário"
+        style="@style/login_button"
+        android:layout_width="250dp"
+        android:layout_height="63dp"
+        android:layout_marginBottom="30dp"
+        android:fontFamily="@font/kronaone_regular"
+        android:gravity="center"
+        android:text="@string/abrir_armario"
         android:textColor="@color/grey"
         app:layout_constraintBottom_toTopOf="@+id/btnCloseLock"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,9 +35,13 @@
 
     <Button
         android:id="@+id/btnCloseLock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Encerrar Locação"
+        style="@style/login_button"
+        android:layout_width="250dp"
+        android:layout_height="63dp"
+        android:layout_marginBottom="35dp"
+        android:fontFamily="@font/kronaone_regular"
+        android:gravity="center"
+        android:text="@string/encerrarlo"
         android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

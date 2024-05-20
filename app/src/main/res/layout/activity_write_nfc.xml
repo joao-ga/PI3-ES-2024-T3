@@ -61,7 +61,7 @@
             android:fontFamily="@font/kronaone_regular"
             android:text="@string/Vincule"
             android:textColor="@color/dark_blue"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@id/rectangle"
             app:layout_constraintStart_toStartOf="@id/rectangle"
