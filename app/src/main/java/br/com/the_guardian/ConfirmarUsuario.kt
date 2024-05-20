@@ -39,6 +39,7 @@ class ConfirmarUsuario : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
 
         uid = intent.getStringExtra("uid").toString()
+        Log.d("debug", uid)
 
         // Load the image from Firestore
         loadImageFromFirestore()
@@ -133,7 +134,7 @@ class ConfirmarUsuario : AppCompatActivity() {
                 if (querySnapshot != null && !querySnapshot.isEmpty) {
                     val document = querySnapshot.documents.firstOrNull()
                     if (document != null) {
-                        val photoPath = document.getString("photoPath")
+                        val photoPath = document.getString("photo")
                         if (!photoPath.isNullOrEmpty()) {
                             displayPhoto(photoPath)
                         } else {

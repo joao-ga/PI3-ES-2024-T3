@@ -99,5 +99,21 @@
     <!---camera-->
     <string name="tirarfoto">TIRE UMA FOTO DO(S) USUÁRIO(S)</string>
 
+    <!--Confirma cliente-->
+    <string name="confirme">CONFIRME O CLIENTE</string>
+    <string name="abrir_armario2">ABRIR ARMÁRIO</string>
+    <string name="prosseguir">PROSSEGUIR</string>
+
+
+    <!--nfc read-->
+    <string name="Aprox">APROXIME A PULSEIRA</string>
+
+    <!--Encerrar Locação-->
+    <string name="encerrar">ENCERRAR LOCAÇÃO</string>
+
+
+    <!--Opção de abrir armário ou encerrar locação-->
+    <string name="opcaoescolha">ESCOLHA UMA OPÇÃO</string>
+    <string name="encerrarlo">Encerrar Locação</string>
 
 </resources>

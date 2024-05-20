@@ -223,4 +223,9 @@ class EncerrarLocScreen : AppCompatActivity() {
                 Log.d(ContentValues.TAG, "Falha ao obter o documento do usuário:", exception)
             }
     }
+
+
+    // FALTA CALCULAR O PRECO DA DA LOCACAO
+
+
 }

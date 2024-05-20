@@ -108,7 +108,7 @@ class CameraActivity : AppCompatActivity() {
         }, 100)
     }
 
-    private fun addPhoto(photoUrl: File) {
+    private fun addPhoto(photoFile: File) {
         val uid = QrCodeData.scannedData
         if (uid != null) {
             db.collection("Locations")
@@ -118,6 +118,7 @@ class CameraActivity : AppCompatActivity() {
                     if (!querySnapshot.isEmpty) {
                         val document = querySnapshot.documents[0]
                         val documentId = document.id
+                        val photoUrl = photoFile.absolutePath  // Converte File para String
 
                         db.collection("Locations")
                             .document(documentId)

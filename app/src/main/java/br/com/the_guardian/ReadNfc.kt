@@ -4,33 +4,33 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.BitmapFactory
 import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.Ndef
 import android.os.Bundle
-import android.util.Base64
+import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import br.com.the_guardian.databinding.ActivityReadNfcBinding
 import java.nio.charset.Charset
 
-class ReadNfc : AppCompatActivity() {
+class ReadNfc : AppCompatActivity(), NfcAdapter.ReaderCallback {
 
     private var nfcAdapter: NfcAdapter? = null
+    private lateinit var binding: ActivityReadNfcBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_read_nfc)
+        binding = ActivityReadNfcBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Inicializa o NfcAdapter
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -45,74 +45,65 @@ class ReadNfc : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        // Configura um PendingIntent para que esta atividade seja acionada quando uma tag NFC for detectada
-        val pendingIntent = PendingIntent.getActivity(
-            this, 0,
-            Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val bundle = Bundle()
+        bundle.putInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, 250)
 
-        // Configura os filtros de intenção para processar somente ações relacionadas a NFC
-        val intentFilters = arrayOf(IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED))
-
-        // Registra os filtros de intenção e o PendingIntent
-        nfcAdapter?.enableForegroundDispatch(this, pendingIntent, intentFilters, null)
+        // Registra o modo leitor para processar NFC tags
+        try {
+            nfcAdapter?.enableReaderMode(this, this, NfcAdapter.FLAG_READER_NFC_A, bundle)
+        } catch (e: IllegalStateException) {
+            Log.e("NFC", "Erro ao habilitar reader mode", e)
+        }
     }
 
     override fun onPause() {
         super.onPause()
 
-        // Desabilita o envio em primeiro plano para evitar o consumo de energia quando a atividade não está em foco
-        nfcAdapter?.disableForegroundDispatch(this)
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-
-        // Verifica se a intent contém uma tag NFC
-        if (NfcAdapter.ACTION_TAG_DISCOVERED == intent.action) {
-            // Extrai a tag NFC da intent
-            val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
-
-            // Verifica se a tag é válida
-            if (tag != null) {
-                // Lê os dados da tag NFC
-                val ndef = Ndef.get(tag)
-                if (ndef != null) {
-                    ndef.connect()
-
-                    // Lê a mensagem NDEF da tag
-                    val ndefMessage = ndef.ndefMessage
-                    if (ndefMessage != null) {
-                        // Itera sobre os registros da mensagem NDEF
-                        for (record in ndefMessage.records) {
-                            // Converte o payload do registro para uma string
-                            val payloadString = String(record.payload, Charset.forName("UTF-8"))
-
-                            // Armazena o UID lido
-                            val uid = payloadString
-
-                            // passar para a próxima atividade
-                            val confirmIntent = Intent(this, ConfirmarUsuario::class.java)
-                                confirmIntent.putExtra("uid", uid)
-                                startActivity(confirmIntent)
-
-
-                            // Exemplo: exibir o UID em um Toast
-                            Toast.makeText(this, "UID lido da tag NFC: $uid", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        Toast.makeText(this, "Nenhuma mensagem NDEF encontrada na tag NFC", Toast.LENGTH_SHORT).show()
-                    }
-
-                    ndef.close()
-                } else {
-                    Toast.makeText(this, "A tag NFC não suporta NDEF", Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                Toast.makeText(this, "Tag NFC inválida", Toast.LENGTH_SHORT).show()
-            }
+        // Desabilita o modo leitor para evitar o consumo de energia quando a atividade não está em foco
+        try {
+            nfcAdapter?.disableReaderMode(this)
+        } catch (e: IllegalStateException) {
+            Log.e("NFC", "Erro ao desabilitar reader mode", e)
         }
     }
 
+    @SuppressLint("MissingPermission")
+    override fun onTagDiscovered(tag: Tag?) {
+        tag?.let {
+            val ndef = Ndef.get(it)
+            ndef?.let { ndef ->
+                try {
+                    ndef.connect()
+                    val ndefMessage = ndef.ndefMessage
+                    Log.d("debug", ndefMessage.toString())
+                    ndef.close()
+
+                    val informacoes = ndefMessage.records
+                    if (informacoes.isNotEmpty()) {
+                        val firstRecord = informacoes[0]
+                        val payload = firstRecord.payload
+                        val text = String(payload, Charset.forName("UTF-8"))
+                        val uid = text.substring(3)
+                        Log.d("NFC", "Tag detectada: $uid")
+
+                        runOnUiThread {
+                            Log.d("NFC", "Iniciando ConfirmarUsuario Activity com uid: $uid")
+                            // Iniciar ConfirmarUsuario Activity com os dados da tag
+                            startActivity(Intent(this, ConfirmarUsuario::class.java).apply {
+                                putExtra("uid", uid)
+                            })
+                        }
+                    } else {
+                        Log.d("NFC", "Nenhum registro NDEF encontrado")
+                    }
+                } catch (e: Exception) {
+                    Log.e("NFC", "Erro ao ler a tag NFC", e)
+                }
+            } ?: run {
+                Log.d("NFC", "NDEF não suportado pela tag")
+            }
+        } ?: run {
+            Log.d("NFC", "Tag não encontrada no Intent")
+        }
+    }
 }
