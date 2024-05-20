@@ -102,7 +102,7 @@
     <!--Confirma cliente-->
     <string name="confirme">CONFIRME O CLIENTE</string>
     <string name="abrir_armario2">ABRIR ARMÁRIO</string>
-    <string name="prosseguir">PROSSEGUIR</string>
+    <string name="confirmapessoa">CONFIRMAR</string>
 
 
     <!--nfc read-->
@@ -115,5 +115,9 @@
     <!--Opção de abrir armário ou encerrar locação-->
     <string name="opcaoescolha">ESCOLHA UMA OPÇÃO</string>
     <string name="encerrarlo">Encerrar Locação</string>
+    <string name="content_Description">Photo</string>
 
+
+    <!--Status de aberto ou encerrado-->
+    <string name="locacao_encerrada">LOCAÇÃO ENCERRADA</string>
 </resources>
