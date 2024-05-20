@@ -66,8 +66,8 @@
 
     <ImageView
         android:id="@+id/photoImageView"
-        android:layout_width="360dp"
-        android:layout_height="569dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginTop="90dp"
         android:contentDescription="@string/content_Description"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -76,6 +76,17 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck"
         />
+
+    <ImageView
+        android:id="@+id/photoImageView2"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnProsseguir"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.452"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/btnProsseguir"

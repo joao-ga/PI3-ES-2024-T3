@@ -1,5 +1,5 @@
 package br.com.the_guardian
-
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -28,7 +28,8 @@ class CameraActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
     private lateinit var imgCaptureExecutor: ExecutorService
     private lateinit var db: FirebaseFirestore
-
+    private var numberOfPersons = 1
+    private var currentPerson = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +39,8 @@ class CameraActivity : AppCompatActivity() {
 
         db = FirebaseFirestore.getInstance()
 
+        numberOfPersons = intent.getIntExtra("NUMBER_PERSON", 1)
+
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
         imgCaptureExecutor = Executors.newSingleThreadExecutor()
@@ -45,8 +48,7 @@ class CameraActivity : AppCompatActivity() {
         startCamera()
 
         binding.btnTakePicture.setOnClickListener {
-            takePicture()
-            blinkPreview()
+            takePictureAndProcess()
         }
     }
 
@@ -66,24 +68,39 @@ class CameraActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-    private fun takePicture() {
-        imageCapture?.let {
-            val fileName = "FOTO_JPEG_${System.currentTimeMillis()}.jpg"
-            val file = File(externalMediaDirs[0], fileName)
+    private fun takePictureAndProcess() {
+        if (currentPerson <= numberOfPersons) {
+            takePicture()
+        }
+    }
 
-            addPhoto(file)
+    private fun takePicture() {
+        imageCapture?.let { imageCapture ->
+            val fileName = "FOTO_JPEG_${System.currentTimeMillis()}_$currentPerson.jpg"
+            val file = File(externalMediaDirs[0], fileName)
 
             val outputFileOptions = ImageCapture.OutputFileOptions.Builder(file).build()
 
-            it.takePicture(
+            imageCapture.takePicture(
                 outputFileOptions,
                 imgCaptureExecutor,
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                       Log.d("debugg", "imagem salva no diretório: $outputFileResults")
+                        Log.d("debugg", "imagem salva no diretório: $outputFileResults")
 
-                        setResult(RESULT_OK)
-                        finish()
+                        if (currentPerson == 1) {
+                            addPhoto(file, currentPerson)
+                        } else {
+                            addPhoto2(file, currentPerson)
+                        }
+
+                        currentPerson++
+
+                        if (currentPerson > numberOfPersons) {
+                            setResult(RESULT_OK)
+                            val intent = Intent(this@CameraActivity, WriteNfc::class.java)
+                            startActivity(intent)
+                        }
                     }
 
                     override fun onError(exception: ImageCaptureException) {
@@ -99,16 +116,7 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun blinkPreview() {
-        binding.root.postDelayed({
-            binding.root.foreground = ColorDrawable(Color.WHITE)
-            binding.root.postDelayed({
-                binding.root.foreground = null
-            }, 50)
-        }, 100)
-    }
-
-    private fun addPhoto(photoFile: File) {
+    private fun addPhoto(photoFile: File, personIndex: Int) {
         val uid = QrCodeData.scannedData
         if (uid != null) {
             db.collection("Locations")
@@ -118,7 +126,7 @@ class CameraActivity : AppCompatActivity() {
                     if (!querySnapshot.isEmpty) {
                         val document = querySnapshot.documents[0]
                         val documentId = document.id
-                        val photoUrl = photoFile.absolutePath  // Converte File para String
+                        val photoUrl = photoFile.absolutePath
 
                         db.collection("Locations")
                             .document(documentId)
@@ -149,5 +157,46 @@ class CameraActivity : AppCompatActivity() {
             Toast.makeText(this, "Erro: usuário não autenticado", Toast.LENGTH_SHORT).show()
         }
     }
-}
 
+    private fun addPhoto2(photoFile: File, personIndex: Int) {
+        val uid = QrCodeData.scannedData
+        if (uid != null) {
+            db.collection("Locations")
+                .whereEqualTo("uid", uid)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        val document = querySnapshot.documents[0]
+                        val documentId = document.id
+                        val photoUrl = photoFile.absolutePath
+
+                        db.collection("Locations")
+                            .document(documentId)
+                            .update("photo2", photoUrl)
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    this,
+                                    "Foto atualizada com sucesso",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(
+                                    this,
+                                    "Erro ao atualizar foto: ${e.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Log.e("UpdatePhoto", "Erro ao atualizar foto", e)
+                            }
+                    } else {
+                        Log.d("UpdatePhoto", "Documento do usuário não encontrado")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d("UpdatePhoto", "Falha ao obter o documento do usuário:", exception)
+                }
+        } else {
+            Toast.makeText(this, "Erro: usuário não autenticado", Toast.LENGTH_SHORT).show()
+        }
+    }
+}

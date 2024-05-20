@@ -17,7 +17,6 @@ class LiberarLocScreen : AppCompatActivity() {
 
     private var scannedData: String? = null
     private var numberOfPersons: Int = 0
-    private var currentPerson: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,13 +49,6 @@ class LiberarLocScreen : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Leitura cancelada", Toast.LENGTH_SHORT).show()
             }
-        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            currentPerson++
-            if (currentPerson <= numberOfPersons) {
-                startCameraActivity()
-            } else {
-                startNfcWriteActivity()
-            }
         }
     }
 
@@ -68,14 +60,12 @@ class LiberarLocScreen : AppCompatActivity() {
 
         dialogView.findViewById<Button>(R.id.btnOnePerson).setOnClickListener {
             numberOfPersons = 1
-            currentPerson = 1
             startCameraActivity()
             dialog.dismiss()
         }
 
         dialogView.findViewById<Button>(R.id.btnTwoPerson).setOnClickListener {
             numberOfPersons = 2
-            currentPerson = 1
             startCameraActivity()
             dialog.dismiss()
         }
@@ -85,7 +75,7 @@ class LiberarLocScreen : AppCompatActivity() {
 
     private fun startCameraActivity() {
         val intent = Intent(this, CameraActivity::class.java)
-        intent.putExtra("CURRENT_PERSON", currentPerson)
+        intent.putExtra("NUMBER_PERSON", numberOfPersons)
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
     }
 

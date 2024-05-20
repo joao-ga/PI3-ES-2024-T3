@@ -1,11 +1,10 @@
 package br.com.the_guardian
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
-import android.app.PendingIntent
 import android.content.ContentValues
 import android.content.Intent
-import android.content.IntentFilter
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
@@ -18,7 +17,6 @@ import android.util.Log
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -27,7 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.io.IOException
 import java.nio.charset.Charset
 
-class EncerrarLocScreen : AppCompatActivity() {
+class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
 
     private var nfcAdapter: NfcAdapter? = null
     private lateinit var db: FirebaseFirestore
@@ -35,7 +33,6 @@ class EncerrarLocScreen : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_encerrar_loc_screen)
 
         // Inicializa o NfcAdapter
@@ -49,7 +46,7 @@ class EncerrarLocScreen : AppCompatActivity() {
         }
 
         // Verifica se o NFC está habilitado no dispositivo
-        if (nfcAdapter != null && !nfcAdapter!!.isEnabled) {
+        if (nfcAdapter == null || !nfcAdapter!!.isEnabled) {
             Toast.makeText(this, "Por favor, ative o NFC nas configurações do seu aparelho", Toast.LENGTH_SHORT).show()
         }
     }
@@ -57,98 +54,119 @@ class EncerrarLocScreen : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        // Configura um PendingIntent para que esta atividade seja acionada quando uma tag NFC for detectada
-        val pendingIntent = PendingIntent.getActivity(
-            this, 0,
-            Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        val bundle = Bundle()
+        bundle.putInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, 250)
 
-        // Configura os filtros de intenção para processar somente ações relacionadas a NFC
-        val intentFilters = arrayOf(IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED))
-
-        // Registra os filtros de intenção e o PendingIntent
-        nfcAdapter?.enableForegroundDispatch(this, pendingIntent, intentFilters, null)
+        // Registra o modo leitor para processar NFC tags
+        try {
+            nfcAdapter?.enableReaderMode(this, this, NfcAdapter.FLAG_READER_NFC_A, bundle)
+        } catch (e: IllegalStateException) {
+            Log.e("NFC", "Erro ao habilitar reader mode", e)
+        }
     }
 
     override fun onPause() {
         super.onPause()
 
-        // Desabilita o envio em primeiro plano para evitar o consumo de energia quando a atividade não está em foco
-        nfcAdapter?.disableForegroundDispatch(this)
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-
-        // Verifica se a intent contém uma tag NFC
-        if (NfcAdapter.ACTION_TAG_DISCOVERED == intent.action) {
-            // Extrai as mensagens NDEF da intent
-            val rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
-            if (rawMessages != null) {
-                val ndefMessages = rawMessages.mapNotNull { it as? NdefMessage }
-                if (ndefMessages.isNotEmpty()) {
-                    // Percorre todas as mensagens NDEF
-                    for (message in ndefMessages) {
-                        // Percorre todos os registros de cada mensagem NDEF
-                        for (record in message.records) {
-                            // Extrai os bytes do registro
-                            val payload = record.payload
-
-                            // Converte os bytes do payload para uma string
-                            val uid = String(payload, Charset.defaultCharset())
-
-                            // Chama o método endLocation com o UID
-                            endLocation(uid)
-
-                            // Limpa a tag NFC
-                            clearNfcTag(intent)
-                        }
-                    }
-                } else {
-                    Toast.makeText(this, "Nenhuma mensagem NDEF encontrada", Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                Toast.makeText(this, "Nenhuma mensagem NDEF encontrada", Toast.LENGTH_SHORT).show()
-            }
+        // Desabilita o modo leitor para evitar o consumo de energia quando a atividade não está em foco
+        try {
+            nfcAdapter?.disableReaderMode(this)
+        } catch (e: IllegalStateException) {
+            Log.e("NFC", "Erro ao desabilitar reader mode", e)
         }
     }
 
-    private fun clearNfcTag(intent: Intent) {
-        val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
+    @SuppressLint("MissingPermission")
+    override fun onTagDiscovered(tag: Tag?) {
         tag?.let {
             val ndef = Ndef.get(it)
-            if (ndef != null) {
+            ndef?.let { ndef ->
                 try {
-                    // Cria um NdefMessage vazio
-                    val emptyMessage = NdefMessage(NdefRecord(NdefRecord.TNF_EMPTY, null, null, null))
-
-                    // Habilita a conexão com a tag NFC
                     ndef.connect()
-                    // Escreve o NdefMessage vazio na tag NFC
-                    ndef.writeNdefMessage(emptyMessage)
-                    // Fecha a conexão com a tag NFC
+                    val ndefMessage = ndef.ndefMessage
+                    Log.d("debug", ndefMessage.toString())
+
+                    val informacoes = ndefMessage.records
+                    if (informacoes.isNotEmpty()) {
+                        val firstRecord = informacoes[0]
+                        val payload = firstRecord.payload
+                        val text = String(payload, Charset.forName("UTF-8"))
+                        val uid = text.substring(3)
+                        Log.d("NFC", "Tag detectada: $uid")
+
+                        runOnUiThread {
+                            // Chama o método endLocation com o UID
+                            endLocation(uid)
+                        }
+
+                        // Limpa a tag NFC
+                        clearNfcTag(ndef)
+
+                        Toast.makeText(this, "Dados da tag NFC limpos com sucesso", Toast.LENGTH_SHORT).show()
+
+                    } else {
+                        Log.d("NFC", "Nenhum registro NDEF encontrado")
+                    }
                     ndef.close()
-
-                    Toast.makeText(this, "Dados da tag NFC limpos com sucesso", Toast.LENGTH_SHORT).show()
-
-                    // Agendar a navegação para a tela HomeGerente após 5 segundos
-                    handler.postDelayed({
-                        val intent = Intent(this, HomeGerente::class.java)
-                        startActivity(intent)
-                        finish()
-                    }, 5000) // 5000ms = 5s
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                    Toast.makeText(this, "Erro ao limpar a tag NFC", Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
-                    e.printStackTrace()
-                    Toast.makeText(this, "Erro desconhecido ao limpar a tag NFC", Toast.LENGTH_SHORT).show()
+                    Log.e("NFC", "Erro ao ler a tag NFC", e)
                 }
-            } else {
-                Toast.makeText(this, "A tag NFC não suporta NDEF", Toast.LENGTH_SHORT).show()
+            } ?: run {
+                Log.d("NFC", "NDEF não suportado pela tag")
             }
+        } ?: run {
+            Log.d("NFC", "Tag não encontrada no Intent")
         }
+    }
+
+    private fun clearNfcTag(ndef: Ndef) {
+        try {
+            // Cria um NdefMessage vazio
+            val emptyMessage = NdefMessage(NdefRecord(NdefRecord.TNF_EMPTY, null, null, null))
+
+            // Escreve o NdefMessage vazio na tag NFC
+            ndef.writeNdefMessage(emptyMessage)
+
+            Toast.makeText(this, "Dados da tag NFC limpos com sucesso", Toast.LENGTH_SHORT).show()
+
+            // Agendar a navegação para a tela HomeGerente após 5 segundos
+            handler.postDelayed({
+                val intent = Intent(this, HomeGerente::class.java)
+                startActivity(intent)
+                finish()
+            }, 5000) // 5000ms = 5s
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Toast.makeText(this, "Erro ao limpar a tag NFC", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Erro desconhecido ao limpar a tag NFC", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun endLocation(uid: String) {
+        db.collection("Locations").whereEqualTo("uid", uid)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents[0]
+                    document.reference.delete()
+                        .addOnSuccessListener {
+                            DataScreen.locacaoConfirmada = false
+                            Toast.makeText(this, "Locação encerrada!", Toast.LENGTH_SHORT).show()
+                            Log.d("debugg", "Documento excluído com sucesso")
+                        }
+                        .addOnFailureListener { exception ->
+                            Toast.makeText(this, "Erro em cancelar pendência, tente de novo mais tarde!", Toast.LENGTH_SHORT).show()
+                            Log.d(ContentValues.TAG, "Falha ao excluir o documento do usuário:", exception)
+                        }
+                } else {
+                    Log.d(ContentValues.TAG, "Documento do usuário não encontrado")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(ContentValues.TAG, "Falha ao obter o documento do usuário:", exception)
+            }
     }
 
     class FullScreenDialogFragment : DialogFragment() {
@@ -197,35 +215,4 @@ class EncerrarLocScreen : AppCompatActivity() {
             handler.removeCallbacksAndMessages(null)
         }
     }
-
-    private fun endLocation(uid: String) {
-        val user = uid
-        db.collection("Locations").whereEqualTo("uid", user)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                if (!querySnapshot.isEmpty) {
-                    val document = querySnapshot.documents[0]
-                    document.reference.delete()
-                        .addOnSuccessListener {
-                            DataScreen.locacaoConfirmada =  false
-                            Toast.makeText(this, "Locação encerrada!", Toast.LENGTH_SHORT).show()
-                            Log.d("debugg", "Documento excluído com sucesso")
-                        }
-                        .addOnFailureListener { exception ->
-                            Toast.makeText(this, "Erro em cancelar pendência, tente de novo mais tarde!", Toast.LENGTH_SHORT).show()
-                            Log.d(ContentValues.TAG, "Falha ao excluir o documento do usuário:", exception)
-                        }
-                } else {
-                    Log.d(ContentValues.TAG, "Documento do usuário não encontrado")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(ContentValues.TAG, "Falha ao obter o documento do usuário:", exception)
-            }
-    }
-
-
-    // FALTA CALCULAR O PRECO DA DA LOCACAO
-
-
 }

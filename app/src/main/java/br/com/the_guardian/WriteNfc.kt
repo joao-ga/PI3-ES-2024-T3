@@ -82,7 +82,7 @@ class WriteNfc : AppCompatActivity() {
                 ndef.writeNdefMessage(ndefMessage)
                 ndef.close()
 
-                Toast.makeText(this, "UID do usuário escrito na tag NFC com sucesso", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Locação realizada com sucesso", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "A tag NFC não suporta NDEF", Toast.LENGTH_SHORT).show()
             }

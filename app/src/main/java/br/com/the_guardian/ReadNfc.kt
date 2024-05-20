@@ -77,7 +77,6 @@ class ReadNfc : AppCompatActivity(), NfcAdapter.ReaderCallback {
                     val ndefMessage = ndef.ndefMessage
                     Log.d("debug", ndefMessage.toString())
                     ndef.close()
-
                     val informacoes = ndefMessage.records
                     if (informacoes.isNotEmpty()) {
                         val firstRecord = informacoes[0]
