@@ -22,7 +22,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 
-class RegisterScreen : AppCompatActivity() {
+class registerScreen : AppCompatActivity() {
 
     // variaveis de gerenciamento do firebase, firestore e functions
     private lateinit var auth: FirebaseAuth
