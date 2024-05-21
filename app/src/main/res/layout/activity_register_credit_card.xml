@@ -46,7 +46,7 @@
             android:layout_marginTop="36dp"
             android:layout_marginEnd="12dp"
             android:drawableStart="@drawable/baseline_arrow_back_ios_new_24"
-            android:paddingStart="6dp"
+            android:paddingStart="4dp"
             android:paddingEnd="0dp"
             app:layout_constraintEnd_toEndOf="@id/appCompatTextView"
             app:layout_constraintEnd_toStartOf="@id/appCompatTextView"

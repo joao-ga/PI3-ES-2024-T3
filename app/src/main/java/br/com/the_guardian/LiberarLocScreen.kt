@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import com.google.zxing.integration.android.IntentIntegrator
 
 
@@ -17,11 +19,20 @@ class LiberarLocScreen : AppCompatActivity() {
 
     private var scannedData: String? = null
     private var numberOfPersons: Int = 0
+    private lateinit var btnVoltar: AppCompatButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_liberar_loc_screen)
         openCamera()
+
+        // Inicialização do botão "Voltar" aqui, para garantir que ele esteja sempre visível
+        btnVoltar = findViewById(R.id.btnVoltar)
+        btnVoltar.setOnClickListener {
+            // botão para voltar para a home
+            nextScreen(HomeGerente::class.java)
+        }
+
     }
 
     private fun openCamera() {
@@ -70,6 +81,10 @@ class LiberarLocScreen : AppCompatActivity() {
             dialog.dismiss()
         }
 
+        dialogView.findViewById<ImageButton>(R.id.btnClose).setOnClickListener {
+            dialog.dismiss()
+        }
+
         dialog.show()
     }
 
@@ -77,6 +92,13 @@ class LiberarLocScreen : AppCompatActivity() {
         val intent = Intent(this, CameraActivity::class.java)
         intent.putExtra("NUMBER_PERSON", numberOfPersons)
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+    }
+
+    // função generica para mudar de tela
+    private fun nextScreen(screen: Class<*>) {
+        val HomeGerente = Intent(this, screen)
+        startActivity(HomeGerente)
+
     }
 
     private fun startNfcWriteActivity() {

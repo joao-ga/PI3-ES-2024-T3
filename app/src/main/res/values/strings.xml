@@ -94,6 +94,7 @@
     <string name="pergunta">Quantas pessoas acessarão este armário?</string>
     <string name="OnePerson">1 pessoa</string>
     <string name="TwoPerson">2 pessoas</string>
+    <string name="close">Botão de fechar</string>
 
 
     <!---camera-->
@@ -120,4 +121,5 @@
 
     <!--Status de aberto ou encerrado-->
     <string name="locacao_encerrada">LOCAÇÃO ENCERRADA</string>
+    <string name="arm_aberto">ARMÁRIO ABERTO</string>
 </resources>

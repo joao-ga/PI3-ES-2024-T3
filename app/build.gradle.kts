@@ -76,4 +76,5 @@ dependencies {
     implementation("androidx.camera:camera-view:1.3.3")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+    implementation ("androidx.viewpager2:viewpager2:1.1.0")
 }

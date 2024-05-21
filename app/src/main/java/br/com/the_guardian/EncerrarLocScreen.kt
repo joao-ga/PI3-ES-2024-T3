@@ -18,6 +18,7 @@ import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
@@ -30,6 +31,7 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
     private var nfcAdapter: NfcAdapter? = null
     private lateinit var db: FirebaseFirestore
     private val handler = Handler(Looper.getMainLooper())
+    private lateinit var btnVoltar: AppCompatButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +50,13 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
         // Verifica se o NFC está habilitado no dispositivo
         if (nfcAdapter == null || !nfcAdapter!!.isEnabled) {
             Toast.makeText(this, "Por favor, ative o NFC nas configurações do seu aparelho", Toast.LENGTH_SHORT).show()
+        }
+
+        // Inicialização do botão "Voltar" aqui, para garantir que ele esteja sempre visível
+        btnVoltar = findViewById(R.id.btnVoltar)
+        btnVoltar.setOnClickListener {
+            // botão para voltar para a home
+            nextScreen(HomeGerente::class.java)
         }
     }
 
@@ -214,5 +223,12 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
             // Cancelar qualquer ação agendada quando o diálogo for pausado
             handler.removeCallbacksAndMessages(null)
         }
+    }
+
+    // função generica para mudar de tela
+    private fun nextScreen(screen: Class<*>) {
+        val HomeGerente = Intent(this, screen)
+        startActivity(HomeGerente)
+
     }
 }

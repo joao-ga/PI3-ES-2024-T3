@@ -19,6 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+
     <Button
         android:id="@+id/btnOpenLock"
         style="@style/login_button"
@@ -32,6 +33,7 @@
         android:textSize="20sp"
         android:textColor="@color/grey"
         android:textAllCaps="false"
+        android:backgroundTint="@color/dark_blue"
         app:layout_constraintTop_toTopOf="@id/text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -46,6 +48,7 @@
         android:gravity="center"
         android:text="@string/encerrarlo"
         android:textColor="@color/grey"
+        android:backgroundTint="@color/dark_blue"
         android:textAllCaps="false"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
