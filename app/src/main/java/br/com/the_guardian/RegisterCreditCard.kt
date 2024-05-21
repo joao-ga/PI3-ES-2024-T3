@@ -4,6 +4,9 @@ package br.com.the_guardian
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputFilter
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -67,6 +70,7 @@ class RegisterCreditCard : AppCompatActivity() {
         btnEnviar = findViewById(R.id.btnEnviar)
 
 
+
         // Inicialização do botão "Voltar" aqui, para garantir que ele esteja sempre visível
         btnVoltar = findViewById(R.id.btnVoltar)
         btnVoltar.setOnClickListener {
@@ -94,10 +98,20 @@ class RegisterCreditCard : AppCompatActivity() {
                             "Preencha todos os campos!",
                             Toast.LENGTH_SHORT,
                         ).show()
+                    } else if (isNumeric(cardName)) {
+                        etName.error = "Nome inválido!"
+                    }else if (!isNumeric(secCode) ) {
+                        etSecCode.error = "Código inválido!"
+                    }else if (!isNumeric(cardNumber) ) {
+                        etNumCartao.error = "Número inválido!"
+
                     } else {
                         if (isExpirationDateValid(expDate)) {
                             addCreditCard(card)
-                        } else {
+
+
+                        }else {
+                            etExpDate.error= "Data inválida"
                             Toast.makeText(
                                 baseContext,
                                 "Data de expiração inválida!",
@@ -220,6 +234,11 @@ class RegisterCreditCard : AppCompatActivity() {
             }
         }
         return false
+    }
+
+    // Função que verifica se uma string contém apenas dígitos
+    private fun isNumeric(str: String): Boolean {
+        return str.all { it.isDigit() }
     }
 
 }
