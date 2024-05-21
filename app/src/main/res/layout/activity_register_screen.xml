@@ -63,7 +63,7 @@
             app:layout_constraintEnd_toEndOf="@id/appCompatTextView3"
             app:layout_constraintStart_toStartOf="@id/appCompatTextView3" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etName"
             style="@style/email_barra"
             android:layout_width="330dp"
@@ -75,13 +75,16 @@
             android:textColorHint="@color/white"
             app:layout_constraintEnd_toEndOf="@id/appCompatTextView4"
             app:layout_constraintStart_toStartOf="@id/appCompatTextView4"
-            app:layout_constraintTop_toBottomOf="@+id/appCompatTextView4"
-                />
+            app:layout_constraintTop_toBottomOf="@+id/appCompatTextView4" />
+
+
 
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etCpf"
             style="@style/email_barra"
+            android:inputType="number"
+            android:maxLength="11"
             android:layout_width="330dp"
             android:layout_height="52dp"
             android:layout_marginTop="30dp"
@@ -108,9 +111,13 @@
             android:layout_marginTop="30dp"
             />
 
+
+
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etPhone"
             style="@style/email_barra"
+            android:inputType="number"
+            android:maxLength="11"
             android:layout_width="330dp"
             android:layout_height="52dp"
             android:fontFamily="@font/juraregular"
@@ -121,6 +128,7 @@
             app:layout_constraintTop_toBottomOf="@+id/etNascimento"
             android:layout_marginTop="30dp"
             />
+
 
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -206,7 +214,6 @@
             app:layout_constraintStart_toStartOf="@id/btnEnviar"
             app:layout_constraintTop_toBottomOf="@id/btnVoltar"
             />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

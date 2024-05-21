@@ -23,6 +23,7 @@ import android.text.TextWatcher
 import android.widget.EditText
 import kotlin.math.max
 
+
 class RegisterScreen : AppCompatActivity() {
 
     // variaveis de gerenciamento do firebase, firestore e functions
@@ -74,8 +75,9 @@ class RegisterScreen : AppCompatActivity() {
         tvCadastroNegado = findViewById(R.id.tvCadastroNegado)
         btnEnviar = findViewById(R.id.btnEnviar)
 
-
-
+        // Adiciona InputFilter para limitar o número de caracteres
+        etCpf.filters = arrayOf(InputFilter.LengthFilter(11))
+        etPhone.filters = arrayOf(InputFilter.LengthFilter(11))
 
         // Adicionar TextWatcher para formatar data de nascimento
         etNascimento.addTextChangedListener(object : TextWatcher {
@@ -146,12 +148,16 @@ class RegisterScreen : AppCompatActivity() {
                 snackbar.show()
 
             } else if (isNumeric(name)) {
-                etName.error = "Nome inválido!"
-
+                etName.error = "Nome inválido"
+            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                etEmail.error = "Email inválido"
             } else if (!isValidDate(birth)) {
-                etNascimento.error = "Data de nascimento inválida!"
-
-            }else {
+                etNascimento.error = "Data de nascimento inválida"
+            } else if (!isNumeric(cpf) || cpf.length != 11) {
+                etCpf.error = "CPF inválido, deve conter 11 dígitos"
+            } else if (!isNumeric(phone) || phone.length != 11) {
+                etPhone.error = "Número de telefone inválido, deve conter 11 dígitos"
+            } else {
                 // se estiver tudo certo ele chama função para registrar no firebase authenticator
                 userRegistration(email, password)
             }
