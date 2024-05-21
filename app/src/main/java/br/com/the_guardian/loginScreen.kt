@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import br.com.the_guardian.registerScreen
 
 class loginScreen : AppCompatActivity() {
 
@@ -62,14 +64,18 @@ class loginScreen : AppCompatActivity() {
         DataScreen.locacaoConfirmada = false
         getLocationInfos()
 
-        btnEnviarLogin.setOnClickListener {view->
+        btnEnviarLogin.setOnClickListener { view ->
             val email = etEmailLogin.text.toString()
             val senha = etSenhaLogin.text.toString()
-            if(email.isEmpty() || senha.isEmpty()) {
-                val snackbar = Snackbar.make(view, "Preencha todos os campos!", Snackbar.LENGTH_SHORT)
+            if (!isEmailValid(email) && !isPasswordValid(senha)) {
+                val snackbar = Snackbar.make(view, "Email ou senha inválidos!", Snackbar.LENGTH_SHORT)
                 snackbar.setBackgroundTint(Color.RED)
                 snackbar.show()
-            } else {
+            }else if (!isEmailValid(email)) {
+                etEmailLogin.error = "Email inválido"
+            }else if (!isPasswordValid(senha)) {
+                etSenhaLogin.error = "Senha inválida"
+            }else {
                 authenticator(email, senha)
             }
         }
@@ -77,18 +83,19 @@ class loginScreen : AppCompatActivity() {
         tvEsqueceuSenha.setOnClickListener {
             val email = etEmailLogin.text.toString()
             recoverPassword(email)
-
-            etEmailLogin.setOnFocusChangeListener{ email, focus ->
-                if(focus){
-                    tvStatusEsqueceuSenha.visibility = View.GONE
-                }
-            }
         }
 
         tvEntrarAnonimamente.setOnClickListener {
             nextScreen(homeScreen::class.java)
         }
+    }
 
+    private fun isEmailValid(email: String): Boolean {
+        return email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    private fun isPasswordValid(password: String): Boolean {
+        return password.isNotEmpty() && password.length >= 6
     }
 
     private fun recoverPassword(email: String) {
@@ -112,21 +119,27 @@ class loginScreen : AppCompatActivity() {
         }
     }
 
-    private fun authenticator (etEmail: String, etSenha: String) {
-        auth.signInWithEmailAndPassword(etEmail, etSenha)
+    private fun authenticator(email: String, senha: String) {
+        auth.signInWithEmailAndPassword(email, senha)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d(ContentValues.TAG, "signInWithEmail:success")
                     verificarTipoUsuario()
-                    updateUI()
                 } else {
-                    Log.w(ContentValues.TAG, "signInWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        baseContext,
-                        "Autenticação falhou, tente de novo mais tarde",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                    updateUI()
+                    val exception = task.exception
+                    val errorMessage = if (exception is FirebaseAuthException) {
+                        when (exception.errorCode) {
+                            "ERROR_INVALID_EMAIL" -> "O endereço de e-mail está mal formatado."
+                            "ERROR_WRONG_PASSWORD" -> "Senha incorreta."
+                            "ERROR_USER_NOT_FOUND" -> "Usuário não encontrado."
+                            else -> "Autenticação falhou, verifique se o Email e senha estã corretos. " +
+                                    " Ou tente de novo mais tarde."
+                        }
+                    } else {
+                        "Autenticação falhou, verifique se o Email e senha estã corretos. " +
+                                " Ou tente de novo mais tarde."                    }
+                    Log.w(ContentValues.TAG, "signInWithEmail:failure", exception)
+                    Toast.makeText(baseContext, errorMessage, Toast.LENGTH_SHORT).show()
                 }
             }
     }

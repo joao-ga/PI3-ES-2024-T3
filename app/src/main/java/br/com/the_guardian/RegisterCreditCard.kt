@@ -69,6 +69,9 @@ class RegisterCreditCard : AppCompatActivity() {
         etSecCode = findViewById(R.id.etSecCode)
         btnEnviar = findViewById(R.id.btnEnviar)
 
+        etNumCartao.filters = arrayOf(InputFilter.LengthFilter(16))
+        etSecCode.filters= arrayOf(InputFilter.LengthFilter(3))
+
 
 
         // Inicialização do botão "Voltar" aqui, para garantir que ele esteja sempre visível
@@ -99,11 +102,11 @@ class RegisterCreditCard : AppCompatActivity() {
                             Toast.LENGTH_SHORT,
                         ).show()
                     } else if (isNumeric(cardName)) {
-                        etName.error = "Nome inválido!"
-                    }else if (!isNumeric(secCode) ) {
-                        etSecCode.error = "Código inválido!"
-                    }else if (!isNumeric(cardNumber) ) {
-                        etNumCartao.error = "Número inválido!"
+                        etName.error = "Nome inválido!"                     
+                    }else if (!isNumeric(secCode) || secCode.length != 3) {
+                        etSecCode.error = "Código inválido! Deve conter 3 digitos"
+                    }else if (!isNumeric(cardNumber) || cardNumber.length != 16) {
+                        etNumCartao.error = "Número inválido! Deve conter 16 digitos"
 
                     } else {
                         if (isExpirationDateValid(expDate)) {

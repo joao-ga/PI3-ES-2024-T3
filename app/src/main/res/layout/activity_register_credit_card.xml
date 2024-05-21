@@ -148,6 +148,7 @@
             style="@style/barranumbercard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLength="16"
             android:width="299dp"
             android:height="100dp"
             android:fontFamily="@font/juraregular"
@@ -186,7 +187,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:width="143dp"
             android:fontFamily="@font/juraregular"
             android:hint="@string/dataexpira"
@@ -222,6 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="0dp"
+            android:maxLength="3"
             android:width="143dp"
             android:fontFamily="@font/juraregular"
             android:hint="@string/cvv"
@@ -236,7 +238,7 @@
             app:layout_constraintEnd_toEndOf="@id/etNumCartao"
             app:layout_constraintTop_toBottomOf="@id/textcvv" />
 
-            <androidx.appcompat.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textnomecard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -248,7 +250,7 @@
             android:layout_marginTop="5dp"
             app:layout_constraintStart_toStartOf="@id/etExpDate"
             app:layout_constraintTop_toBottomOf="@id/etExpDate"
-                />
+            />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etName"
