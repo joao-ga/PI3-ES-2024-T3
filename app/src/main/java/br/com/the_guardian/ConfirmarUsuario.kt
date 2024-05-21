@@ -1,6 +1,5 @@
 package br.com.the_guardian
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -68,8 +67,8 @@ class ConfirmarUsuario : AppCompatActivity() {
 
             val view = inflater.inflate(R.layout.dialog_lock_options, container, false)
 
-            val btnOpenLock = view.findViewById<Button>(R.id.btnOpenLock)
-            val btnCloseLock = view.findViewById<Button>(R.id.btnCloseLock)
+            val btnOpenLock = view.findViewById<AppCompatButton>(R.id.btnOpenLock)
+            val btnCloseLock = view.findViewById<AppCompatButton>(R.id.btnCloseLock)
 
             btnOpenLock.setOnClickListener {
                 val dialog = FullScreenDialogFragment()
@@ -89,21 +88,13 @@ class ConfirmarUsuario : AppCompatActivity() {
         private val handler = Handler(Looper.getMainLooper())
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            return activity?.let {
-                val builder = AlertDialog.Builder(it)
-
-                // Infla o layout para o diálogo
-                val inflater = requireActivity().layoutInflater
-                val view = inflater.inflate(R.layout.dialog_loc_status, null)
-
-                val text = view.findViewById<TextView>(R.id.text)
+            val dialog = Dialog(requireContext(), R.style.FullScreenDialog)
+            dialog.apply {
+                setContentView(R.layout.dialog_loc_status)
+                val text = findViewById<TextView>(R.id.text)
                 text.text = getString(R.string.arm_aberto)
-
-                // Adiciona o layout ao diálogo
-                builder.setView(view)
-
-                builder.create()
-            } ?: throw IllegalStateException("Activity cannot be null")
+            }
+            return dialog
         }
 
         override fun onResume() {

@@ -3,57 +3,61 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="379dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:background="@color/grey">
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/opcaoescolha"
-        android:textColor="@color/dark_blue"
-        android:textSize="18sp"
-        android:layout_marginTop="100dp"
-        android:fontFamily="@font/kronaone_regular"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
-
-    <Button
-        android:id="@+id/btnOpenLock"
-        style="@style/login_button"
-        android:layout_width="250dp"
-        android:layout_height="63dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginBottom="30dp"
-        android:fontFamily="@font/jurabold"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:orientation="vertical"
         android:gravity="center"
-        android:text="@string/abrir_armario"
-        android:textSize="20sp"
-        android:textColor="@color/grey"
-        android:textAllCaps="false"
-        android:backgroundTint="@color/dark_blue"
-        app:layout_constraintTop_toTopOf="@id/text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btnCloseLock"
-        style="@style/login_button"
-        android:layout_width="250dp"
-        android:layout_height="63dp"
-        android:layout_marginBottom="35dp"
-        android:fontFamily="@font/jurabold"
-        android:gravity="center"
-        android:text="@string/encerrarlo"
-        android:textColor="@color/grey"
-        android:backgroundTint="@color/dark_blue"
-        android:textAllCaps="false"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/quadradonc"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnOpenLock" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/opcaoescolha"
+            android:textColor="@color/dark_blue"
+            android:textSize="18sp"
+            android:layout_marginTop="0dp"
+            android:fontFamily="@font/kronaone_regular"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnOpenLock"
+            style="@style/button_options"
+            android:layout_width="250dp"
+            android:layout_height="63dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/jurabold"
+            android:text="@string/abrir_armario"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCloseLock"
+            style="@style/button_options"
+            android:layout_width="250dp"
+            android:layout_height="63dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/jurabold"
+            android:padding="10dp"
+            android:text="@string/encerrarlo"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
