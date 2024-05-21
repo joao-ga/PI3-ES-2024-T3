@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import br.com.the_guardian.registerScreen
 
 class loginScreen : AppCompatActivity() {
 
@@ -51,7 +50,7 @@ class loginScreen : AppCompatActivity() {
         etSenhaLogin = findViewById(R.id.etSenhaLogin)
         tvCadastrar = findViewById(R.id.tvCadastrar)
         tvCadastrar.setOnClickListener {
-            nextScreen(registerScreen::class.java)
+            nextScreen(RegisterScreen::class.java)
         }
         tvLoginNegado = findViewById(R.id.tvLoginNegado)
         tvLoginEnviado = findViewById(R.id.tvLoginEnviado)

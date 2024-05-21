@@ -281,7 +281,7 @@ class DataScreen : AppCompatActivity() {
                                             locacaoAtual =
                                                 Locacao(userId, userLoc, locker, precoNumerico)
                                             locacoesConfirmadas.add(locacaoAtual!!)
-                                            confirmacao(locacaoAtual!!)
+                                            //confirmacao(locacaoAtual!!)
                                             addLocationInfo(name, precoSelecionadoText)
                                             val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
                                             }
@@ -378,7 +378,8 @@ class DataScreen : AppCompatActivity() {
                 "price" to price,
                 "startTime" to time,
                 "isLocated" to true,
-                "photo" to null
+                "photo" to "",
+                "photo2" to ""
             )
             db.collection("Locations")
                 .add(locationData)

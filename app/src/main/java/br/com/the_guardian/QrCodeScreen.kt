@@ -61,7 +61,6 @@ class QrCodeScreen : AppCompatActivity() {
             e.printStackTrace()
         }
 
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
     // função para converter um texto em um QR code na forma de Bitmap
