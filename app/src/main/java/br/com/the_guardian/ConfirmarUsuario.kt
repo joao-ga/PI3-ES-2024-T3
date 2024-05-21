@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -29,6 +30,7 @@ class ConfirmarUsuario : AppCompatActivity() {
     private lateinit var uid: String
     private lateinit var photoImageView: ImageView
     private lateinit var photoImageView2: ImageView
+    private lateinit var btnVoltar: AppCompatButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +49,13 @@ class ConfirmarUsuario : AppCompatActivity() {
         loadImageFromFirestore()
         loadImageFromFirestore2()
 
+        // Inicialização do botão "Voltar" aqui, para garantir que ele esteja sempre visível
+        btnVoltar = findViewById(R.id.btnVoltar)
+        btnVoltar.setOnClickListener {
+            // botão para voltar para a home
+            nextScreen(HomeGerente::class.java)
+        }
+
         btnProsseguir.setOnClickListener {
             val dialog = AcaoArmario()
             dialog.show(supportFragmentManager, "dialog_lock_options")
@@ -64,7 +73,7 @@ class ConfirmarUsuario : AppCompatActivity() {
 
             btnOpenLock.setOnClickListener {
                 val dialog = FullScreenDialogFragment()
-                dialog.show(childFragmentManager, "dialog_loc_status")
+                dialog.show(parentFragmentManager, "dialog_loc_status")
             }
 
             btnCloseLock.setOnClickListener {
@@ -88,7 +97,7 @@ class ConfirmarUsuario : AppCompatActivity() {
                 val view = inflater.inflate(R.layout.dialog_loc_status, null)
 
                 val text = view.findViewById<TextView>(R.id.text)
-                text.text = "ARMÁRIO ABERTO"
+                text.text = getString(R.string.arm_aberto)
 
                 // Adiciona o layout ao diálogo
                 builder.setView(view)
@@ -181,10 +190,18 @@ class ConfirmarUsuario : AppCompatActivity() {
             }
     }
 
+
     private fun displayPhoto(photoUrl: String, imgView: ImageView) {
         Glide.with(this)
             .load(photoUrl)
             .into(imgView)
     }
 
+
+    // função generica para mudar de tela
+    private fun nextScreen(screen: Class<*>) {
+        val HomeGerente = Intent(this, screen)
+        startActivity(HomeGerente)
+
+    }
 }

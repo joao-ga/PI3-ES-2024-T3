@@ -1,12 +1,11 @@
 package br.com.the_guardian
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -30,6 +29,7 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     private var numberOfPersons = 1
     private var currentPerson = 1
+    private lateinit var btnVoltar: AppCompatButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +46,13 @@ class CameraActivity : AppCompatActivity() {
         imgCaptureExecutor = Executors.newSingleThreadExecutor()
 
         startCamera()
+
+        // Inicialização do botão "Voltar" aqui, para garantir que ele esteja sempre visível
+        btnVoltar = findViewById(R.id.btnVoltar)
+        btnVoltar.setOnClickListener {
+            // botão para voltar para a home
+            nextScreen(HomeGerente::class.java)
+        }
 
         binding.btnTakePicture.setOnClickListener {
             takePictureAndProcess()
@@ -198,5 +205,13 @@ class CameraActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Erro: usuário não autenticado", Toast.LENGTH_SHORT).show()
         }
+    }
+
+
+    // função generica para mudar de tela
+    private fun nextScreen(screen: Class<*>) {
+        val HomeGerente = Intent(this, screen)
+        startActivity(HomeGerente)
+
     }
 }

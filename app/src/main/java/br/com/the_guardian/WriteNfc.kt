@@ -12,12 +12,15 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import java.io.IOException
 
 class WriteNfc : AppCompatActivity() {
 
     private var nfcAdapter: NfcAdapter? = null
     private var qrCodeContent: String? = null
+    private lateinit var btnVoltar: AppCompatButton
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +34,13 @@ class WriteNfc : AppCompatActivity() {
             // Recupera os dados escaneados do Intent
             qrCodeContent = QrCodeData.scannedData
             Log.e("debug", qrCodeContent.toString())
+        }
+
+        // Inicialização do botão "Voltar" aqui, para garantir que ele esteja sempre visível
+        btnVoltar = findViewById(R.id.btnVoltar)
+        btnVoltar.setOnClickListener {
+            // botão para voltar para a home
+            nextScreen(HomeGerente::class.java)
         }
     }
 
@@ -93,5 +103,12 @@ class WriteNfc : AppCompatActivity() {
             e.printStackTrace()
             Toast.makeText(this, "Erro desconhecido ao escrever na tag NFC", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    // função generica para mudar de tela
+    private fun nextScreen(screen: Class<*>) {
+        val HomeGerente = Intent(this, screen)
+        startActivity(HomeGerente)
+
     }
 }

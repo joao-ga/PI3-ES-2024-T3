@@ -1,10 +1,7 @@
 package br.com.the_guardian
 
 import android.annotation.SuppressLint
-import android.app.PendingIntent
 import android.content.Intent
-import android.content.IntentFilter
-import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.Ndef
@@ -12,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import br.com.the_guardian.databinding.ActivityReadNfcBinding
@@ -21,6 +19,7 @@ class ReadNfc : AppCompatActivity(), NfcAdapter.ReaderCallback {
 
     private var nfcAdapter: NfcAdapter? = null
     private lateinit var binding: ActivityReadNfcBinding
+    private lateinit var btnVoltar: AppCompatButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +38,13 @@ class ReadNfc : AppCompatActivity(), NfcAdapter.ReaderCallback {
         // Verifica se o NFC está habilitado no dispositivo
         if (nfcAdapter == null || !nfcAdapter!!.isEnabled) {
             Toast.makeText(this, "Por favor, ative o NFC nas configurações do seu aparelho", Toast.LENGTH_SHORT).show()
+        }
+
+        // Inicialização do botão "Voltar" aqui, para garantir que ele esteja sempre visível
+        btnVoltar = findViewById(R.id.btnVoltar)
+        btnVoltar.setOnClickListener {
+            // botão para voltar para a home
+            nextScreen(HomeGerente::class.java)
         }
     }
 
@@ -104,5 +110,12 @@ class ReadNfc : AppCompatActivity(), NfcAdapter.ReaderCallback {
         } ?: run {
             Log.d("NFC", "Tag não encontrada no Intent")
         }
+    }
+
+    // função generica para mudar de tela
+    private fun nextScreen(screen: Class<*>) {
+        val HomeGerente = Intent(this, screen)
+        startActivity(HomeGerente)
+
     }
 }
