@@ -50,7 +50,7 @@ class loginScreen : AppCompatActivity() {
         etSenhaLogin = findViewById(R.id.etSenhaLogin)
         tvCadastrar = findViewById(R.id.tvCadastrar)
         tvCadastrar.setOnClickListener {
-            nextScreen(RegisterScreen::class.java)
+            nextScreen(registerScreen::class.java)
         }
         tvLoginNegado = findViewById(R.id.tvLoginNegado)
         tvLoginEnviado = findViewById(R.id.tvLoginEnviado)

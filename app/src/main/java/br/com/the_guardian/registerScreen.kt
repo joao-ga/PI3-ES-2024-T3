@@ -24,7 +24,7 @@ import android.widget.EditText
 import kotlin.math.max
 
 
-class RegisterScreen : AppCompatActivity() {
+class registerScreen : AppCompatActivity() {
 
     // variaveis de gerenciamento do firebase, firestore e functions
     private lateinit var auth: FirebaseAuth
