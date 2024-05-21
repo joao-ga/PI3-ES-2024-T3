@@ -25,6 +25,11 @@ import androidx.fragment.app.DialogFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import java.io.IOException
 import java.nio.charset.Charset
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
 
@@ -32,6 +37,9 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
     private lateinit var db: FirebaseFirestore
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var btnVoltar: AppCompatButton
+    private lateinit var locker: String
+    private lateinit var startTime: String
+    private lateinit var price: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +66,7 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
             // botão para voltar para a home
             nextScreen(HomeGerente::class.java)
         }
+
     }
 
     override fun onResume() {
@@ -164,6 +173,8 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
                             DataScreen.locacaoConfirmada = false
                             Toast.makeText(this, "Locação encerrada!", Toast.LENGTH_SHORT).show()
                             Log.d("debugg", "Documento excluído com sucesso")
+
+                            calcPrice(uid)
                         }
                         .addOnFailureListener { exception ->
                             Toast.makeText(this, "Erro em cancelar pendência, tente de novo mais tarde!", Toast.LENGTH_SHORT).show()
@@ -178,6 +189,7 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
             }
     }
 
+    // Dialog para indicar que a locação foi encerrada
     class FullScreenDialogFragment : DialogFragment() {
 
         private val handler = Handler(Looper.getMainLooper())
@@ -186,14 +198,12 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
             return activity?.let {
                 val builder = AlertDialog.Builder(it)
 
-                // Infla o layout para o diálogo
                 val inflater = requireActivity().layoutInflater
                 val view = inflater.inflate(R.layout.dialog_loc_status, null)
 
                 val text = view.findViewById<TextView>(R.id.text)
                 text.text = getString(R.string.locacao_encerrada)
 
-                // Adiciona o layout ao diálogo
                 builder.setView(view)
 
                 builder.create()
@@ -214,21 +224,82 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
                 val intent = Intent(activity, HomeGerente::class.java)
                 startActivity(intent)
                 dismiss()
-            }, 5000) // 5000ms = 5s
+            }, 5000)
         }
 
         override fun onPause() {
             super.onPause()
 
-            // Cancelar qualquer ação agendada quando o diálogo for pausado
+            // Cancelar qualquer ação quando o diálogo for pausado
             handler.removeCallbacksAndMessages(null)
         }
     }
 
-    // função generica para mudar de tela
+    // função para mudar de tela
     private fun nextScreen(screen: Class<*>) {
         val HomeGerente = Intent(this, screen)
         startActivity(HomeGerente)
 
+    }
+
+    // função para calcular o tempo que o usuário ficou com o armário (em minutos)
+    private fun calcTime(startTime: String, endTime: String): Long {
+        val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val startDate = dateFormat.parse(startTime)
+        val endDate = dateFormat.parse(endTime)
+
+        val diffInMillis = (endDate?.time!!) - (startDate?.time!!)
+        val diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
+
+        return diffInMinutes
+    }
+
+    //função para calcular o valor do reembolso do cliente com base no tempo utilizado
+    private fun calcPrice(uid: String) {
+        val endTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+        var valorReembolso: Int
+        var tabelaPrecos: List<Int> = listOf()
+
+        db.collection("Locations").whereEqualTo("locker", uid)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot.documents) {
+                    startTime = document.getString("startTime").toString()
+                    price = document.getString("price").toString()
+                    locker = document.getString("locker").toString()
+
+                    Log.d("CalcPrice", "Start Time: $startTime, Price: $price, Locker: $locker")
+                }
+
+                db.collection("Lockers").document(locker)
+                    .get()
+                    .addOnSuccessListener { lockerDocument ->
+                        if (lockerDocument.exists()) {
+                            val pricesAny = lockerDocument.get("prices")
+                            if (pricesAny is List<*>) {
+                                tabelaPrecos = pricesAny.mapNotNull { it as? Int }
+                            }
+                        }
+
+                        Log.d("Preços", tabelaPrecos.toString())
+
+                        val timeSpent = calcTime(startTime, endTime)
+                        Log.d("Tempo Alocado", "User spent $timeSpent minutes with the locker")
+
+                        valorReembolso = when {
+                            timeSpent <= 30 -> tabelaPrecos.last() - tabelaPrecos[0]
+                            timeSpent <= 60 -> tabelaPrecos.last() - tabelaPrecos[1]
+                            timeSpent <= 120 -> tabelaPrecos.last() - tabelaPrecos[2]
+                            timeSpent <= 180 -> tabelaPrecos.last() - tabelaPrecos[3]
+                            else -> 0
+                        }
+
+                        Log.d("Valor Reembolso", "Reembolso: $valorReembolso")
+                        Toast.makeText(this, "Valor extornado: $valorReembolso", Toast.LENGTH_LONG).show()
+                    }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("CalcPrice", "Error getting documents: ", exception)
+            }
     }
 }
