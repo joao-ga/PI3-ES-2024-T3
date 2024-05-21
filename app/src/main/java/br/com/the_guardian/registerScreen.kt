@@ -21,8 +21,10 @@ import com.google.firebase.functions.FirebaseFunctions
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import kotlin.math.max
 
-class registerScreen : AppCompatActivity() {
+
+class RegisterScreen : AppCompatActivity() {
 
     // variaveis de gerenciamento do firebase, firestore e functions
     private lateinit var auth: FirebaseAuth
@@ -76,7 +78,6 @@ class registerScreen : AppCompatActivity() {
         // Adiciona InputFilter para limitar o número de caracteres
         etCpf.filters = arrayOf(InputFilter.LengthFilter(11))
         etPhone.filters = arrayOf(InputFilter.LengthFilter(11))
-
 
         // Adicionar TextWatcher para formatar data de nascimento
         etNascimento.addTextChangedListener(object : TextWatcher {
