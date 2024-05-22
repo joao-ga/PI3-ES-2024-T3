@@ -157,7 +157,9 @@ class registerScreen : AppCompatActivity() {
                 etCpf.error = "CPF inválido, deve conter 11 dígitos"
             } else if (!isNumeric(phone) || phone.length != 11) {
                 etPhone.error = "Número de telefone inválido, deve conter 11 dígitos"
-            } else {
+            }else if (!isPasswordValid(password)) {
+                etPassword.error = "Senha inválida"
+            }else {
                 // se estiver tudo certo ele chama função para registrar no firebase authenticator
                 userRegistration(email, password)
             }
@@ -169,6 +171,9 @@ class registerScreen : AppCompatActivity() {
             // função que muda de tela
             nextScreen(loginScreen::class.java)
         }
+    }
+    private fun isPasswordValid(password: String): Boolean {
+        return password.isNotEmpty() && password.length >= 6
     }
 
     // função que manda e-mail de verificação para o usuário
