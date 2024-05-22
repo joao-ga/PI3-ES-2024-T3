@@ -37,9 +37,6 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
     private lateinit var db: FirebaseFirestore
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var btnVoltar: AppCompatButton
-    private lateinit var locker: String
-    private lateinit var startTime: String
-    private lateinit var price: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +57,7 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
             Toast.makeText(this, "Por favor, ative o NFC nas configurações do seu aparelho", Toast.LENGTH_SHORT).show()
         }
 
-        // Inicialização do botão "Voltar" aqui, para garantir que ele esteja sempre visível
+        // Inicialização do botão "Voltar"
         btnVoltar = findViewById(R.id.btnVoltar)
         btnVoltar.setOnClickListener {
             // botão para voltar para a home
@@ -115,19 +112,21 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
                         runOnUiThread {
                             // Chama o método endLocation com o UID
                             endLocation(uid)
+
+                            // Limpa a tag NFC
+                            clearNfcTag(ndef)
+
+                            Toast.makeText(this, "Dados da tag NFC limpos com sucesso", Toast.LENGTH_SHORT).show()
                         }
-
-                        // Limpa a tag NFC
-                        clearNfcTag(ndef)
-
-                        Toast.makeText(this, "Dados da tag NFC limpos com sucesso", Toast.LENGTH_SHORT).show()
-
                     } else {
                         Log.d("NFC", "Nenhum registro NDEF encontrado")
                     }
                     ndef.close()
                 } catch (e: Exception) {
                     Log.e("NFC", "Erro ao ler a tag NFC", e)
+                    runOnUiThread {
+                        Toast.makeText(this, "Erro ao ler a tag NFC", Toast.LENGTH_SHORT).show()
+                    }
                 }
             } ?: run {
                 Log.d("NFC", "NDEF não suportado pela tag")
@@ -137,6 +136,7 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
         }
     }
 
+
     private fun clearNfcTag(ndef: Ndef) {
         try {
             // Cria um NdefMessage vazio
@@ -145,24 +145,32 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
             // Escreve o NdefMessage vazio na tag NFC
             ndef.writeNdefMessage(emptyMessage)
 
-            Toast.makeText(this, "Dados da tag NFC limpos com sucesso", Toast.LENGTH_SHORT).show()
+            // Exibe a mensagem de sucesso na thread principal
+            runOnUiThread {
+                Toast.makeText(this, "Dados da tag NFC limpos com sucesso", Toast.LENGTH_SHORT).show()
+            }
 
-            // Agendar a navegação para a tela HomeGerente após 5 segundos
+            // Agendar a navegação para a tela HomeGerente após 5 segundos na thread principal
             handler.postDelayed({
                 val intent = Intent(this, HomeGerente::class.java)
                 startActivity(intent)
                 finish()
-            }, 5000) // 5000ms = 5s
+            }, 5000)
         } catch (e: IOException) {
             e.printStackTrace()
-            Toast.makeText(this, "Erro ao limpar a tag NFC", Toast.LENGTH_SHORT).show()
+            runOnUiThread {
+                Toast.makeText(this, "Erro ao limpar a tag NFC", Toast.LENGTH_SHORT).show()
+            }
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "Erro desconhecido ao limpar a tag NFC", Toast.LENGTH_SHORT).show()
+            runOnUiThread {
+                Toast.makeText(this, "Erro desconhecido ao limpar a tag NFC", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     private fun endLocation(uid: String) {
+        calcPrice(uid)
         db.collection("Locations").whereEqualTo("uid", uid)
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -173,8 +181,6 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
                             DataScreen.locacaoConfirmada = false
                             Toast.makeText(this, "Locação encerrada!", Toast.LENGTH_SHORT).show()
                             Log.d("debugg", "Documento excluído com sucesso")
-
-                            calcPrice(uid)
                         }
                         .addOnFailureListener { exception ->
                             Toast.makeText(this, "Erro em cancelar pendência, tente de novo mais tarde!", Toast.LENGTH_SHORT).show()
@@ -237,9 +243,8 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
 
     // função para mudar de tela
     private fun nextScreen(screen: Class<*>) {
-        val HomeGerente = Intent(this, screen)
-        startActivity(HomeGerente)
-
+        val intent = Intent(this, screen)
+        startActivity(intent)
     }
 
     // função para calcular o tempo que o usuário ficou com o armário (em minutos)
@@ -249,57 +254,68 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
         val endDate = dateFormat.parse(endTime)
 
         val diffInMillis = (endDate?.time!!) - (startDate?.time!!)
-        val diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
-
-        return diffInMinutes
+        return TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
     }
 
     //função para calcular o valor do reembolso do cliente com base no tempo utilizado
     private fun calcPrice(uid: String) {
+        Log.d("debug", "entrei em calc price")
         val endTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
         var valorReembolso: Int
         var tabelaPrecos: List<Int> = listOf()
 
-        db.collection("Locations").whereEqualTo("locker", uid)
+        db.collection("Locations").whereEqualTo("uid", uid)
             .get()
             .addOnSuccessListener { querySnapshot ->
-                for (document in querySnapshot.documents) {
-                    startTime = document.getString("startTime").toString()
-                    price = document.getString("price").toString()
-                    locker = document.getString("locker").toString()
+                if (!querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents[0]
+                    val startTime = document.getString("startTime").toString()
+                    val price = document.getString("price").toString()
+                    val locker = document.getString("locker")
 
                     Log.d("CalcPrice", "Start Time: $startTime, Price: $price, Locker: $locker")
-                }
 
-                db.collection("Lockers").document(locker)
-                    .get()
-                    .addOnSuccessListener { lockerDocument ->
-                        if (lockerDocument.exists()) {
-                            val pricesAny = lockerDocument.get("prices")
-                            if (pricesAny is List<*>) {
-                                tabelaPrecos = pricesAny.mapNotNull { it as? Int }
+                    db.collection("Lockers").whereEqualTo("id", locker)
+                        .get()
+                        .addOnSuccessListener { querySnapshot ->
+                            if (!querySnapshot.isEmpty) {
+                                val lockerDocument = querySnapshot.documents[0]
+                                val prices = lockerDocument.get("prices")  as List<Int>
+                                Log.d("Preços", prices.toString())
+                                tabelaPrecos = prices
+
+                                val timeSpent = calcTime(startTime, endTime)
+                                Log.d("Tempo Alocado", "User spent $timeSpent minutes with the locker")
+
+                                valorReembolso = when {
+                                    timeSpent <= 30 -> tabelaPrecos.last() - tabelaPrecos[0]
+                                    timeSpent <= 60 -> tabelaPrecos.last() - tabelaPrecos[1]
+                                    timeSpent <= 120 -> tabelaPrecos.last() - tabelaPrecos[2]
+                                    timeSpent <= 180 -> tabelaPrecos.last() - tabelaPrecos[3]
+                                    else -> 0
+                                }
+
+                                Log.d("Valor Reembolso", "Reembolso: $valorReembolso")
+                                runOnUiThread {
+                                    Toast.makeText(
+                                        this,
+                                        "Valor extornado: $valorReembolso",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            } else {
+                                Log.w("CalcPrice", "Locker document does not exist")
                             }
                         }
-
-                        Log.d("Preços", tabelaPrecos.toString())
-
-                        val timeSpent = calcTime(startTime, endTime)
-                        Log.d("Tempo Alocado", "User spent $timeSpent minutes with the locker")
-
-                        valorReembolso = when {
-                            timeSpent <= 30 -> tabelaPrecos.last() - tabelaPrecos[0]
-                            timeSpent <= 60 -> tabelaPrecos.last() - tabelaPrecos[1]
-                            timeSpent <= 120 -> tabelaPrecos.last() - tabelaPrecos[2]
-                            timeSpent <= 180 -> tabelaPrecos.last() - tabelaPrecos[3]
-                            else -> 0
+                        .addOnFailureListener { exception ->
+                            Log.w("CalcPrice", "Error getting locker document: ", exception)
                         }
-
-                        Log.d("Valor Reembolso", "Reembolso: $valorReembolso")
-                        Toast.makeText(this, "Valor extornado: $valorReembolso", Toast.LENGTH_LONG).show()
-                    }
+                } else {
+                    Log.w("CalcPrice", "Location document not found for uid: $uid")
+                }
             }
             .addOnFailureListener { exception ->
-                Log.w("CalcPrice", "Error getting documents: ", exception)
+                Log.w("CalcPrice", "Error getting location documents: ", exception)
             }
     }
 }

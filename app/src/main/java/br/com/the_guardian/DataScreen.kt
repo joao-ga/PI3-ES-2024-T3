@@ -213,7 +213,7 @@ class DataScreen : AppCompatActivity() {
                 localizacaoSegunda.latitude = segunda.latitude
                 localizacaoSegunda.longitude = segunda.longitude
 
-                val distancia = localizacaoAtual.distanceTo(localizacaoSegunda) / 100.0
+                val distancia = localizacaoAtual.distanceTo(localizacaoSegunda) / 1000.0
 
                 return distancia
             }
