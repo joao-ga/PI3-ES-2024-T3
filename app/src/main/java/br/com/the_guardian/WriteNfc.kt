@@ -13,6 +13,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import com.google.firebase.firestore.FirebaseFirestore
 import java.io.IOException
 
 class WriteNfc : AppCompatActivity() {
@@ -20,11 +21,15 @@ class WriteNfc : AppCompatActivity() {
     private var nfcAdapter: NfcAdapter? = null
     private var qrCodeContent: String? = null
     private lateinit var btnVoltar: AppCompatButton
+    private lateinit var db: FirebaseFirestore
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_write_nfc)
+        db = FirebaseFirestore.getInstance()
+
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
@@ -73,6 +78,10 @@ class WriteNfc : AppCompatActivity() {
             if (tag != null) {
                 Log.d("debug", qrCodeContent.toString())
                 writeNfcTag(qrCodeContent.toString(), tag)
+
+                getlocker(qrCodeContent)
+
+
             } else {
                 Toast.makeText(this, "Nenhuma tag NFC encontrada", Toast.LENGTH_SHORT).show()
             }
@@ -110,5 +119,28 @@ class WriteNfc : AppCompatActivity() {
         val HomeGerente = Intent(this, screen)
         startActivity(HomeGerente)
 
+    }
+    private fun getlocker(uid: String?) {
+        db.collection("Locations")
+            .whereEqualTo("uid", uid)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (documents.isEmpty) {
+                    Toast.makeText(this, "Nenhum armário encontrado para este UID", Toast.LENGTH_SHORT).show()
+                } else {
+                    for (document in documents) {
+                        val locker = document.getString("locker")
+                        if (locker != null) {
+                            Toast.makeText(this, "Armário alocado: $locker", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this, "Dados do armário não encontrados", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("debug", "Erro ao recuperar dados: ", exception)
+                Toast.makeText(this, "Erro ao recuperar dados do armário", Toast.LENGTH_SHORT).show()
+            }
     }
 }
