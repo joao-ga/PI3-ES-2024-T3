@@ -27,9 +27,9 @@
     <string name="telefone_cadastro">Telefone</string>
     <string name="e_mail_cadastro">E-mail</string>
     <string name="senha_cadastro">Senha</string>
-    <string name="cadastrar_se">Cadastre-se</string>
-    <string name="j_possu_uma_conta"><font color="#1C2733"> Já possui uma conta? </font> LOGIN \n</string>
-    <string name="voltar_login"><b> <font color="#1C2733"> Já possui uma conta? </font> LOGIN</b></string>
+    <string name="cadastrar_se">Cadastrar</string>
+    <string name="j_possu_uma_conta"><font color="#1C2733"> Já possui uma conta? </font>LOGIN\n</string>
+    <string name="voltar_login"><b> <font color="#1C2733">Já possui uma conta? </font>LOGIN</b></string>
     <string name="cadastro_realizado">Cadastro realizado</string>
     <string name="cadastro_negado">Cadastro negado</string>
     />
