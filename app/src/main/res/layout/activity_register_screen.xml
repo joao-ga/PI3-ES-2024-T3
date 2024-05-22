@@ -77,8 +77,15 @@
             app:layout_constraintStart_toStartOf="@id/appCompatTextView4"
             app:layout_constraintTop_toBottomOf="@+id/appCompatTextView4" />
 
-
-
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNameError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/etName"
+            app:layout_constraintTop_toBottomOf="@id/etName"
+            />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etCpf"
@@ -95,6 +102,15 @@
             app:layout_constraintStart_toStartOf="@id/etName"
             app:layout_constraintTop_toBottomOf="@+id/etName"/>
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCpfError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/etCpf"
+            app:layout_constraintTop_toBottomOf="@id/etCpf"
+            />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etNascimento"
@@ -111,6 +127,15 @@
             android:layout_marginTop="30dp"
             />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNascimentoError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/etNascimento"
+            app:layout_constraintTop_toBottomOf="@id/etNascimento"
+            />
 
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -129,7 +154,15 @@
             android:layout_marginTop="30dp"
             />
 
-
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPhoneError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/etPhone"
+            app:layout_constraintTop_toBottomOf="@id/etPhone"
+            />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etEmail"
@@ -143,6 +176,16 @@
             app:layout_constraintStart_toStartOf="@id/etPhone"
             app:layout_constraintTop_toBottomOf="@+id/etPhone"
             android:layout_marginTop="30dp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvEmailError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/etEmail"
+            app:layout_constraintTop_toBottomOf="@id/etEmail"
+            />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etPassword"
@@ -158,6 +201,17 @@
             app:layout_constraintTop_toBottomOf="@+id/etEmail"
             android:layout_marginTop="30dp"/>
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPasswordError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/etPassword"
+            app:layout_constraintTop_toBottomOf="@id/etPassword"
+            />
+
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnEnviar"
             style="@style/login_button"
@@ -168,24 +222,23 @@
             android:text="@string/cadastrar_se"
             android:textColor="@color/grey"
             android:textSize="22sp"
-            app:layout_constraintEnd_toEndOf="@id/etPassword"
-            app:layout_constraintStart_toStartOf="@id/etPassword"
-            app:layout_constraintTop_toBottomOf="@+id/etPassword"
-            android:layout_marginTop="10dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvPasswordError"
+            android:layout_marginTop="50dp"/>
 
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnVoltar"
-            android:layout_width="247dp"
-            android:layout_height="25dp"
-            android:layout_marginTop="1dp"
+            android:layout_width="300dp"
+            android:layout_height="48dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/jurabold"
             android:text="@string/voltar_login"
             android:textColor="@color/purple"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="@id/btnEnviar"
-            app:layout_constraintStart_toStartOf="@id/btnEnviar"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnEnviar" />
 
         <androidx.appcompat.widget.AppCompatTextView

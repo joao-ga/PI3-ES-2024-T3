@@ -23,6 +23,10 @@ android {
         buildConfig = true
         viewBinding = true
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.0.5" // Versão do Kotlin compiler plugin para Compose }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -77,4 +81,8 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     implementation ("androidx.viewpager2:viewpager2:1.1.0")
+    implementation ("androidx.compose.ui:ui:1.6.7") // Dependência principal do Jetpack Compose
+    implementation ("androidx.compose.material:material:1.6.7")  // Componentes de Material Design
+    implementation ("androidx.activity:activity-compose:1.9.0") // Integração com Activity
+}
 }
