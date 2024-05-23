@@ -73,45 +73,63 @@
 
     <ImageView
         android:id="@+id/photoImageView"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="315dp"
+        android:layout_height="465dp"
+        android:layout_marginBottom="180dp"
         android:contentDescription="@string/content_Description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.379"
         tools:ignore="SpeakableTextPresentCheck" />
 
 
     <ImageView
         android:id="@+id/photoImageView2"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
+        android:layout_width="315dp"
+        android:layout_height="465dp"
+        android:layout_marginBottom="180dp"
         android:layout_marginTop="295dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.373" />
+        />
+
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btntrocarimagensEsquerda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="276dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/zxing_transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/texto"
+        app:srcCompat="@drawable/baseline_arrow_forward_ios_24" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btntrocarImagemDireita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="276dp"
+        android:layout_marginStart="17dp"
+        android:background="@color/zxing_transparent"
+        android:src="@drawable/baseline_arrow_back_ios_new_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/texto" />
 
     <Button
         android:id="@+id/btnProsseguir"
         style="@style/login_button"
         android:layout_width="250dp"
         android:layout_height="49dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="-130dp"
         android:fontFamily="@font/kronaone_regular"
         android:gravity="center"
         android:text="@string/confirmapessoa"
         android:textColor="@color/grey"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/photoImageView2" />
+        app:layout_constraintTop_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

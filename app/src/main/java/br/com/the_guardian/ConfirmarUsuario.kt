@@ -17,6 +17,7 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -30,6 +31,8 @@ class ConfirmarUsuario : AppCompatActivity() {
     private lateinit var photoImageView: ImageView
     private lateinit var photoImageView2: ImageView
     private lateinit var btnVoltar: AppCompatButton
+    private lateinit var btntrocarimagensEsquerda: AppCompatImageButton
+    private lateinit var btntrocarImagemDireita: AppCompatImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,12 +42,14 @@ class ConfirmarUsuario : AppCompatActivity() {
         btnProsseguir = findViewById(R.id.btnProsseguir)
         photoImageView = findViewById(R.id.photoImageView)
         photoImageView2 = findViewById(R.id.photoImageView2)
+        btntrocarimagensEsquerda = findViewById(R.id.btntrocarimagensEsquerda)
+        btntrocarImagemDireita = findViewById(R.id.btntrocarImagemDireita)
         db = FirebaseFirestore.getInstance()
 
         uid = intent.getStringExtra("uid").toString()
         Log.d("debug", uid)
 
-        // Load the image from Firestore
+        // Load the images from Firestore
         loadImageFromFirestore()
         loadImageFromFirestore2()
 
@@ -55,11 +60,39 @@ class ConfirmarUsuario : AppCompatActivity() {
             nextScreen(HomeGerente::class.java)
         }
 
+
+        photoImageView.visibility = View.VISIBLE // Garante que a primeira imagem esteja visível
+        photoImageView2.visibility = View.GONE
+
+        // Botão para trocar a imagem para a esquerda
+        btntrocarimagensEsquerda.setOnClickListener {
+            swapImageToLeft()
+        }
+
+        // Botão para trocar a imagem para a direita
+        btntrocarImagemDireita.setOnClickListener {
+            swapImageToRight()
+        }
+
         btnProsseguir.setOnClickListener {
             val dialog = AcaoArmario()
             dialog.show(supportFragmentManager, "dialog_lock_options")
         }
+
+
     }
+
+    // Métodos para trocar a imagem para a esquerda e para a direita
+    fun swapImageToLeft() {
+        photoImageView.visibility = View.GONE
+        photoImageView2.visibility = View.VISIBLE
+    }
+
+    fun swapImageToRight() {
+        photoImageView.visibility = View.VISIBLE
+        photoImageView2.visibility = View.GONE
+    }
+
 
     class AcaoArmario : BottomSheetDialogFragment() {
 

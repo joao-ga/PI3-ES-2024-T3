@@ -122,4 +122,5 @@
     <!--Status de aberto ou encerrado-->
     <string name="locacao_encerrada">LOCAÇÃO ENCERRADA</string>
     <string name="arm_aberto">ARMÁRIO ABERTO</string>
+
 </resources>
