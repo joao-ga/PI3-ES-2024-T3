@@ -93,9 +93,11 @@ class QrCodeScreen : AppCompatActivity() {
         return bitmap
     }
 
+    // funcao que delete uma locação
     private fun deleteLocationInfo() {
         val currentUser = auth.currentUser?.uid
         if (currentUser != null) {
+            // busca no banco uma locação pelo uid do usuario
             db.collection("Locations").whereEqualTo("uid", currentUser)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
@@ -103,11 +105,13 @@ class QrCodeScreen : AppCompatActivity() {
                         val document = querySnapshot.documents[0]
                         document.reference.delete()
                             .addOnSuccessListener {
+                                // deixa a locação como falsa e muda de tela
                                 locacaoConfirmada =  false
                                 nextScreen(homeScreen::class.java)
                                 Toast.makeText(this, "Pendência de locação cancelada!", Toast.LENGTH_SHORT).show()
                                 Log.d("debugg", "Documento excluído com sucesso")
                             }
+                            // logs de erro
                             .addOnFailureListener { exception ->
                                 Toast.makeText(this, "Erro em cancelar pendência, tente de novo mais tarde!", Toast.LENGTH_SHORT).show()
                                 Log.d(ContentValues.TAG, "Falha ao excluir o documento do usuário:", exception)
@@ -122,9 +126,9 @@ class QrCodeScreen : AppCompatActivity() {
         }
     }
 
+    // função generica que muda de tela
     private fun nextScreen(screen: Class<*>) {
         val newScreen = Intent(this, screen)
         startActivity(newScreen)
     }
-
 }

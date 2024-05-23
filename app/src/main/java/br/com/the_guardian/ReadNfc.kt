@@ -17,6 +17,7 @@ import java.nio.charset.Charset
 
 class ReadNfc : AppCompatActivity(), NfcAdapter.ReaderCallback {
 
+    // variaveis de iniciação tardia
     private var nfcAdapter: NfcAdapter? = null
     private lateinit var binding: ActivityReadNfcBinding
     private lateinit var btnVoltar: AppCompatButton
@@ -73,29 +74,36 @@ class ReadNfc : AppCompatActivity(), NfcAdapter.ReaderCallback {
         }
     }
 
+    // função para ler tags nfc
     @SuppressLint("MissingPermission")
     override fun onTagDiscovered(tag: Tag?) {
+        // verifica se a tag nao é nula
         tag?.let {
             val ndef = Ndef.get(it)
+            // verifica se a ndef nao é nula
             ndef?.let { ndef ->
                 try {
+                    // realiza a conecção com a tag nfc
                     ndef.connect()
+                    // recebe a mensagem que veio da nfc
                     val ndefMessage = ndef.ndefMessage
-                    Log.d("debug", ndefMessage.toString())
+                    // fecha a conecção
                     ndef.close()
                     val informacoes = ndefMessage.records
                     if (informacoes.isNotEmpty()) {
+                        // ele transforma a mensagem para string e retira o dado importante
                         val firstRecord = informacoes[0]
                         val payload = firstRecord.payload
                         val text = String(payload, Charset.forName("UTF-8"))
                         val uid = text.substring(3)
 
                         runOnUiThread {
-                            // Iniciar ConfirmarUsuario Activity com os dados da tag
+                            // Iniciar ConfirmarUsuario Activity com os dados da tag na thread princiapal
                             startActivity(Intent(this, ConfirmarUsuario::class.java).apply {
                                 putExtra("uid", uid)
                             })
                         }
+                        // logs de erro
                     } else {
                         Log.d("NFC", "Nenhum registro NDEF encontrado")
                     }
