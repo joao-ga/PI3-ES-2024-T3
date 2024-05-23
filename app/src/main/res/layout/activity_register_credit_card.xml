@@ -72,26 +72,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:layout_marginEnd="284dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="255dp"
+            app:layout_constraintEnd_toEndOf="@id/cartao"
             app:layout_constraintTop_toBottomOf="@id/rectangle" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/etNumCartaoamostra"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="88dp"
-            android:layout_marginEnd="168dp"
+            android:layout_marginEnd="130dp"
             android:fontFamily="@font/juraregular"
             android:hint="@string/numberamostra"
-            android:paddingStart="23dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="1dp"
-            android:paddingBottom="10dp"
             android:textAlignment="textStart"
             android:textColorHint="@color/grey_texto_card"
             android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/cartao"
             app:layout_constraintTop_toBottomOf="@id/rectangle" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -99,17 +95,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="140dp"
-            android:layout_marginEnd="288dp"
+            android:layout_marginStart="28dp"
             android:fontFamily="@font/juraregular"
             android:hint="@string/nameamostra"
-            android:paddingStart="23dp"
-            android:paddingTop="1dp"
-            android:paddingEnd="1dp"
-            android:paddingBottom="1dp"
             android:textAlignment="textStart"
             android:textColorHint="@color/grey_texto_card"
             android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/cartao"
             app:layout_constraintTop_toBottomOf="@id/rectangle" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -127,7 +119,7 @@
             android:textAlignment="textStart"
             android:textColorHint="@color/grey_button"
             android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/cartao"
             app:layout_constraintTop_toBottomOf="@id/rectangle" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -167,6 +159,16 @@
             app:layout_constraintTop_toBottomOf="@id/textumerocard"/>
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etNumCartaoError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/etNumCartao"
+            app:layout_constraintTop_toBottomOf="@id/etNumCartao"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textodata"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -175,11 +177,12 @@
             android:textAlignment="textStart"
             android:textColor="@color/dark_blue"
             android:textSize="14sp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="25dp"
             android:layout_marginStart="2dp"
             app:layout_constraintStart_toStartOf="@id/etNumCartao"
             app:layout_constraintTop_toBottomOf="@id/etNumCartao"
             />
+
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etExpDate"
@@ -204,10 +207,20 @@
             app:layout_constraintTop_toBottomOf="@id/textodata" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etExpDateError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/etExpDate"
+            app:layout_constraintTop_toBottomOf="@id/etExpDate"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textcvv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="25dp"
             android:layout_marginEnd="112dp"
             android:fontFamily="@font/juraregular"
             android:text="@string/cvv"
@@ -221,7 +234,7 @@
             style="@style/barranumbercard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="0dp"
             android:maxLength="3"
             android:width="143dp"
@@ -239,6 +252,16 @@
             app:layout_constraintTop_toBottomOf="@id/textcvv" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etSecCodeError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/etSecCode"
+            app:layout_constraintTop_toBottomOf="@id/etSecCode"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textnomecard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -247,7 +270,7 @@
             android:textAlignment="textStart"
             android:textColor="@color/dark_blue"
             android:textSize="14sp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="25dp"
             app:layout_constraintStart_toStartOf="@id/etExpDate"
             app:layout_constraintTop_toBottomOf="@id/etExpDate"
             />
@@ -275,6 +298,16 @@
             app:layout_constraintTop_toBottomOf="@id/textnomecard"/>
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etNameError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/etName"
+            app:layout_constraintTop_toBottomOf="@id/etName"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appCompatTextView8"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
@@ -283,10 +316,11 @@
             android:textAlignment="viewStart"
             android:textColor="@color/dark_blue"
             android:textSize="12sp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etName"/>
+            app:layout_constraintTop_toBottomOf="@id/etName"
+            />
 
 
         <androidx.appcompat.widget.AppCompatButton
@@ -302,6 +336,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="30dp"
             app:layout_constraintTop_toBottomOf="@id/appCompatTextView8"/>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
