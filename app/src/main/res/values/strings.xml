@@ -6,15 +6,15 @@
     <string name="get_started">Para começarmos, entre usando seu email e senha.</string>
     <string name="email_login">Email</string>
     <string name="senha_login">Senha</string>
-    <string name="sem_cadastro"> <font color="#1C2733"> Não tem conta?</font> <font color="#5218FA">cadastre-se</font></string>
+    <string name="sem_cadastro"> <font color="#1C2733">Não tem conta?</font> <font color="#5218FA">Cadastre-se</font></string>
     <string name="login">LOGIN</string>
     <string name="login_realizado">Login Realizado</string>
     <string name="Login_negado">Login Negado</string>
     <string name="welcome_back_description">logo</string>
-    <string name="esqueci_senha"> <b>Esqueceu a senha?</b></string>
+    <string name="esqueci_senha"><b>Esqueceu a senha?</b></string>
     <string name="logged_in_key">logged_in</string>
     <string name="preference_file_key">loginScreen</string>
-    <string name="ver_mapa"><b>ver mapa</b></string>
+    <string name="ver_mapa">Ver mapa</string>
     <string name="ou">ou</string>
     <string name="informemail">Informe um email</string>
 

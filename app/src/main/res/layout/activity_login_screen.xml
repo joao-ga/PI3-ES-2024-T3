@@ -77,6 +77,16 @@
             app:layout_constraintStart_toStartOf="@id/AppCompatTextView3"
             app:layout_constraintTop_toBottomOf="@+id/AppCompatTextView3" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvEmailLoginError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/etEmailLogin"
+            app:layout_constraintTop_toBottomOf="@id/etEmailLogin"
+            />
+
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etSenhaLogin"
             style="@style/email_barra"
@@ -91,6 +101,16 @@
             app:layout_constraintEnd_toEndOf="@id/etEmailLogin"
             app:layout_constraintStart_toStartOf="@id/etEmailLogin"
             app:layout_constraintTop_toBottomOf="@+id/SenhaText" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvESenhaLoginError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/etSenhaLogin"
+            app:layout_constraintTop_toBottomOf="@id/etSenhaLogin"
+            />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/EmailText"
@@ -114,7 +134,7 @@
             android:hint="@string/senha_login"
             android:textColor="@color/dark_blue"
             android:textSize="20sp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="25dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/etEmailLogin"
@@ -129,9 +149,7 @@
             android:text="@string/esqueci_senha"
             android:textColor="@color/purple"
             android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.78"
-            app:layout_constraintStart_toStartOf="@id/etSenhaLogin"
+            app:layout_constraintEnd_toEndOf="@id/etSenhaLogin"
             app:layout_constraintTop_toBottomOf="@+id/etSenhaLogin"
             />
 
@@ -152,15 +170,16 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvCadastrar"
-            android:layout_width="240dp"
-            android:layout_height="30dp"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
-            android:fontFamily="@font/jurasemibold"
+            android:fontFamily="@font/jurabold"
             android:text="@string/sem_cadastro"
             android:textAlignment="center"
             android:gravity="center"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/btnEnviarLogin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnEnviarLogin" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -168,7 +187,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="112dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="30dp"
             android:fontFamily="@font/jurabold"
             android:text="@string/ou"
             android:textColor="@color/dark_blue"
@@ -180,15 +199,13 @@
             android:id="@+id/tvEntrarAnonimamente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="75dp"
-            android:layout_marginTop="0dp"
-            android:fontFamily="@font/jurasemibold"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/kronaone_regular"
             android:text="@string/ver_mapa"
             android:textColor="@color/purple"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@id/tvCadastrar"
-            app:layout_constraintHorizontal_bias="0.048"
-            app:layout_constraintStart_toStartOf="@id/tvCadastrar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ou"
             />
 
@@ -222,17 +239,13 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvStatusEsqueceuSenha"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/informemail"
-            android:textAlignment="center"
             android:textColor="@color/red"
-            android:textSize="16sp"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvLoginNegado"
-            android:layout_marginTop="16dp"/>
+            app:layout_constraintStart_toStartOf="@id/etEmailLogin"
+            app:layout_constraintTop_toBottomOf="@id/etEmailLogin"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
