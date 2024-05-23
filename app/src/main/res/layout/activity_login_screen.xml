@@ -93,7 +93,6 @@
             android:layout_width="300dp"
             android:layout_height="52dp"
             android:layout_marginTop="4dp"
-            android:drawableEnd="@drawable/eye_svgrepo_com"
             android:fontFamily="@font/juraregular"
             android:hint="@string/senha_login"
             android:inputType="textPassword"
@@ -101,6 +100,33 @@
             app:layout_constraintEnd_toEndOf="@id/etEmailLogin"
             app:layout_constraintStart_toStartOf="@id/etEmailLogin"
             app:layout_constraintTop_toBottomOf="@+id/SenhaText" />
+
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/openEyes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="12dp"
+            android:background="@color/zxing_transparent"
+            android:src="@drawable/eye_svgrepo_com"
+            app:layout_constraintEnd_toEndOf="@id/etSenhaLogin"
+            app:layout_constraintTop_toBottomOf="@id/SenhaText"
+
+            />
+
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/closedEyes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="12dp"
+            android:background="@color/zxing_transparent"
+            android:src="@drawable/closedeyes"
+            app:layout_constraintEnd_toEndOf="@id/etSenhaLogin"
+            app:layout_constraintTop_toBottomOf="@id/SenhaText"
+            />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvESenhaLoginError"
@@ -111,6 +137,7 @@
             app:layout_constraintStart_toStartOf="@id/etSenhaLogin"
             app:layout_constraintTop_toBottomOf="@id/etSenhaLogin"
             />
+
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/EmailText"
@@ -170,7 +197,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvCadastrar"
-            android:layout_width="260dp"
+            android:layout_width="290dp"
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:fontFamily="@font/jurabold"

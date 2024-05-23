@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.util.Patterns
 import android.view.View
@@ -16,6 +18,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
@@ -44,6 +47,9 @@ class loginScreen : AppCompatActivity() {
     private lateinit var tvEntrarAnonimamente: AppCompatTextView
     private lateinit var tvEmailLoginError: AppCompatTextView
     private lateinit var tvESenhaLoginError: AppCompatTextView
+    private lateinit var openEyes: AppCompatImageButton
+    private lateinit var closedEyes: AppCompatImageButton
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +76,15 @@ class loginScreen : AppCompatActivity() {
 
         tvEmailLoginError = findViewById(R.id.tvEmailLoginError)
         tvESenhaLoginError = findViewById(R.id.tvESenhaLoginError)
+
+        openEyes = findViewById(R.id.openEyes)
+        closedEyes = findViewById(R.id.closedEyes)
+
+        openEyes.setOnClickListener { showPassword() }
+        closedEyes.setOnClickListener { hidePassword() }
+
+        closedEyes.visibility = View.VISIBLE
+        openEyes.visibility = View.GONE
 
         clearErrorOnTextChange(etEmailLogin, tvEmailLoginError)
         clearErrorOnTextChange(etSenhaLogin, tvESenhaLoginError)
@@ -116,6 +131,19 @@ class loginScreen : AppCompatActivity() {
             nextScreen(homeScreen::class.java)
         }
     }
+
+    private fun showPassword() {
+        etSenhaLogin.transformationMethod = PasswordTransformationMethod.getInstance()
+        openEyes.visibility = View.GONE
+        closedEyes.visibility = View.VISIBLE
+    }
+
+    private fun hidePassword() {
+        etSenhaLogin.transformationMethod = HideReturnsTransformationMethod.getInstance()
+        openEyes.visibility = View.VISIBLE
+        closedEyes.visibility = View.GONE
+    }
+
 
 
     private fun isEmailValid(email: String): Boolean {
