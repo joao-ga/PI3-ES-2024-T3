@@ -91,23 +91,27 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
         }
     }
 
+    // funao que le uma tag nfc
     @SuppressLint("MissingPermission")
     override fun onTagDiscovered(tag: Tag?) {
+        // verifica se a tag vem nula
         tag?.let {
             val ndef = Ndef.get(it)
+            // verifica se o ndef vem null
             ndef?.let { ndef ->
                 try {
+                    //conecta com a nfc
                     ndef.connect()
                     val ndefMessage = ndef.ndefMessage
 
+                    // recebe os dados da nfc e tranfornma ele em string
                     val informacoes = ndefMessage.records
                     if (informacoes.isNotEmpty()) {
                         val firstRecord = informacoes[0]
                         val payload = firstRecord.payload
                         val text = String(payload, Charset.forName("UTF-8"))
                         val uid = text.substring(3)
-                        Log.d("NFC", "Tag detectada")
-
+                        // main thread
                         runOnUiThread {
                             // Chama o método endLocation com o UID
                             endLocation(uid)
@@ -115,12 +119,16 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
                             // Limpa a tag NFC
                             clearNfcTag(ndef)
 
+                            // resposta para o usuario
                             Toast.makeText(this, "Dados da tag NFC limpos com sucesso", Toast.LENGTH_SHORT).show()
                         }
+                        // logs de erro
                     } else {
                         Log.d("NFC", "Nenhum registro NDEF encontrado")
                     }
+                    // fecha a conecção
                     ndef.close()
+                    // logs de erro
                 } catch (e: Exception) {
                     Log.e("NFC", "Erro ao ler a tag NFC", e)
                     runOnUiThread {
@@ -136,6 +144,7 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
     }
 
 
+    // funcao que limpa a nfc
     private fun clearNfcTag(ndef: Ndef) {
         try {
             // Cria um NdefMessage vazio
@@ -157,60 +166,75 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
             }, 5000)
         } catch (e: IOException) {
             e.printStackTrace()
+            // manda uma mensagm para o usuario na main thread
             runOnUiThread {
                 Toast.makeText(this, "Erro ao limpar a tag NFC", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            // manda uma mensagm de erro para o usuario na main thread
             runOnUiThread {
                 Toast.makeText(this, "Erro desconhecido ao limpar a tag NFC", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    // Função para finalizar a locação do armário
     private fun endLocation(uid: String) {
+        // Calcula o preço antes de prosseguir
         calcPrice(uid)
+
+        // Acessa a coleção "Locations" no Firestore para encontrar o documento com o UID fornecido
         db.collection("Locations").whereEqualTo("uid", uid)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
                     val document = querySnapshot.documents[0]
+                    // Deleta o documento encontrado
                     document.reference.delete()
                         .addOnSuccessListener {
                             DataScreen.locacaoConfirmada = false
+                            // Mostra um toast indicando o término da locação
                             Toast.makeText(this, "Locação encerrada!", Toast.LENGTH_SHORT).show()
-                            Log.d("debugg", "Documento excluído com sucesso")
                         }
                         .addOnFailureListener { exception ->
+                            // Mostra um toast de erro caso a exclusão falhe
                             Toast.makeText(this, "Erro em cancelar pendência, tente de novo mais tarde!", Toast.LENGTH_SHORT).show()
                             Log.d(ContentValues.TAG, "Falha ao excluir o documento do usuário:", exception)
                         }
                 } else {
+                    // Registra que o documento do usuário não foi encontrado
                     Log.d(ContentValues.TAG, "Documento do usuário não encontrado")
                 }
             }
             .addOnFailureListener { exception ->
+                // Registra falha ao obter o documento do usuário
                 Log.d(ContentValues.TAG, "Falha ao obter o documento do usuário:", exception)
             }
     }
 
-    // Dialog para indicar que a locação foi encerrada
+    // Diálogo para indicar que a locação foi encerrada
     class FullScreenDialogFragment : DialogFragment() {
-
+        // Handler para lidar com ações em threads principais
         private val handler = Handler(Looper.getMainLooper())
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             return activity?.let {
+                // Cria um AlertDialog builder
                 val builder = AlertDialog.Builder(it)
 
+                // Infla o layout do diálogo
                 val inflater = requireActivity().layoutInflater
                 val view = inflater.inflate(R.layout.dialog_loc_status, null)
 
+                // Configura o texto do diálogo
                 val text = view.findViewById<TextView>(R.id.text)
                 text.text = getString(R.string.locacao_encerrada)
 
+                // Define a view do diálogo
                 builder.setView(view)
 
+                // Cria o diálogo
                 builder.create()
             } ?: throw IllegalStateException("Activity cannot be null")
         }
@@ -220,6 +244,7 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
             val window = dialog?.window
             val params = window?.attributes
 
+            // Define as dimensões do diálogo como tela cheia
             params?.width = WindowManager.LayoutParams.MATCH_PARENT
             params?.height = WindowManager.LayoutParams.MATCH_PARENT
             window?.attributes = params
@@ -234,54 +259,62 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
 
         override fun onPause() {
             super.onPause()
-
             // Cancelar qualquer ação quando o diálogo for pausado
             handler.removeCallbacksAndMessages(null)
         }
     }
 
-    // função para mudar de tela
+    // Função para navegar para a próxima tela
     private fun nextScreen(screen: Class<*>) {
         val intent = Intent(this, screen)
         startActivity(intent)
     }
 
-    // função para calcular o tempo que o usuário ficou com o armário (em minutos)
+    // Função para calcular o tempo que o usuário ficou com o armário (em minutos)
     private fun calcTime(startTime: String, endTime: String): Long {
+        // Formata as datas no formato especificado
         val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         val startDate = dateFormat.parse(startTime)
         val endDate = dateFormat.parse(endTime)
 
+        // Calcula a diferença de tempo em milissegundos e converte para minutos
         val diffInMillis = (endDate?.time!!) - (startDate?.time!!)
         return TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
     }
 
-    //função para calcular o valor do reembolso do cliente com base no tempo utilizado
+    // Função para calcular o valor do reembolso do cliente com base no tempo utilizado
     private fun calcPrice(uid: String) {
+        // Obtém o horário atual
         val endTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
         var valorReembolso: Int
         var tabelaPrecos: List<Int> = listOf()
 
+        // Acessa a coleção "Locations" no Firestore para obter os dados da locação
         db.collection("Locations").whereEqualTo("uid", uid)
             .get()
             .addOnSuccessListener { querySnapshot ->
+                // Verifica se há documentos retornados
                 if (!querySnapshot.isEmpty) {
+                    // Obtém o primeiro documento retornado
                     val document = querySnapshot.documents[0]
                     val startTime = document.getString("startTime").toString()
-                    val price = document.getString("price").toString()
                     val locker = document.getString("locker")
 
+                    // Acessa a coleção "Lockers" no Firestore para obter os dados do armário
                     db.collection("Lockers").whereEqualTo("id", locker)
                         .get()
                         .addOnSuccessListener { querySnapshot ->
+                            // Verifica se há documentos retornados
                             if (!querySnapshot.isEmpty) {
+                                // Obtém o primeiro documento retornado
                                 val lockerDocument = querySnapshot.documents[0]
-                                val prices = lockerDocument.get("prices")  as List<Int>
+                                val prices = lockerDocument.get("prices") as List<Int>
                                 tabelaPrecos = prices
 
+                                // Calcula o tempo gasto pelo usuário com o armário
                                 val timeSpent = calcTime(startTime, endTime)
-                                Log.d("Tempo Alocado", "User spent $timeSpent minutes with the locker")
 
+                                // Calcula o valor do reembolso com base no tempo gasto
                                 valorReembolso = when {
                                     timeSpent <= 30 -> tabelaPrecos.last() - tabelaPrecos[0]
                                     timeSpent <= 60 -> tabelaPrecos.last() - tabelaPrecos[1]
@@ -289,6 +322,7 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
                                     timeSpent <= 180 -> tabelaPrecos.last() - tabelaPrecos[3]
                                     else -> 0
                                 }
+                                // Exibe um toast com o valor do reembolso
                                 runOnUiThread {
                                     Toast.makeText(
                                         this,
@@ -297,18 +331,21 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
                                     ).show()
                                 }
                             } else {
+                                // Registra que o documento do armário não foi encontrado
                                 Log.w("CalcPrice", "Locker document does not exist")
                             }
                         }
                         .addOnFailureListener { exception ->
-                            Log.w("CalcPrice", "Error getting locker document: ", exception)
+                            // Registra falha ao obter o documento do armário
+                            Log.w("CalcPrice", "Error getting price document: ", exception)
                         }
                 } else {
+                    // Registra que o documento da locação não foi encontrado para o UID fornecido
                     Log.w("CalcPrice", "Location document not found for uid: $uid")
                 }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("CalcPrice", "Error getting location documents: ", exception)
+            } .addOnFailureListener { exception ->
+                // Registra falha ao obter o documento do armário
+                Log.w("CalcPrice", "Error getting locker document: ", exception)
             }
     }
 }

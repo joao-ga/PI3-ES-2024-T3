@@ -107,12 +107,9 @@ class RegisterCreditCard : AppCompatActivity() {
                         etSecCode.error = "Código inválido! Deve conter 3 digitos"
                     }else if (!isNumeric(cardNumber) || cardNumber.length != 16) {
                         etNumCartao.error = "Número inválido! Deve conter 16 digitos"
-
                     } else {
                         if (isExpirationDateValid(expDate)) {
                             addCreditCard(card)
-
-
                         }else {
                             etExpDate.error= "Data inválida"
                             Toast.makeText(
@@ -128,11 +125,13 @@ class RegisterCreditCard : AppCompatActivity() {
 
     }
 
+    // função que busca o cartão de credito do usuario
     private fun getCreditCardInfos() {
         val firestore = FirebaseFirestore.getInstance()
         val currentUser = auth.currentUser?.uid
 
         if (currentUser != null) {
+            // busca o cartão de credito
             firestore.collection("CreditCards")
                 .whereEqualTo("idUser", currentUser)
                 .get()
@@ -156,6 +155,7 @@ class RegisterCreditCard : AppCompatActivity() {
                             btnEnviar.setBackgroundResource(R.color.dark_grey)
                             btnEnviar.isEnabled = false
 
+                        // logs de erro
                         } else {
                             Log.e("error", "Os dados do cartão de crédito estão vazios.")
                         }

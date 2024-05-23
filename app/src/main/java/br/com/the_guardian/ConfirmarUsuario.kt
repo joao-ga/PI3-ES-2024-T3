@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class ConfirmarUsuario : AppCompatActivity() {
 
+    // Declaração de variáveis para os elementos da UI e banco de dados
     private lateinit var btnProsseguir: Button
     private lateinit var db: FirebaseFirestore
     private lateinit var uid: String
@@ -39,6 +40,7 @@ class ConfirmarUsuario : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_confirmar_usuario)
 
+        // Inicializando os elementos da UI
         btnProsseguir = findViewById(R.id.btnProsseguir)
         photoImageView = findViewById(R.id.photoImageView)
         photoImageView2 = findViewById(R.id.photoImageView2)
@@ -46,42 +48,40 @@ class ConfirmarUsuario : AppCompatActivity() {
         btntrocarImagemDireita = findViewById(R.id.btntrocarImagemDireita)
         db = FirebaseFirestore.getInstance()
 
+        // Obtendo o UID do Intent
         uid = intent.getStringExtra("uid").toString()
 
-        // Load the images from Firestore
+        // Carregando as imagens do Firestore
         loadImageFromFirestore()
         loadImageFromFirestore2()
 
-        // Inicialização do botão "Voltar" aqui, para garantir que ele esteja sempre visível
+        // Inicializando o botão "Voltar" para garantir que ele esteja sempre visível
         btnVoltar = findViewById(R.id.btnVoltar)
         btnVoltar.setOnClickListener {
             // botão para voltar para a home
             nextScreen(HomeGerente::class.java)
         }
 
-
+        // Configuração inicial da visibilidade das imagens
         photoImageView.visibility = View.VISIBLE // Garante que a primeira imagem esteja visível
         photoImageView2.visibility = View.GONE
 
-        // Botão para trocar a imagem para a esquerda
+        // Configurando os botões para trocar as imagens
         btntrocarimagensEsquerda.setOnClickListener {
             swapImageToLeft()
         }
-
-        // Botão para trocar a imagem para a direita
         btntrocarImagemDireita.setOnClickListener {
             swapImageToRight()
         }
 
+        // Configurando o botão "Prosseguir" para mostrar o diálogo de ações do armário
         btnProsseguir.setOnClickListener {
             val dialog = AcaoArmario()
             dialog.show(supportFragmentManager, "dialog_lock_options")
         }
-
-
     }
 
-    // Métodos para trocar a imagem para a esquerda e para a direita
+    // Métodos para trocar a visibilidade das imagens
     fun swapImageToLeft() {
         photoImageView.visibility = View.GONE
         photoImageView2.visibility = View.VISIBLE
@@ -92,16 +92,16 @@ class ConfirmarUsuario : AppCompatActivity() {
         photoImageView2.visibility = View.GONE
     }
 
-
+    // Classe para o diálogo de ações do armário
     class AcaoArmario : BottomSheetDialogFragment() {
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
             val view = inflater.inflate(R.layout.dialog_lock_options, container, false)
 
             val btnOpenLock = view.findViewById<AppCompatButton>(R.id.btnOpenLock)
             val btnCloseLock = view.findViewById<AppCompatButton>(R.id.btnCloseLock)
 
+            // Configurando os botões do diálogo
             btnOpenLock.setOnClickListener {
                 val dialog = FullScreenDialogFragment()
                 dialog.show(parentFragmentManager, "dialog_loc_status")
@@ -115,6 +115,7 @@ class ConfirmarUsuario : AppCompatActivity() {
         }
     }
 
+    // Classe para o diálogo de tela cheia
     class FullScreenDialogFragment : DialogFragment() {
 
         private val handler = Handler(Looper.getMainLooper())
@@ -134,6 +135,7 @@ class ConfirmarUsuario : AppCompatActivity() {
             val window = dialog?.window
             val params = window?.attributes
 
+            // Configurando o diálogo para tela cheia
             params?.width = WindowManager.LayoutParams.MATCH_PARENT
             params?.height = WindowManager.LayoutParams.MATCH_PARENT
             window?.attributes = params
@@ -148,12 +150,12 @@ class ConfirmarUsuario : AppCompatActivity() {
 
         override fun onPause() {
             super.onPause()
-
             // Cancelar qualquer ação agendada quando o diálogo for pausado
             handler.removeCallbacksAndMessages(null)
         }
     }
 
+    // Função de companheiro para mudar de tela
     companion object {
         fun nextScreen(context: Context, screen: Class<*>) {
             val intent = Intent(context, screen)
@@ -161,7 +163,9 @@ class ConfirmarUsuario : AppCompatActivity() {
         }
     }
 
+    // Função para carregar a primeira imagem do Firestore
     private fun loadImageFromFirestore() {
+        // faz a busca na locations com o uid
         db.collection("Locations")
             .whereEqualTo("uid", uid)
             .get()
@@ -171,7 +175,9 @@ class ConfirmarUsuario : AppCompatActivity() {
                     if (document != null) {
                         val photoPath = document.getString("photo")
                         if (!photoPath.isNullOrEmpty()) {
+                            // chama a funcao displayPhoto
                             displayPhoto(photoPath, photoImageView)
+                            //logs de erro
                         } else {
                             Log.d("Firestore", "Photo path is null or empty")
                         }
@@ -187,8 +193,10 @@ class ConfirmarUsuario : AppCompatActivity() {
             }
     }
 
+    // Função para carregar a segunda imagem do Firestore
     private fun loadImageFromFirestore2() {
         db.collection("Locations")
+            // faz a busca na locations com o uid
             .whereEqualTo("uid", uid)
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -197,7 +205,9 @@ class ConfirmarUsuario : AppCompatActivity() {
                     if (document != null) {
                         val photoPath = document.getString("photo2")
                         if (!photoPath.isNullOrEmpty()) {
+                            // chama a funcao displayPhoto
                             displayPhoto(photoPath, photoImageView2)
+                        // logs de erro
                         } else {
                             Log.d("Firestore", "Photo path is null or empty")
                         }
@@ -213,18 +223,16 @@ class ConfirmarUsuario : AppCompatActivity() {
             }
     }
 
-
+    // Função para exibir a foto usando Glide
     private fun displayPhoto(photoUrl: String, imgView: ImageView) {
         Glide.with(this)
             .load(photoUrl)
             .into(imgView)
     }
 
-
-    // função generica para mudar de tela
+    // Função genérica para mudar de tela
     private fun nextScreen(screen: Class<*>) {
         val HomeGerente = Intent(this, screen)
         startActivity(HomeGerente)
-
     }
 }

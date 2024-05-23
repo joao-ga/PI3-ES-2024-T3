@@ -34,7 +34,7 @@ class registerScreen : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     private lateinit var functions: FirebaseFunctions
 
-    // Variáveis de inputs, botões e texto
+    // Variáveis de inputs, botões e texto da interface do usuário
     private lateinit var etEmail: AppCompatEditText
     private lateinit var etPassword: AppCompatEditText
     private lateinit var etName: AppCompatEditText
@@ -52,7 +52,7 @@ class registerScreen : AppCompatActivity() {
     private lateinit var tvEmailError: AppCompatTextView
     private lateinit var tvPasswordError: AppCompatTextView
 
-    // Classe usuário, representa os dados do usuário
+    // Classe de dados do usuário, representa os dados do usuário
     data class User(
         val uid: String? = null,
         val name: String? = null,
@@ -67,12 +67,13 @@ class registerScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_screen)
 
-        // Inicialização das variáveis do Firebase e da interface do usuário
+        // Inicialização das instâncias do Firebase e da interface do usuário
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
         db = FirebaseFirestore.getInstance()
         functions = FirebaseFunctions.getInstance("southamerica-east1")
 
+        // Inicialização das views da interface do usuário
         etName = findViewById(R.id.etName)
         etEmail = findViewById(R.id.etEmail)
         etCpf = findViewById(R.id.etCpf)
@@ -90,11 +91,11 @@ class registerScreen : AppCompatActivity() {
         tvEmailError = findViewById(R.id.tvEmailError)
         tvPasswordError = findViewById(R.id.tvPasswordError)
 
-        // Adiciona InputFilter para limitar o número de caracteres
+        // Adiciona InputFilter para limitar o número de caracteres nos campos de CPF e telefone
         etCpf.filters = arrayOf(InputFilter.LengthFilter(11))
         etPhone.filters = arrayOf(InputFilter.LengthFilter(11))
 
-        // Adicionar TextWatcher para formatar data de nascimento
+        // Adiciona TextWatcher para formatar a data de nascimento enquanto o usuário digita
         etNascimento.addTextChangedListener(object : TextWatcher {
             private var current = ""
             private val ddmmyyyy = "DDMMYYYY"
@@ -139,15 +140,15 @@ class registerScreen : AppCompatActivity() {
                     current = clean
                     etNascimento.setText(current)
                     etNascimento.setSelection(if (sel < current.count()) sel else current.count())
-
                 }
             }
 
             override fun afterTextChanged(s: Editable) {}
         })
 
+        // Define o comportamento do botão "Enviar"
         btnEnviar.setOnClickListener { view ->
-            // Cria variáveis para receber os dados do usuário
+            // Coleta os dados do usuário dos campos de entrada
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
             val cpf = etCpf.text.toString()
@@ -155,10 +156,11 @@ class registerScreen : AppCompatActivity() {
             val name = etName.text.toString()
             val phone = etPhone.text.toString()
 
+            // Chama a função que valida e registra o usuário
             validateAndRegisterUser(view, email, password, cpf, birth, name, phone)
         }
 
-        // Botão para voltar para a tela de login
+        // Define o comportamento do botão "Voltar"
         btnVoltar.setOnClickListener {
             // Função que muda de tela
             nextScreen(loginScreen::class.java)
@@ -169,6 +171,7 @@ class registerScreen : AppCompatActivity() {
     private fun validateAndRegisterUser(view: android.view.View, email: String, password: String, cpf: String, birth: String, name: String, phone: String) {
         var isError = false
 
+        // Valida o campo nome
         if (name.isEmpty()) {
             updateInputState(etName, tvNameError, "Nome não pode estar vazio", true)
             isError = true
@@ -179,6 +182,7 @@ class registerScreen : AppCompatActivity() {
             updateInputState(etName, tvNameError, "", false)
         }
 
+        // Valida o campo email
         if (email.isEmpty()) {
             updateInputState(etEmail, tvEmailError, "Email não pode estar vazio", true)
             isError = true
@@ -189,6 +193,7 @@ class registerScreen : AppCompatActivity() {
             updateInputState(etEmail, tvEmailError, "", false)
         }
 
+        // Valida o campo data de nascimento
         if (birth.isEmpty()) {
             updateInputState(etNascimento, tvNascimentoError, "Data de nascimento não pode estar vazia", true)
             isError = true
@@ -199,6 +204,7 @@ class registerScreen : AppCompatActivity() {
             updateInputState(etNascimento, tvNascimentoError, "", false)
         }
 
+        // Valida o campo CPF
         if (cpf.isEmpty()) {
             updateInputState(etCpf, tvCpfError, "CPF não pode estar vazio", true)
             isError = true
@@ -209,6 +215,7 @@ class registerScreen : AppCompatActivity() {
             updateInputState(etCpf, tvCpfError, "", false)
         }
 
+        // Valida o campo telefone
         if (phone.isEmpty()) {
             updateInputState(etPhone, tvPhoneError, "Número de telefone não pode estar vazio", true)
             isError = true
@@ -219,6 +226,7 @@ class registerScreen : AppCompatActivity() {
             updateInputState(etPhone, tvPhoneError, "", false)
         }
 
+        // Valida o campo senha
         if (password.isEmpty()) {
             updateInputState(etPassword, tvPasswordError, "Senha não pode estar vazia", true)
             isError = true
@@ -226,18 +234,17 @@ class registerScreen : AppCompatActivity() {
             updateInputState(etPassword, tvPasswordError, "", false)
         }
 
+        // Exibe mensagens de erro se houver campos inválidos
         if (isError) {
-            // Se houver mensagens de erro, mostra um snackbar
-            val snackbar = Snackbar.make(view, "Preencha todos os campos corretamente!", Snackbar.LENGTH_LONG)
-            snackbar.setBackgroundTint(Color.RED)
+            val snackbar = Snackbar.make(view, "Por favor, corrija os campos inválidos.", Snackbar.LENGTH_LONG)
             snackbar.show()
         } else {
-            // Se todos os campos estão corretos, chama a função para registrar no Firebase Authenticator
+            // Chama a função para registrar no Firebase Authenticator se não houver erros
             userRegistration(email, password)
         }
     }
 
-    // Função que atualiza o estado visual de um campo de entrada de texto com base no status fornecido.
+    // Função que atualiza o estado visual de um campo de entrada de texto com base no status fornecido
     fun updateInputState(editText: EditText, errorTextView: TextView, tvError: String, isError: Boolean) {
         val errorIcon: Drawable? = if (isError) {
             ContextCompat.getDrawable(this, R.drawable.baseline_error_24)?.apply {
@@ -259,8 +266,7 @@ class registerScreen : AppCompatActivity() {
         }
     }
 
-
-    // função que manda e-mail de verificação para o usuário
+    // Função que envia e-mail de verificação para o usuário
     private fun sendEmailVerification() {
         // user recebe o usuario atual
         val user = auth.currentUser
@@ -282,9 +288,9 @@ class registerScreen : AppCompatActivity() {
             }
     }
 
-    // função que registra usuário no firebase authenticator
+    // Função que registra o usuário no Firebase Authenticator
     private fun userRegistration(email: String, password: String) {
-        // cria um usuário no authenticator
+        // cria um usuario no authentication
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 // se der certo
@@ -294,7 +300,7 @@ class registerScreen : AppCompatActivity() {
                     // Obter o UID do usuário atualmente autenticado
                     val uid = auth.currentUser?.uid
                     if (uid != null) {
-                        // Chama a função addUser passando o UID do usuário
+                        // Adiciona o usuário ao banco de dados após registro no Firebase Authenticator
                         addUser(uid, User(uid, etName.text.toString(), email, etPhone.text.toString(), etCpf.text.toString(), etNascimento.text.toString(), false))
                     } else {
                         Log.e("TAG", "UID do usuário é nulo após a autenticação.")
@@ -311,9 +317,10 @@ class registerScreen : AppCompatActivity() {
                 }
             }
     }
+
     // Função que adiciona o usuário no banco de dados
     private fun addUser(uid: String, u: User) {
-        // Faz um map nos dados do usuário
+        // cria um hash pra adicionar usuario
         val user = hashMapOf(
             "uid" to uid,
             "name" to u.name,
@@ -323,7 +330,7 @@ class registerScreen : AppCompatActivity() {
             "phone" to u.phone,
             "isManager" to u.isManager
         )
-        // Chama a função do Firebase para cadastrar o usuário
+        // chama a function que adiciona o usuario no backend
         functions.getHttpsCallable("addUser").call(user)
             .addOnSuccessListener { result ->
                 // Sucesso ao cadastrar o usuário
@@ -347,6 +354,7 @@ class registerScreen : AppCompatActivity() {
         return str.all { it.isDigit() }
     }
 
+    // Função que valida se uma data está no formato DD/MM/YYYY
     private fun isValidDate(date: String): Boolean {
         if (date.length != 10) return false
         val parts = date.split("/")
@@ -355,6 +363,7 @@ class registerScreen : AppCompatActivity() {
         val month = parts[1].toIntOrNull() ?: return false
         val year = parts[2].toIntOrNull() ?: return false
 
+        // verificação do dia, mes e ano
         if (day !in 1..31 || month !in 1..12 || year !in 1900..2100) return false
 
         val calendar = Calendar.getInstance()

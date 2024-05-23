@@ -218,6 +218,7 @@ class DataScreen : AppCompatActivity() {
                 return distancia
             }
 
+            // funcao que verifica a distancia do usurio em relacao ao armario
             fun checkLocation(): Boolean {
                 for (place in places) {
                     val locPlace = LatLng(place.latitude, place.longitude)
@@ -230,17 +231,21 @@ class DataScreen : AppCompatActivity() {
                 return false
             }
 
+            // funcao que verifica se o usurio tem cartao de credito cadastrado
             suspend fun verificarUsuarioTemCartao(): Boolean {
                 val currentUser = auth.currentUser?.uid
                 var hasCard = false
                 if (currentUser != null) {
+                    // faz a busca pelo uid do usuario
                     hasCard = suspendCoroutine { continuation ->
                         db.collection("CreditCards").whereEqualTo("idUser", currentUser)
                             .get()
                             .addOnSuccessListener { querySnapshot ->
                                 if (!querySnapshot.isEmpty) {
+                                    // se tiver retorna true
                                     continuation.resume(true)
                                 } else {
+                                    // senao retorna falso
                                     Log.d(TAG, "Cartão do usuário não encontrado")
                                     continuation.resume(false)
                                 }
@@ -258,6 +263,7 @@ class DataScreen : AppCompatActivity() {
                 return hasCard
             }
 
+            // funcao que verifica se o usuario esta logado
             fun usuarioEstaLogado(): Boolean {
                 val usuarioAtual = auth.currentUser
                 return usuarioAtual != null
@@ -265,28 +271,36 @@ class DataScreen : AppCompatActivity() {
 
             // se algum botão foi selecionado, inicia a tela de QrCode com o preço selecionado
             if (isAnyRadioButtonChecked) {
+                // cria uma coroutine para fazer processos de banco de dados em uma outra thread
                 CoroutineScope(Dispatchers.Main).launch {
+                    // verifica se o usuario esta logado
                     if (usuarioEstaLogado()) {
+                        // verifica se usuario tem um cartao de credito
                         if (verificarUsuarioTemCartao()) {
+                            // verifica se ele já possui uma locacao
                             if (checkLocation()) {
                                 if (!locacaoConfirmada) {
                                     if (locacaoAtual == null) {
+                                        // pega o preco selecionado
                                         val precoSelecionadoText =
                                             findViewById<RadioButton>(checkedRadioButtonId).text.toString()
+                                        // filtra apenas pelo numero do preço
                                         val precoNumerico =
                                             precoSelecionadoText.substringAfter("R$ ")
                                                 .toDoubleOrNull()
                                         if (precoNumerico != null) {
+                                            // recebe o armario selcionado
                                             val locker = actualLocker
+                                            // cris locacao
                                             locacaoAtual =
                                                 Locacao(userId, userLoc, locker, precoNumerico)
                                             locacoesConfirmadas.add(locacaoAtual!!)
-                                            //confirmacao(locacaoAtual!!)
+                                            // chama funcao que cria uma locacao no banco de dados e chama uma nova activity
                                             addLocationInfo(name, precoSelecionadoText)
                                             val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
                                             }
                                             startActivity(intent)
-
+                                        // mensagem de erros
                                         } else {
                                             Toast.makeText(
                                                 baseContext,
@@ -340,9 +354,11 @@ class DataScreen : AppCompatActivity() {
         }
     }
 
+    // verifica se o usuario já tem uma locacao
     private fun getLocationInfos() {
         val currentUser = auth.currentUser?.uid
         if (currentUser != null) {
+            // faz a busca pelo uid do usuario
             db.collection("Locations").whereEqualTo("uid", currentUser)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
@@ -350,6 +366,7 @@ class DataScreen : AppCompatActivity() {
                         val document = querySnapshot.documents[0]
                         val isLocated = document["isLocated"]
                         if (isLocated.toString() == "true") {
+                            // se for true ele atualiza a variavel de controle e vai para a tela de qrCode
                             locacaoConfirmada = true
                             Toast.makeText(this, "Você já tem um armário pendente, apresente o QR code para o gerente!", Toast.LENGTH_LONG).show()
                             val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
@@ -366,10 +383,12 @@ class DataScreen : AppCompatActivity() {
         }
     }
 
+    // função que adiciona uma nova locacao
     private fun addLocationInfo(locker: String?, price: String) {
         val currentUser = auth.currentUser?.uid
         val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
         if (currentUser != null) {
+            // hash de dados da locacao
             val locationData = hashMapOf(
                 "uid" to currentUser,
                 "locker" to locker,
@@ -382,11 +401,13 @@ class DataScreen : AppCompatActivity() {
             db.collection("Locations")
                 .add(locationData)
                 .addOnSuccessListener { documentReference ->
+                    // mensagem de sucesso
                     locacaoConfirmada = true
                     Log.d("LocationInfo", "DocumentSnapshot added with ID: ${documentReference.id}")
                     Toast.makeText(this, "Locação confirmada!", Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener { e ->
+                    // mensagem de erro
                     Log.w("LocationInfo", "Error adding document", e)
                     Toast.makeText(this, "Erro, tente novamente mais tarde", Toast.LENGTH_SHORT).show()
                 }

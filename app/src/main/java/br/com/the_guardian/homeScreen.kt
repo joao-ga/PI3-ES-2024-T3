@@ -409,9 +409,11 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
     }
 
 
+    // funcao que busca as informacoes da locacao
     private fun getLocationInfos() {
         val currentUser = auth.currentUser?.uid
         if (currentUser != null) {
+            // busca a locacao pelo uid do usuario
             db.collection("Locations").whereEqualTo("uid", currentUser)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
@@ -423,6 +425,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
                             val user = document["uid"]
                             val price = document["price"]
                             val time = document["startTime"]
+                            // em caso de sucesso aparece uma mensagem pro usuario e manda ele para a tela de qrCode
                             Toast.makeText(this, "Você já tem um armário pendente, apresente o QR code para o gerente!", Toast.LENGTH_LONG).show()
                             DataScreen.locacaoConfirmada = true
                             val intent = Intent(baseContext, QrCodeScreen::class.java).apply {
@@ -434,6 +437,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
                             startActivity(intent)
 
                         }
+                        // logs de erro
                     } else {
                         Toast.makeText(this, "Você não tem nenhum armario pendente.", Toast.LENGTH_LONG).show()
                         Log.d(ContentValues.TAG, "Documento do usuário não encontrado")

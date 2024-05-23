@@ -35,78 +35,105 @@ class LiberarLocScreen : AppCompatActivity() {
 
     }
 
+    // função que abre a camera
     private fun openCamera() {
         val integrator = IntentIntegrator(this)
+        // orientação da camera
         integrator.setOrientationLocked(false)
+        // testo de referência para o usuario
         integrator.setPrompt("ESCANEIE o QRcode")
         integrator.setBeepEnabled(false)
+        // realiza o scan
         integrator.initiateScan()
     }
 
+    // funbção que é chamada ao realizar scan
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
             if (result.contents != null) {
                 val contents = result.contents
-              
-                QrCodeData.scannedData = contents // Salva os dados escaneados na variável
 
+                // Salva os dados escaneados na variável
+                QrCodeData.scannedData = contents
                 scannedData = contents
-              
-                Log.i("CONTENT SCAN", contents)
+
+                // aparece o dialod para ver a quantidade de pessoas que vão tirar foto
                 showSelectPersonDialog()
             } else {
+                // log de erro
                 Toast.makeText(this, "Leitura cancelada", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun showSelectPersonDialog() {
+        // Infla a visualização do layout do diálogo
         val dialogView = layoutInflater.inflate(R.layout.dialog_select_person, null)
+
+        // Cria um diálogo com o layout inflado
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
             .create()
 
+        // Define o comportamento do botão para selecionar uma pessoa
         dialogView.findViewById<Button>(R.id.btnOnePerson).setOnClickListener {
+            // Define o número de pessoas para 1
             numberOfPersons = 1
+            // Inicia a atividade da câmera
             startCameraActivity()
+            // Fecha o diálogo
             dialog.dismiss()
         }
 
+        // Define o comportamento do botão para selecionar duas pessoas
         dialogView.findViewById<Button>(R.id.btnTwoPerson).setOnClickListener {
+            // Define o número de pessoas para 2
             numberOfPersons = 2
+            // Inicia a atividade da câmera
             startCameraActivity()
+            // Fecha o diálogo
             dialog.dismiss()
         }
 
+        // Define o comportamento do botão para fechar o diálogo
         dialogView.findViewById<ImageButton>(R.id.btnClose).setOnClickListener {
+            // Fecha o diálogo
             dialog.dismiss()
         }
-
+        // Exibe o diálogo
         dialog.show()
     }
 
     private fun startCameraActivity() {
+        // Cria uma intenção para iniciar a atividade da câmera
         val intent = Intent(this, CameraActivity::class.java)
+        // Adiciona um extra na intenção com o número de pessoas selecionado
         intent.putExtra("NUMBER_PERSON", numberOfPersons)
+        // Inicia a atividade da câmera e aguarda um resultado
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
     }
 
-    // função generica para mudar de tela
+    // Função genérica para mudar de tela
     private fun nextScreen(screen: Class<*>) {
+        // Cria uma intenção para iniciar a nova tela (atividade)
         val HomeGerente = Intent(this, screen)
+        // Inicia a nova atividade
         startActivity(HomeGerente)
-
     }
 
     private fun startNfcWriteActivity() {
+        // Cria uma intenção para iniciar a atividade de escrita NFC
         val intent = Intent(this, WriteNfc::class.java)
+        // Adiciona um extra na intenção com o conteúdo do código QR escaneado
         intent.putExtra("QR_CODE_CONTENT", scannedData)
+        // Inicia a atividade de escrita NFC
         startActivity(intent)
     }
 
     companion object {
+        // Constante para identificar a solicitação de captura de imagem
         const val REQUEST_IMAGE_CAPTURE = 1
     }
 }
