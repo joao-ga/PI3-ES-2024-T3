@@ -135,8 +135,8 @@ class RegisterCreditCard : AppCompatActivity() {
                     etExpDate.setText(current)
                     etExpDate.setSelection(if (sel < current.length) sel else current.length)
 
-                    // Adicione uma saída no Logcat
-                    Log.d("TextWatcher", "Texto alterado: $current")
+//                    // Adicione uma saída no Logcat
+//                    Log.d("TextWatcher", "Texto alterado: $current")
                 }
             }
 
