@@ -89,10 +89,8 @@ class ReadNfc : AppCompatActivity(), NfcAdapter.ReaderCallback {
                         val payload = firstRecord.payload
                         val text = String(payload, Charset.forName("UTF-8"))
                         val uid = text.substring(3)
-                        Log.d("NFC", "Tag detectada: $uid")
 
                         runOnUiThread {
-                            Log.d("NFC", "Iniciando ConfirmarUsuario Activity com uid: $uid")
                             // Iniciar ConfirmarUsuario Activity com os dados da tag
                             startActivity(Intent(this, ConfirmarUsuario::class.java).apply {
                                 putExtra("uid", uid)

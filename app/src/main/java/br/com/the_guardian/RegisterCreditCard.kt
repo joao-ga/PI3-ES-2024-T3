@@ -165,7 +165,7 @@ class RegisterCreditCard : AppCompatActivity() {
                 }
                 .addOnFailureListener { exception ->
                     Log.e("DataScreen", "Erro ao recuperar dados do Firestore: $exception")
-                    Toast.makeText(this, "Erro ao recuperar dados do Firestore: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Erro, tente de novo mais tarde", Toast.LENGTH_SHORT).show()
                 }
         } else {
             Log.e("error", "Usuário atual é nulo.")
@@ -195,7 +195,7 @@ class RegisterCreditCard : AppCompatActivity() {
             .addOnFailureListener { e ->
                 // Erro ao cadastrar o usuário
                 Log.w(ContentValues.TAG, "Erro ao cadastrar Cartão de crédito", e)
-                Toast.makeText(this, "Cartão não cadastrado.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Erro, tente de novo  mais tarde", Toast.LENGTH_SHORT).show()
             }
     }
 

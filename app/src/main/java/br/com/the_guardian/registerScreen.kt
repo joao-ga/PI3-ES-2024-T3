@@ -275,7 +275,7 @@ class registerScreen : AppCompatActivity() {
                         Toast.LENGTH_SHORT).show()
                 } else {
                     // se não
-                    Toast.makeText(baseContext, "Email não enviado, tente de novo mais tarde",
+                    Toast.makeText(baseContext, "Email de verificação não enviado, tente de novo mais tarde",
                         Toast.LENGTH_SHORT).show()
                     Log.e("TAG", "Falha ao enviar e-mail de verificação.", task.exception)
                 }
@@ -291,12 +291,6 @@ class registerScreen : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // mostra uma resposta pro usuário e chama a função de mandar um email de verificação
                     Log.d("TAG", "createUserWithEmail:success")
-                    Toast.makeText(
-                        baseContext,
-                        "Um email de verificação foi enviado para seu endereço de email.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-
                     // Obter o UID do usuário atualmente autenticado
                     val uid = auth.currentUser?.uid
                     if (uid != null) {

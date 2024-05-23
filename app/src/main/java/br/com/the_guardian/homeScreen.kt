@@ -283,7 +283,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
                         clickedPlace.prices = prices.map { it.toInt() } // convertendo de Long para Int
                         // chama função que envia os dados para outra activity
                         openDetailsScreen(clickedPlace)
-                        Log.i("SUCESSO", "DADOS COLETADOS $prices")
                     } else {
                         Log.e("error", "Este armário não possui preços disponíveis.")
                     }
@@ -347,7 +346,6 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
                         userLoc = LatLng(location.latitude, location.longitude)
                         // e define a camera na localizacao do usuario
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, 18f))
-                        Log.e("debug", "AUTORIZADO")
                     }
                 }
             } else {
@@ -419,9 +417,7 @@ class homeScreen : AppCompatActivity(), OnMapReadyCallback, DirectionsCallback {
                 .addOnSuccessListener { querySnapshot ->
                     if (!querySnapshot.isEmpty) {
                         val document = querySnapshot.documents[0]
-                        Log.d("debugg", document.toString())
                         val isLocated = document["isLocated"]
-                        Log.d("debugg", isLocated.toString())
                         if (isLocated.toString() == "true") {
                             val locker = document["locker"]
                             val user = document["uid"]

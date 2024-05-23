@@ -99,7 +99,6 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
                 try {
                     ndef.connect()
                     val ndefMessage = ndef.ndefMessage
-                    Log.d("debug", ndefMessage.toString())
 
                     val informacoes = ndefMessage.records
                     if (informacoes.isNotEmpty()) {
@@ -107,7 +106,7 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
                         val payload = firstRecord.payload
                         val text = String(payload, Charset.forName("UTF-8"))
                         val uid = text.substring(3)
-                        Log.d("NFC", "Tag detectada: $uid")
+                        Log.d("NFC", "Tag detectada")
 
                         runOnUiThread {
                             // Chama o método endLocation com o UID
@@ -259,7 +258,6 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
 
     //função para calcular o valor do reembolso do cliente com base no tempo utilizado
     private fun calcPrice(uid: String) {
-        Log.d("debug", "entrei em calc price")
         val endTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
         var valorReembolso: Int
         var tabelaPrecos: List<Int> = listOf()
@@ -273,15 +271,12 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
                     val price = document.getString("price").toString()
                     val locker = document.getString("locker")
 
-                    Log.d("CalcPrice", "Start Time: $startTime, Price: $price, Locker: $locker")
-
                     db.collection("Lockers").whereEqualTo("id", locker)
                         .get()
                         .addOnSuccessListener { querySnapshot ->
                             if (!querySnapshot.isEmpty) {
                                 val lockerDocument = querySnapshot.documents[0]
                                 val prices = lockerDocument.get("prices")  as List<Int>
-                                Log.d("Preços", prices.toString())
                                 tabelaPrecos = prices
 
                                 val timeSpent = calcTime(startTime, endTime)
@@ -294,8 +289,6 @@ class EncerrarLocScreen : AppCompatActivity(), NfcAdapter.ReaderCallback {
                                     timeSpent <= 180 -> tabelaPrecos.last() - tabelaPrecos[3]
                                     else -> 0
                                 }
-
-                                Log.d("Valor Reembolso", "Reembolso: $valorReembolso")
                                 runOnUiThread {
                                     Toast.makeText(
                                         this,

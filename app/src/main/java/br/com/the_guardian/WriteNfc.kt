@@ -89,7 +89,6 @@ class WriteNfc : AppCompatActivity() {
     }
 
     private fun writeNfcTag(uid: String, tag: Tag) {
-        Log.d("debug", "Entrou no writeNfcTag")
         try {
             val ndef = Ndef.get(tag)
             if (ndef != null) {
@@ -97,7 +96,6 @@ class WriteNfc : AppCompatActivity() {
                 val ndefMessage = NdefMessage(arrayOf(textRecord))
 
                 ndef.connect()
-                Log.d("debug", ndefMessage.toString())
                 ndef.writeNdefMessage(ndefMessage)
                 ndef.close()
 
@@ -110,7 +108,7 @@ class WriteNfc : AppCompatActivity() {
             Toast.makeText(this, "Erro ao escrever na tag NFC: ${e.message}", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "Erro desconhecido ao escrever na tag NFC", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Erro ao escrever na tag NFC", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -131,7 +129,7 @@ class WriteNfc : AppCompatActivity() {
                     for (document in documents) {
                         val locker = document.getString("locker")
                         if (locker != null) {
-                            Toast.makeText(this, "Armário alocado: $locker", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Armário alugado: $locker", Toast.LENGTH_SHORT).show()
                         } else {
                             Toast.makeText(this, "Dados do armário não encontrados", Toast.LENGTH_SHORT).show()
                         }

@@ -54,7 +54,6 @@ class LiberarLocScreen : AppCompatActivity() {
 
                 scannedData = contents
               
-                Toast.makeText(this, contents, Toast.LENGTH_LONG).show()
                 Log.i("CONTENT SCAN", contents)
                 showSelectPersonDialog()
             } else {

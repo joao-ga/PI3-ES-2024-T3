@@ -93,8 +93,6 @@ class CameraActivity : AppCompatActivity() {
                 imgCaptureExecutor,
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        Log.d("debugg", "imagem salva no diretório: $outputFileResults")
-
                         if (currentPerson == 1) {
                             addPhoto(file, currentPerson)
                         } else {
@@ -141,7 +139,7 @@ class CameraActivity : AppCompatActivity() {
                             .addOnSuccessListener {
                                 Toast.makeText(
                                     this,
-                                    "Foto atualizada com sucesso",
+                                    "Primeira foto tirada com sucesso!",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -183,7 +181,7 @@ class CameraActivity : AppCompatActivity() {
                             .addOnSuccessListener {
                                 Toast.makeText(
                                     this,
-                                    "Foto atualizada com sucesso",
+                                    "Segunda foto tirada com sucesso",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }

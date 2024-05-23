@@ -47,7 +47,6 @@ class ConfirmarUsuario : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
 
         uid = intent.getStringExtra("uid").toString()
-        Log.d("debug", uid)
 
         // Load the images from Firestore
         loadImageFromFirestore()

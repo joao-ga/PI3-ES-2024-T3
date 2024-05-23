@@ -348,9 +348,7 @@ class DataScreen : AppCompatActivity() {
                 .addOnSuccessListener { querySnapshot ->
                     if (!querySnapshot.isEmpty) {
                         val document = querySnapshot.documents[0]
-                        Log.d("debugg", document.toString())
                         val isLocated = document["isLocated"]
-                        Log.d("debugg", isLocated.toString())
                         if (isLocated.toString() == "true") {
                             locacaoConfirmada = true
                             Toast.makeText(this, "Você já tem um armário pendente, apresente o QR code para o gerente!", Toast.LENGTH_LONG).show()

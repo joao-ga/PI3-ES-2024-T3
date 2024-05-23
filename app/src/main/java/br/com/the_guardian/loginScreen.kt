@@ -270,7 +270,6 @@ class loginScreen : AppCompatActivity() {
                 if (!querySnapshot.isEmpty) {
                     val document = querySnapshot.documents[0]
                     val isManager = document["isManager"]
-                    Log.d("is manager", isManager.toString())
                     if (isManager.toString() == "true") {
                         // Se o usuário for um gerente, direcione-o para a interface do gerente
                         nextScreen(HomeGerente::class.java)
@@ -304,9 +303,7 @@ class loginScreen : AppCompatActivity() {
                 .addOnSuccessListener { querySnapshot ->
                     if (!querySnapshot.isEmpty) {
                         val document = querySnapshot.documents[0]
-                        Log.d("debugg", document.toString())
                         val isLocated = document["isLocated"]
-                        Log.d("debugg", isLocated.toString())
                         if (isLocated.toString() == "true") {
                             val locker = document["locker"]
                             val user = document["uid"]
