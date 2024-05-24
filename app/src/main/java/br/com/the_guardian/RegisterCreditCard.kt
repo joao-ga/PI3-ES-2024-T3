@@ -52,6 +52,8 @@ class RegisterCreditCard : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         functions = Firebase.functions("southamerica-east1")
         val currentUser = auth.currentUser
+        getCreditCardInfos()
+
 
         // inicialização dos inputs e botões
         etNumCartao = findViewById(R.id.etNumCartao)
@@ -95,6 +97,52 @@ class RegisterCreditCard : AppCompatActivity() {
         }
 
     }
+
+    private fun getCreditCardInfos() {
+        val firestore = FirebaseFirestore.getInstance()
+        val currentUser = auth.currentUser?.uid
+
+        if (currentUser != null) {
+            firestore.collection("CreditCards")
+                .whereEqualTo("idUser", currentUser)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        val document = querySnapshot.documents[0]
+                        val cardInfo = document.toObject(CreditCards::class.java)
+                        if (cardInfo != null) {
+                            // Preenche os campos com as informações do cartão
+                            etNumCartao.setText(cardInfo.cardNumber ?: "")
+                            etName.setText(cardInfo.cardName ?: "")
+                            etExpDate.setText(cardInfo.expDate ?: "")
+                            etSecCode.setText(cardInfo.secCode ?: "")
+
+                            // Habilita a edição dos campos
+                            etNumCartao.isEnabled = true
+                            etName.isEnabled = true
+                            etExpDate.isEnabled = true
+                            etSecCode.isEnabled = true
+
+                            btnEnviar.isEnabled = false
+                            btnEnviar.setBackgroundResource(R.color.dark_grey)
+
+                        } else {
+                            Log.e("error", "Os dados do cartão de crédito estão vazios.")
+                        }
+                    } else {
+                        Log.d("debugg", "Nenhum cartão de crédito encontrado para este usuário.")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.e("DataScreen", "Erro ao recuperar dados do Firestore: $exception")
+                    Toast.makeText(this, "Erro ao recuperar dados do Firestore: ${exception.message}", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Log.e("error", "Usuário atual é nulo.")
+            Toast.makeText(this, "Erro: usuário não autenticado.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     // função que adiciona o cartão no banco de dados
     private fun addCreditCard(card: CreditCards) {
