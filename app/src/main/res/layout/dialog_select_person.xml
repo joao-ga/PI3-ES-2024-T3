@@ -18,7 +18,7 @@
         android:text="@string/pergunta"
         android:textAlignment="center"
         android:textColor="@color/dark_blue"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/layoutButtons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +52,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnOnePerson"
             style="@style/login_button"
-            android:layout_width="141dp"
+            android:layout_width="125dp"
             android:layout_height="49dp"
             android:layout_marginEnd="30dp"
             android:fontFamily="@font/kronaone_regular"
@@ -62,7 +62,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnTwoPerson"
             style="@style/login_button"
-            android:layout_width="141dp"
+            android:layout_width="125dp"
             android:layout_height="49dp"
             android:fontFamily="@font/kronaone_regular"
             android:text="@string/TwoPerson"
