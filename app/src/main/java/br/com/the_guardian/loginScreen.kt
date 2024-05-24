@@ -216,6 +216,18 @@ class loginScreen : AppCompatActivity() {
 
         errorTextView.text = errorMessage
         errorTextView.visibility = if (isError) View.VISIBLE else View.GONE
+
+
+        // Ajusta a visibilidade dos botões de visibilidade de senha
+        if (editText.id == R.id.etSenhaLogin) {
+            if (isError) {
+                openEyes.visibility = View.GONE
+                closedEyes.visibility = View.GONE
+            } else {
+                openEyes.visibility = View.GONE
+                closedEyes.visibility = View.VISIBLE
+            }
+        }
     }
 
     // Autentica o usuário com email e senha
